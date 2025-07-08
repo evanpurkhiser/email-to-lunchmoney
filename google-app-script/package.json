@@ -1,0 +1,13 @@
+{
+  "name": "lunchmoney-email-app-script",
+  "version": "1.0.0",
+  "scripts": {
+    "deploy": "clasp push"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.99"
+  }
+}
