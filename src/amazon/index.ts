@@ -1,6 +1,7 @@
 import {Email} from 'postal-mime';
 
 import {
+  EmailProcessor,
   LunchMoneyAction,
   LunchMoneyMatch,
   LunchMoneySplit,
@@ -99,7 +100,7 @@ function makeAction(order: AmazonOrder): LunchMoneyAction {
   return updateAction;
 }
 
-export async function processAmazonEmail(email: Email, env: Env) {
+async function process(email: Email, env: Env) {
   const emailText = email.text ?? '';
   const orderText = extractOrderBlock(emailText);
 
@@ -115,7 +116,13 @@ export async function processAmazonEmail(email: Email, env: Env) {
   return makeAction(order);
 }
 
-export function isAmazonOrder(email: Email) {
+function matchEmail(email: Email) {
   const {from, subject} = email;
-  return from.address?.endsWith('amazon.com') && subject?.startsWith('Ordered');
+  return !!from.address?.endsWith('amazon.com') && !!subject?.startsWith('Ordered');
 }
+
+export const amazonProcessor: EmailProcessor = {
+  identifier: 'amazon',
+  matchEmail,
+  process,
+};

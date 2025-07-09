@@ -1,30 +1,30 @@
 import PostalMime, {Email} from 'postal-mime';
 
-import {isAmazonOrder, processAmazonEmail} from './amazon';
-import {LunchMoneyAction} from './types';
+import {amazonProcessor} from './amazon';
+import {EmailProcessor, LunchMoneyAction} from './types';
+
+const EMAIL_PROCESSORS: EmailProcessor[] = [amazonProcessor];
 
 /**
- * Records one or more LunchMoney actions to the database using a bulk insert
+ * Records a LunchMoney actions to the database
  */
-export function recordActions(actions: LunchMoneyAction[], source: string, env: Env) {
-  const stmt = env.DB.prepare(
-    'INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)'
-  );
-
-  return env.DB.batch(actions.map(a => stmt.bind(source, JSON.stringify(a))));
+function recordAction(action: LunchMoneyAction, source: string, env: Env) {
+  return env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+    .bind(source, JSON.stringify(action))
+    .run();
 }
 
 async function processEmail(email: Email, env: Env) {
   console.log(`Processing email from: ${email.from.address}`);
 
-  if (isAmazonOrder(email)) {
-    const action = await processAmazonEmail(email, env);
-    await recordActions([action], 'amazon', env);
+  const processors = EMAIL_PROCESSORS.filter(processor => processor.matchEmail(email));
 
-    return;
-  }
+  const results = processors.map(async processor => {
+    const action = await processor.process(email, env);
+    await recordAction(action, processor.identifier, env);
+  });
 
-  console.error('Email was not handled');
+  await Promise.all(results);
 }
 
 /**

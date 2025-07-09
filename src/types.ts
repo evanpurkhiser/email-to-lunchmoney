@@ -1,3 +1,20 @@
+import {Email} from 'postal-mime';
+
+export interface EmailProcessor {
+  /**
+   * String identifier for this processor.
+   */
+  identifier: string;
+  /**
+   * Determines if this processor is responsible for processing this email
+   */
+  matchEmail: (email: Email) => boolean;
+  /**
+   * Process am email.
+   */
+  process: (email: Email, env: Env) => Promise<LunchMoneyAction>;
+}
+
 export interface LunchMoneyMatch {
   /**
    * The name of the payee to match
