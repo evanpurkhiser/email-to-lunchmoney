@@ -6,7 +6,7 @@ import {isAmazonOrder, processAmazonEmail} from './amazon';
  * This script receives emails forwarded from my gmail and recordes details
  * about expected transactions that will appear in my lunchmoney.
  */
-const emailHandler: EmailExportedHandler<Env> = async function (message, env, _ctx) {
+const emailHandler: EmailExportedHandler<Env> = async function (message, env, ctx) {
   const forwardedMessage = await PostalMime.parse(message.raw);
   const from = forwardedMessage.from.address;
 
@@ -22,7 +22,7 @@ const emailHandler: EmailExportedHandler<Env> = async function (message, env, _c
   console.log(`Processing email from: ${originalMessage.from.address}`);
 
   if (isAmazonOrder(originalMessage)) {
-    processAmazonEmail(originalMessage, env);
+    ctx.waitUntil(processAmazonEmail(originalMessage, env));
     return;
   }
 
