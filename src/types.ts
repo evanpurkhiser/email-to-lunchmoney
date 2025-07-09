@@ -35,7 +35,18 @@ export interface LunchMoneySplit {
   /**
    * How to split the transaction
    */
-  split: Array<{amount: number; note: string}>;
+  split: Split[];
+}
+
+interface Split {
+  /**
+   * Split amount in cents
+   */
+  amount: number;
+  /**
+   * Note for the split
+   */
+  note: string;
 }
 
 export interface LunchMoneyUpdate {
@@ -51,3 +62,10 @@ export interface LunchMoneyUpdate {
 }
 
 export type LunchMoneyAction = LunchMoneyUpdate | LunchMoneySplit;
+
+export interface LunchMoneyActionRow {
+  id: number;
+  date_created: string;
+  source: string;
+  action: string;
+}

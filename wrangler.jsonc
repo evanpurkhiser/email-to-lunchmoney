@@ -15,5 +15,10 @@
       "database_name": "email-to-lunchmoney",
       "database_id": "c95a5b91-338a-4c04-8af4-f7f4f0a8af58"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "*/30 * * * *"
+    ]
+  }
 }

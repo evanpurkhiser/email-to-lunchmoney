@@ -1,6 +1,7 @@
 import PostalMime, {Email} from 'postal-mime';
 
 import {amazonProcessor} from './amazon';
+import {processActions} from './lunchmoney';
 import {EmailProcessor, LunchMoneyAction} from './types';
 
 const EMAIL_PROCESSORS: EmailProcessor[] = [amazonProcessor];
@@ -49,6 +50,7 @@ const emailHandler: EmailExportedHandler<Env> = async function (message, env, ct
 
 const app: ExportedHandler<Env> = {
   email: emailHandler,
+  scheduled: (_controller, env, ctx) => void ctx.waitUntil(processActions(env)),
 };
 
 export default app;
