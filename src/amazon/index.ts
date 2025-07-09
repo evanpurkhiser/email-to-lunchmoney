@@ -1,7 +1,14 @@
 import {Email} from 'postal-mime';
 
+import {
+  LunchMoneyAction,
+  LunchMoneyMatch,
+  LunchMoneySplit,
+  LunchMoneyUpdate,
+} from '../types';
+
 import {extractOrder} from './prompt';
-import {AmazonOrderItem} from './types';
+import {AmazonOrder, AmazonOrderItem} from './types';
 
 /**
  * Extracts the main order block from an Amazon plain text email.
@@ -28,14 +35,14 @@ export function extractOrderBlock(emailText: string): string | null {
  * Works with cents (integers) to avoid floating-point precision issues.
  * Returns tax amounts in cents.
  */
-export function computeItemTaxes(items: AmazonOrderItem[], totalCostCents: number): number[] {
+export function computeItemTaxes(items: AmazonOrderItem[], totalCents: number): number[] {
   const subtotalCents = items.reduce(
     (sum, item) => sum + item.priceEachCents * item.quantity,
     0
   );
 
-  const totalTaxCents = totalCostCents - subtotalCents;
-  
+  const totalTaxCents = totalCents - subtotalCents;
+
   if (totalTaxCents < 0) {
     throw new Error('Total cost is less than subtotal.');
   }
@@ -58,6 +65,40 @@ export function computeItemTaxes(items: AmazonOrderItem[], totalCostCents: numbe
   return taxCents;
 }
 
+function makeItemNote(order: AmazonOrder, item: AmazonOrderItem) {
+  return `${item.shortName} (${order.orderId})`;
+}
+
+function makeAction(order: AmazonOrder): LunchMoneyAction {
+  const itemsTax = computeItemTaxes(order.orderItems, order.totalCostCents);
+
+  const match: LunchMoneyMatch = {
+    expectedPayee: 'Amazon',
+    expectedTotal: order.totalCostCents,
+  };
+
+  if (order.orderItems.length > 1) {
+    const splitAction: LunchMoneySplit = {
+      match,
+      type: 'split',
+      split: order.orderItems.map((item, i) => ({
+        note: makeItemNote(order, item),
+        amount: item.priceEachCents + itemsTax[i],
+      })),
+    };
+
+    return splitAction;
+  }
+
+  const updateAction: LunchMoneyUpdate = {
+    match,
+    type: 'update',
+    note: makeItemNote(order, order.orderItems[0]),
+  };
+
+  return updateAction;
+}
+
 export async function processAmazonEmail(email: Email, env: Env) {
   const emailText = email.text ?? '';
   const orderText = extractOrderBlock(emailText);
@@ -68,12 +109,12 @@ export async function processAmazonEmail(email: Email, env: Env) {
   }
 
   const order = await extractOrder(orderText, env);
-  const itemTaxCents = computeItemTaxes(order.orderItems, order.totalCostCents);
 
-  console.log(
-    order,
-    itemTaxCents.map((tax, i) => order.orderItems[i].priceEachCents + tax)
-  );
+  console.log('Got order details from amazon email', {order});
+
+  const action = makeAction(order);
+
+  console.log('Built Lunch Money action', {action});
 }
 
 export function isAmazonOrder(email: Email) {
