@@ -41,6 +41,7 @@ export async function processActions(env: Env) {
     start_date: format(twoWeeksAgo, 'yyyy-MM-dd'),
     end_date: format(now, 'yyyy-MM-dd'),
     status: 'uncleared',
+    pending: 'true',
   });
 
   const txnsResp = await lunchMoneyApi(env, `/transactions?${params}`);
