@@ -112,9 +112,7 @@ export async function processAmazonEmail(email: Email, env: Env) {
 
   console.log('Got order details from amazon email', {order});
 
-  const action = makeAction(order);
-
-  console.log('Built Lunch Money action', {action});
+  return makeAction(order);
 }
 
 export function isAmazonOrder(email: Email) {
