@@ -1,8 +1,12 @@
 import {createExecutionContext, env, waitOnExecutionContext} from 'cloudflare:test';
-import {describe, it, vi} from 'vitest';
+import {describe, it, vi, beforeEach} from 'vitest';
 
 import fixtureEmail from '../fixtures/amazon.eml?raw';
+import fixtureOrder from '../fixtures/amazon.json';
 import worker from '../src/index';
+
+// Mock the extractOrder function
+vi.mock('./amazon/prompt');
 
 function messageMock(content: string): ForwardableEmailMessage {
   const raw = new ReadableStream({
@@ -27,6 +31,11 @@ function messageMock(content: string): ForwardableEmailMessage {
 }
 
 describe('Email Handler', () => {
+  beforeEach(async () => {
+    const {extractOrder} = vi.mocked(await import('./amazon/prompt'));
+    extractOrder.mockResolvedValue(fixtureOrder);
+  });
+
   it('processes fixture email without errors', async () => {
     const ctx = createExecutionContext();
 

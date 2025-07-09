@@ -1,44 +1,6 @@
 import OpenAI from 'openai';
 
-/**
- * A structured representation of an Amazon order extracted from an email.
- */
-export interface AmazonOrder {
-  /**
-   * The Amazon order number, e.g. "114-9193968-9091445".
-   */
-  order_id: string;
-  /**
-   * A list of items included in the order.
-   */
-  order_items: AmazonOrderItem[];
-  /**
-   * The total cost of the order in USD, found at the bottom of the email.
-   */
-  total_cost_usd: number;
-}
-
-/**
- * A single item listed in an Amazon order.
- */
-export interface AmazonOrderItem {
-  /**
-   * The full product title as shown in the email under “Ordered”.
-   */
-  name: string;
-  /**
-   * A concise 2–4 word summary of the item (brand + descriptor).
-   */
-  short_name: string;
-  /**
-   * The number of units ordered for this item.
-   */
-  quantity: number;
-  /**
-   * The price of a single unit in USD.
-   */
-  price_each_usd: number;
-}
+import {AmazonOrder, AmazonOrderItem} from './types';
 
 export const AMAZON_ORDER_ITEM_PROPERTIES = {
   name: {
@@ -113,23 +75,22 @@ Use the exact words from the email when setting product names and prices.
  * Uses OpenAI to extract structured ordere details from the email
  */
 export async function extractOrder(order: string, env: Env): Promise<AmazonOrder> {
-  // Mock: return fixture data instead of calling OpenAI
-  return {
-    "order_id": "114-0833187-7581859",
-    "order_items": [
+  const client = new OpenAI({apiKey: env.OPENAI_API_KEY});
+
+  const response = await client.responses.create({
+    model: 'o4-mini',
+    text: {format: SCHEMA},
+    input: [
       {
-        "name": "Bathroom Faucet Brushed Nickel One-Handle, Modern one Hole Bathroom Sink Faucet Lavatory Faucet with Deck",
-        "short_name": "Brushed Nickel Faucet",
-        "quantity": 1,
-        "price_each_usd": 24.29
+        role: 'system',
+        content: [{type: 'input_text', text: PROMPT}],
       },
       {
-        "name": "Bathroom Sink Drain Without Overflow Vessel Sink Lavatory Vanity Pop Up Drain Stopper, Brushed Nickel",
-        "short_name": "Nickel Sink Drain",
-        "quantity": 1,
-        "price_each_usd": 16.99
-      }
+        role: 'user',
+        content: [{type: 'input_text', text: order}],
+      },
     ],
-    "total_cost_usd": 44.95
-  };
+  });
+
+  return JSON.parse(response.output_text);
 }
