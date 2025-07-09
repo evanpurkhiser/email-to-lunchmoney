@@ -1,5 +1,7 @@
 import PostalMime from 'postal-mime';
 
+import {isAmazonOrder, processAmazonEmail} from './amazon';
+
 /**
  * This script receives emails forwarded from my gmail and recordes details
  * about expected transactions that will appear in my lunchmoney.
@@ -15,11 +17,16 @@ const emailHandler: EmailExportedHandler<Env> = async function (message, env, _c
 
   // The Google App Script forwards the entire "raw" contents of the oirignal
   // message as plain text, so we parse the plain text portion
-  const originalMessage = await PostalMime.parse(forwardedMessage.text);
+  const originalMessage = await PostalMime.parse(forwardedMessage.text!);
 
-  console.log(originalMessage.from);
-  console.log(originalMessage.text);
-  console.log(originalMessage.subject);
+  console.log(`Processing email from: ${originalMessage.from.address}`);
+
+  if (isAmazonOrder(originalMessage)) {
+    processAmazonEmail(originalMessage, env);
+    return;
+  }
+
+  console.log('Email was not handled');
 };
 
 const app: ExportedHandler<Env> = {
