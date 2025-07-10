@@ -1,3 +1,4 @@
+import {captureException, withSentry} from '@sentry/cloudflare';
 import PostalMime, {Email} from 'postal-mime';
 
 import {amazonProcessor} from 'src/amazon';
@@ -34,6 +35,7 @@ async function processEmail(email: Email, env: Env) {
       const action = await processor.process(email, env);
       await recordAction(action, processor.identifier, env);
     } catch (error) {
+      captureException(error);
       console.error('Failed to process email', error);
     }
   });
@@ -61,9 +63,17 @@ const emailHandler: EmailExportedHandler<Env> = async function (message, env, ct
   ctx.waitUntil(processEmail(originalMessage, env));
 };
 
-const app: ExportedHandler<Env> = {
-  email: emailHandler,
-  scheduled: (_controller, env, ctx) => void ctx.waitUntil(processActions(env)),
-};
+const app: ExportedHandler<Env> = withSentry(
+  env => ({
+    dsn: 'https://67fbf2b80619df462851d411a66557be@o126623.ingest.us.sentry.io/4509642116890624',
+    release: env.CF_VERSION_METADATA.id,
+    tracesSampleRate: 1.0,
+    sendDefaultPii: true,
+  }),
+  {
+    email: emailHandler,
+    scheduled: (_controller, env, ctx) => void ctx.waitUntil(processActions(env)),
+  }
+);
 
 export default app;
