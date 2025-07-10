@@ -1,5 +1,5 @@
 import {addDays, differenceInMinutes, format, isBefore, parse} from 'date-fns';
-import {convert} from 'html-to-text';
+import {convert as htmlToText} from 'html-to-text';
 import {Email} from 'postal-mime';
 
 import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from '../types';
@@ -27,7 +27,7 @@ interface CostDetails {
 }
 
 function process(email: Email) {
-  const emailText = convert(email.html!);
+  const emailText = htmlToText(email.html!);
 
   const rideMatch = emailText.match(LYFT_RIDE_REGEX);
   const costMatch = emailText.match(LYFT_TOTAL_COST_REGEX);
