@@ -7,6 +7,14 @@ import singleStopFixture from './fixtures/single-stop.eml?raw';
 import {lyftRideProcessor} from '.';
 
 describe('Lyft Ride EmailProcessor', () => {
+  it('matches lyft ride emails', async () => {
+    const emailOne = await PostalMime.parse(singleStopFixture);
+    expect(lyftRideProcessor.matchEmail(emailOne)).toBe(true);
+
+    const emailTwo = await PostalMime.parse(multiStopFixture);
+    expect(lyftRideProcessor.matchEmail(emailTwo)).toBe(true);
+  });
+
   it('processes and creates a LunchMoneyAction for a single ride', async () => {
     const email = await PostalMime.parse(singleStopFixture);
     const result = await lyftRideProcessor.process(email, env);
