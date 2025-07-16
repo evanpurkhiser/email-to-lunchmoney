@@ -74,11 +74,6 @@ Some emails I would like to add
 
    The App Script is in [`./google-app-script`](./google-app-script).
 
-   > [!IMPORTANT]
-   > Ideally the emails could be directly forwarded using the forwarding filter
-   > action, however doing so does not forward the entire email, including the
-   > plain text version, which is often easier to parse.
-
 4. The worker receives the email and determines which available Email Processor
    is able to parse the email. Processors typically look at the from header and
    subject, though they can use any part of the email to determine if they can
@@ -105,6 +100,11 @@ Some emails I would like to add
 
    - Splitting transactions
    - Adding notes to transactions
+
+> [!NOTE]
+> Ideally the emails could be directly forwarded using the forwarding filter
+> action, however doing so does not forward the entire email, including the
+> plain text version, which is often easier to parse.
 
 ## Secrets
 
