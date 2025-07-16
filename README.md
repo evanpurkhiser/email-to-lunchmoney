@@ -13,6 +13,23 @@ This may be useful for those who want to answer questions like:
 > What did I buy on Amazon for $75?
 > Where did I go on that $12.50 Lyft ride?
 
+### Before Email to Lunch Money
+
+| Date       | Payee  | Amount | Notes |
+|------------|--------|--------|-------|
+| 2025-07-10 | Amazon | $43.21 |       |
+| 2025-07-10 | Lyft   | $8.50  |       |
+| 2025-07-10 | Apple  | $9.99  |       |
+
+### After Processing
+
+| Date       | Payee         | Amount | Notes |
+|------------|---------------|--------|-------|
+| 2025-07-10 | Amazon (split)| $28.22 | Amazon Mise En Scene Hair Serum (113-7795219-8445010) |
+| 2025-07-10 | Amazon (split)| $14.99 | Amazon CERRXIAN power adapter (113-5327144-6942647) |
+| 2025-07-10 | Lyft          | $8.50  | Lyft 186 States St, San Francisco, CA → 882 Sutter St, San Francisco, CA [16:40, 27m] |
+| 2025-07-10 | Apple         | $9.99  | Apple iCloud+ with 2TB storage |
+
 ## How it works
 
 The general idea is that you send various types of receipts to this service.
