@@ -39,14 +39,14 @@ This may be useful for those who want to answer questions like:
 The general idea is that you send various types of receipts to this service.
 Support for the following emails is currently implemented
 
-- Amazon order emails. Orders with multiple items have their associated Lunch
+- **Amazon order emails**. Orders with multiple items have their associated Lunch
   Money transactions split into a single transaction for each item. A note is
   added to transactions with a shortened item name and order number.
 
-- Lyft rideshare and Bike rides. A note is added to each transaction with the
+- **Lyft rideshare and Bike rides**. A note is added to each transaction with the
   start and end location, time of ride, and duration.
 
-- Apple receipts. Adds the name of the app, subscription, or in-app purchase as
+- **Apple receipts**. Adds the name of the app, subscription, or in-app purchase as
   a note to the Apple transaction.
 
 Some emails I would like to add
