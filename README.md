@@ -68,8 +68,10 @@ Some emails I would like to add
    forwarded are labeled with `Fwd / Lunch Money`. You can find [my filters
    here](https://github.com/evanpurkhiser/gmailctl-personal/blob/main/evanpurkhiser%40gmail.com.jsonnet)
 
-   > [!IMPORTANT]
-   > Ideally the emails could be directly forwarded using the forwarding filter action, however doing so does not forward the entire email, including the plain text version, which is often easier to parse.
+> [!IMPORTANT]
+> Ideally the emails could be directly forwarded using the forwarding filter
+> action, however doing so does not forward the entire email, including the
+> plain text version, which is often easier to parse.
 
 3. A [Google App Script](https://developers.google.com/apps-script) is used to
    look for emails labeled as `Fwd / Lunch Money` and it forwards the entire
