@@ -11,7 +11,7 @@ Lunch Money.
 This may be useful for those who want to answer questions like:
 
 > What did I buy on Amazon for $75?
-> Why did I spend $8.50 on a Lyft bike ride?
+> Where did I go on that $12.50 Lyft ride?
 
 ## How it works
 
