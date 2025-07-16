@@ -1,3 +1,3 @@
-import {all} from '@evanpurkhiser/eslint-config';
+import {common} from '@evanpurkhiser/eslint-config';
 
-export default [...all];
+export default [...common];
