@@ -15,6 +15,11 @@ describe('Amazon order EmailProcessor', () => {
     extractOrderSpy.mockReturnValue(Promise.resolve(fixtureOrder));
   });
 
+  it('matches amazon order emails', async () => {
+    const email = await PostalMime.parse(fixtureEmail);
+    expect(amazonProcessor.matchEmail(email)).toBe(true);
+  });
+
   it('processes and creates a LunchMoneyAction for amazon orders', async () => {
     const email = await PostalMime.parse(fixtureEmail);
 
