@@ -29,10 +29,10 @@ function hasNote(note: string | null) {
 
 export async function processActions(env: Env) {
   const stmt = env.DB.prepare(
-    'SELECT * FROM lunchmoney_actions ORDER BY date_created DESC'
+    'SELECT * FROM lunchmoney_actions ORDER BY date_created ASC'
   );
   const actionsResult = await stmt.all<LunchMoneyActionRow>();
-  const actions = actionsResult.results.reverse();
+  const actions = actionsResult.results;
 
   // bail if there's no pending actions to process
   if (actions.length === 0) {
