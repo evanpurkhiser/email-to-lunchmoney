@@ -20,19 +20,19 @@ This may be useful for those who want to answer questions like:
 ### Before Email to Lunch Money
 
 | Payee  | Amount | Notes |
-|--------|--------|-------|
+| ------ | ------ | ----- |
 | Amazon | $43.21 |       |
 | Lyft   | $8.50  |       |
 | Apple  | $9.99  |       |
 
 ### After Processing
 
-| Payee  | Amount | Notes |
-|--------|--------|-------|
-| Amazon | $28.22 | Mise En Scene Hair Serum (113-7795219-8445010) |
-| Amazon | $14.99 | CERRXIAN power adapter (113-5327144-6942647) |
+| Payee  | Amount | Notes                                                                            |
+| ------ | ------ | -------------------------------------------------------------------------------- |
+| Amazon | $28.22 | Mise En Scene Hair Serum (113-7795219-8445010)                                   |
+| Amazon | $14.99 | CERRXIAN power adapter (113-5327144-6942647)                                     |
 | Lyft   | $8.50  | 186 States St, San Francisco, CA → 882 Sutter St, San Francisco, CA [16:40, 27m] |
-| Apple  | $9.99  | iCloud+ with 2TB storage |
+| Apple  | $9.99  | iCloud+ with 2TB storage                                                         |
 
 ## How it works
 
@@ -80,10 +80,9 @@ Some emails I would like to add
    handle the email.
 
 5. Each processor may do their own processing:
-
    - `amazon` parses out the items ordered from the plain text email and passes
      the text to the OpenAI API to get a shortened version of the item names
-     (since amazon items typically have very long names). 
+     (since amazon items typically have very long names).
 
    - `lyft-bike` converts the HTML email to text (as they do not send plain
      text variants) and simply uses regex to extract the ride metadata.
@@ -97,7 +96,6 @@ Some emails I would like to add
    updated according to the action
 
    Actions currently support:
-
    - Splitting transactions
    - Adding notes to transactions
 
