@@ -1,4 +1,8 @@
-import {captureException, withSentry} from '@sentry/cloudflare';
+import {
+  captureException,
+  consoleLoggingIntegration,
+  withSentry,
+} from '@sentry/cloudflare';
 import PostalMime, {Email} from 'postal-mime';
 
 import {amazonProcessor} from 'src/amazon';
@@ -80,6 +84,7 @@ const app: ExportedHandler<Env> = withSentry(
     release: env.CF_VERSION_METADATA.id,
     tracesSampleRate: 1.0,
     sendDefaultPii: true,
+    integrations: [consoleLoggingIntegration({levels: ['log', 'warn', 'error']})],
   }),
   {
     email: (message, env, ctx) => void ctx.waitUntil(handleMessage(message, env)),
