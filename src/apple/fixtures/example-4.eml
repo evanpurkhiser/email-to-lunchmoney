@@ -1,0 +1,262 @@
+Delivered-To: evanpurkhiser@gmail.com
+Received: by 2002:a17:504:8e07:b0:1d4d:f07d:916d with SMTP id gm7csp1324600njb;
+        Fri, 22 Aug 2025 11:23:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE2HVvV8XMNxChpyUdREbXsdqwpW/Bgoz7MegvvK0XzfDYsJX3YM44O4iWrwdXA2WOQDrm4
+X-Received: by 2002:a05:620a:468c:b0:7e3:3384:4a8b with SMTP id af79cd13be357-7ea10fda85emr495353385a.37.1755887009482;
+        Fri, 22 Aug 2025 11:23:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1755887009; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Mr5O9AyDxsCR7en/dI4X57coGv2r7yku+cbUPQ9qoVU+JpqwCETZjJaoKaEOIdp+JQ
+         2ErSNdhDCJlVZ3GI8KoURNEaVN4vME8TTJ2+rJNTm3ldgF1SitFfAM5BHAotOw02IH0R
+         kngRZAkUE309S5GvVTV0pSPm5t8VfA+YPPa2CZVWd6e03Y70mGqx4qITgNDuI6Y367/Y
+         h2fD7++MO0kCLKNh+PRJSHlp9dQhzGsMAxZWSZJOz0RP60X8lrYy25lq7PYBcx0yb2+D
+         vDNsHUvrpuI4E6S0umr2H3PSZuU+ccwJIcUhiroW0oaRh2gVc5ngE8VkSpUofrxkHSGz
+         1jsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=mime-version:subject:message-id:to:from:date:dkim-signature;
+        bh=Hd6yJkURFMswqD7+XyVB+3PNs4RKzf673UbH2RgIPuM=;
+        fh=169V9/7R5Hr0c84w09Eb6qts8GXB7/FdpMEMd03Gbs8=;
+        b=Sj9W6SfbuLLVpeScIdKRVbPJbAg6BWiMCem7hFqn7bdTG8aHkUDwR1oda6uyR66Yme
+         uNTFE+vcSnMJ2QKy8/iOwjHfH3n8+cWkiguZgnMwvjs1jzLluZm6RKZ5P/FYF8HI+Wwb
+         Zhm+b610Riv6vNBJCMQYMk0UTj8gaA9zJh+ZOfVVujcyXPtC1BZujYLbgbrMbKDCXxy2
+         aTS9eUIx5A7/XRHPslODu9XdOIY3jg2zm9NpzTMezhaGWA84ZegNIr/eT3CEx1ZU8svR
+         dUJLCC4S9E8uMHGfriisFjh0PI8q1d9nVtzxPWsUQ+t+6M71JiLwx9/4hMNFVH1dCUxt
+         Ivuw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@email.apple.com header.s=email0517 header.b=e3YjjpQz;
+       spf=pass (google.com: domain of no_reply@email.apple.com designates 17.23.6.38 as permitted sender) smtp.mailfrom=no_reply@email.apple.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=email.apple.com
+Return-Path: <no_reply@email.apple.com>
+Received: from st57p01nt-txnmsbadger006103.apple.com (st57p01nt-txnmsbadger006103.apple.com. [17.23.6.38])
+        by mx.google.com with ESMTPS id af79cd13be357-7ebebcae93fsi17498585a.35.2025.08.22.11.23.29
+        for <evanpurkhiser@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Aug 2025 11:23:29 -0700 (PDT)
+Received-SPF: pass (google.com: domain of no_reply@email.apple.com designates 17.23.6.38 as permitted sender) client-ip=17.23.6.38;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@email.apple.com header.s=email0517 header.b=e3YjjpQz;
+       spf=pass (google.com: domain of no_reply@email.apple.com designates 17.23.6.38 as permitted sender) smtp.mailfrom=no_reply@email.apple.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=email.apple.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.apple.com; s=email0517; t=1755887008; bh=Hd6yJkURFMswqD7+XyVB+3PNs4RKzf673UbH2RgIPuM=; h=Date:From:To:Message-ID:Subject:Content-Type; b=e3YjjpQzTE+Wts6vBceXoI93O3X5knKZkbHoR5EQbbUJMzFuJ4ybY+Ij8D394/+9K
+	 pP0gZw6QVa1+ZYXVhKKQxexaweGAYrTPj0CqyBiFwmoudrJ3xp6rMWVJnn3p04/7ls
+	 YSRnbWTQoq6xdr52RminCyV0USgqWKi/11xccuA2tBD4+1g6DoqvYBfYwgh+jqZttv
+	 IafRNOJQ5e0pGzmix8SKlxklg21kNn44IviDuGyM3LeAwZwzd8HeddsQHbdZk/Bpug
+	 TWnYOYwjlM+zvnMEVbpV/TF2ZN7c36XmszVC9V4R1Gy2Fdn6JTcZlb1CCBRFDi4oaf
+	 TOuG6GLvTf0cQ==
+Date: Fri, 22 Aug 2025 18:23:28 +0000 (GMT)
+From: Apple <no_reply@email.apple.com>
+To: evanpurkhiser@gmail.com
+Message-ID: <259508276.51002311.1755887008965@email.apple.com>
+Subject: Your receipt from Apple.
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="----=_Part_51002309_685428488.1755887008965"
+X-Broadcast-Id: 10631
+X-Attach-Flag: N
+X-COMMS-C: false
+X-Sent-To: evanpurkhiser@gmail.com,2,FqtWKHs9EiRzY8ASC42Yu92Z8PveDapaGPz3HfL%2B5M9kyXJUnAIbeIpFUZKopOOYnLpsWUqbQ4%2BK9IixjwUR8g%2F2sGdKWYj1tbeNsFasfAIbgQo11CWehbyRdfEQYOKjN%2Bf02gAYzJZhT3Q6JkLalGSC8Jj%2B63eyq9KGxt3wM0uGpnvDOchFM1Bcx%2FBi9eLqxmNCv42U0QSkhi8GIb99NylMwbgrIzm25I9b0icvMtlfmlPSWxzGrtLmjMHJH%2B8cDcvYMC9os8tpN%2BFkv3gQKehNdo3s0%2FqpVymiU3t0DoITA2nTfi8KyLITkgICBuNfU%2FDTeG8nPeLM3gvCqKIBWCF5GLI8IQ%2F%2Faq285UX4YasdN%2FS0Mh0EKl4YY2g1WnHzkpJ%2B%2BC9NcnRFjaR3YRhkHMJmnp8jSUv9K1VzH%2B6zxPavq6k%2F8v4Xtoh5yw8HZ2rVQm2w5GNlvwT8hMBhhdQIrQ%3D%3D
+X-TXN_ID: 84998d9a-1979-4f70-afe1-1ddd81c90585
+X-DKIM_SIGN_REQUIRED: YES
+X-EmailType-Id: 10631
+X-Business-Group: iTunes
+X-Country: US
+
+------=_Part_51002309_685428488.1755887008965
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Disposition: inline
+
+<html><head><style data-emotion=3D"custom hzv07h qrj5ky 1ago99h 1p2cbqg m31=
+y3a 108v2mv 6ffxnu 18w16cf f41j3e zresjj rgm23z omvd4k 1skwja4 vc9uxc gzadz=
+y wogfc8 i8xbl3 137u684 1y6quhx 1wwfjxf 9urhlu 1d5xd7o 15zbox7 68yyeh 1s7ar=
+qf jhluqm 1cfbe7l ytumd6 161t2u8 1nn7g7i 4anrg1 1sstyyn 1okufpp 4cxybv 1d15=
+tds 1q2yoq2 9smyh7 9ro87k 1p74tef bc7j6f 1deqyu 4tra68 pko50u 1xv4psa 14rno=
+zc 16u9pil 19xkdnh uk6cul 1smj2jt 15cb153">.custom-hzv07h{margin:20px;font-=
+family:system-ui,-apple-system,BlinkMacSystemFont,SF Pro,Segoe UI,Helvetica=
+ Neue,Helvetica,Arial,sans-serif;color:rgb(51, 51, 51);line-height:23px;pad=
+ding:20px;}.custom-hzv07h .action{background-color:#027eff;color:#fff;}.cus=
+tom-hzv07h .body-link{text-decoration:none;color:#027eff;}.custom-qrj5ky{ma=
+x-width:750px;margin:0 auto;}.custom-1ago99h{width:100%;}.custom-1p2cbqg{ma=
+rgin-bottom:50px;}.custom-m31y3a{padding-bottom:40px;}.custom-108v2mv{displ=
+ay:inline-block;font-weight:600;line-height:32px;margin:0;font-size:32px;co=
+lor:#333333;letter-spacing:0.13px;}.custom-6ffxnu{margin-bottom:25px;margin=
+-top:25px;width:100%;}.custom-18w16cf{font-size:14px;color:#333333;margin:0=
+;display:inline-block;margin-bottom:10px;}.rtl .custom-18w16cf{margin-right=
+:0;margin-left:5px;}.ltr .custom-18w16cf{margin-right:5px;margin-left:0;}.c=
+ustom-f41j3e{font-size:14px;color:#333333;margin:0;display:inline-block;fon=
+t-weight:600;margin-right:5px;}.rtl .custom-f41j3e{margin-right:0;margin-le=
+ft:5px;}.ltr .custom-f41j3e{margin-right:5px;margin-left:0;}.custom-zresjj{=
+font-weight:300;font-size:17px;line-height:23px;font-size:14px;color:#33333=
+3;margin:0;display:inline-block;}.rtl .custom-zresjj{margin-right:0;margin-=
+left:5px;}.ltr .custom-zresjj{margin-right:5px;margin-left:0;}.custom-rgm23=
+z{margin-top:40px;width:100%;}.custom-rgm23z+.custom-rgm23z{margin-top:25px=
+;}.custom-omvd4k{width:60px;padding-inline:0 20px;}.custom-1skwja4{border-r=
+adius:14px;border:1px solid rgba(128,128,128,0.2);}@media(max-width: 480px)=
+{.custom-vc9uxc{display:block;}}.custom-gzadzy{font-size:17px;color:#333333=
+;font-weight:600;margin:0;}.custom-wogfc8{font-weight:300;font-size:17px;li=
+ne-height:23px;font-size:14px;color:#666666;line-height:1.6;margin:0;}.rtl =
+.custom-wogfc8{margin-right:5px;margin-left:0;}.ltr .custom-wogfc8{margin-r=
+ight:0;margin-left:5px;}.rtl .custom-wogfc8{margin-right:0;margin-left:0;}.=
+ltr .custom-wogfc8{margin-right:0;margin-left:0;}.custom-i8xbl3{padding-inl=
+ine-start:32px;}.rtl .custom-i8xbl3{text-align:left;}.ltr .custom-i8xbl3{te=
+xt-align:right;}@media(max-width: 480px){.custom-i8xbl3{display:block;margi=
+n-top:10px;padding-inline-start:0;width:100%;}.ltr .custom-i8xbl3{text-alig=
+n:left;}.rtl .custom-i8xbl3{text-align:right;}}.custom-137u684{font-weight:=
+300;font-size:17px;line-height:23px;font-size:17px;color:#333333;font-weigh=
+t:600;margin:0;}.custom-1y6quhx{margin-top:50px;width:100%;font-size:17px;}=
+.custom-1y6quhx+*{border-top:1px solid #ddd;padding-top:15px;}.payment-info=
+rmation+.custom-1y6quhx{margin-top:25px;}@media(max-width: 480px){.custom-1=
+y6quhx .payment-information__left{padding-bottom:25px;}.custom-1y6quhx .pay=
+ment-information__col{width:100%!important;}}.custom-1wwfjxf{font-weight:30=
+0;font-size:17px;line-height:23px;font-size:21px;color:#333333;font-weight:=
+600;margin:0;line-height:29px;letter-spacing:0.23px;padding-bottom:8px;}.cu=
+stom-9urhlu{display:inline-block;width:50%;vertical-align:top;}.custom-1d5x=
+d7o{font-weight:300;color:#333333;letter-spacing:-0.37px;line-height:25px;v=
+ertical-align:top;margin:0;}.custom-15zbox7{font-weight:300;font-size:17px;=
+line-height:23px;font-weight:600;color:#333333;letter-spacing:-0.37px;line-=
+height:25px;vertical-align:top;margin:0;font-size:17px;display:inline-block=
+;width:66%;text-align:start;}.custom-68yyeh{font-weight:300;color:#333333;l=
+etter-spacing:-0.37px;line-height:25px;vertical-align:top;margin:0;display:=
+inline-block;width:34%;text-align:end;}.custom-1s7arqf{margin:0;line-height=
+:25px;}.custom-jhluqm{font-weight:300;font-size:17px;line-height:23px;margi=
+n:0;line-height:25px;}.custom-1cfbe7l{font-weight:300;font-size:17px;line-h=
+eight:23px;}.custom-ytumd6{text-decoration:none;}.custom-161t2u8{border-top=
+:1px #ddd solid;padding-top:15px;width:100%;}.custom-1nn7g7i{width:100%;}@m=
+edia(max-width: 480px){.custom-1nn7g7i{text-align:center;}}.custom-4anrg1{f=
+ont-size:14px;line-height:1.47059;font-weight:200;letter-spacing:-0.022em;b=
+order-color:transparent;border-width:0px;border-radius:8px;cursor:pointer;d=
+isplay:inline-block;min-width:260px;max-width:340px;padding:8px 15px;margin=
+:5px 0;text-align:center;white-space:nowrap;}@media(max-width: 480px){.cust=
+om-4anrg1{min-width:100%;}}.custom-1sstyyn{margin:40px 0px;}.custom-1okufpp=
+{font-size:17px;padding-bottom:8px;font-weight:550;}.custom-4cxybv{padding-=
+bottom:8px;}.custom-1d15tds{font-size:17px;font-weight:300;color:#0070C9;te=
+xt-decoration:none;}.custom-1q2yoq2{margin-top:30px;margin-bottom:30px;}.cu=
+stom-9smyh7{font-weight:300;font-size:17px;line-height:23px;font-size:13px;=
+color:#888888;margin-top:0;margin-bottom:0;line-height:1.5;}.custom-9ro87k =
+a:link{color:#666;}.footer-copy+.custom-9ro87k{margin-top:-20px;}.custom-1p=
+74tef{color:#666;text-decoration:none;font-size:13px;}.custom-bc7j6f{color:=
+#666;margin:0px 10px;text-align:center;font-size:13px;}.payment-information=
+__subtotal-group+.custom-1deqyu{margin-top:14px;}.custom-4tra68{font-weight=
+:300;color:#333333;letter-spacing:-0.37px;line-height:25px;vertical-align:t=
+op;margin:0;font-size:17px;display:inline-block;width:66%;text-align:start;=
+}.custom-pko50u{margin-top:12.5px;margin-bottom:12.5px;border-top:1px solid=
+ #cccccc;}.custom-1xv4psa{position:relative;display:block;padding:24px;bord=
+er-radius:12px;text-decoration:none;background-color:#fafafa;}.custom-14rno=
+zc{display:block;margin:16px auto;}.custom-16u9pil{font-weight:300;font-siz=
+e:17px;line-height:23px;color:#111111;font-size:30px;font-weight:500;text-a=
+lign:center;margin-top:14px;margin-bottom:0;}.custom-19xkdnh{display:block;=
+align-items:center;text-align:center;margin-top:16px;font-size:14px;}.custo=
+m-uk6cul{vertical-align:middle;}.custom-1smj2jt{font-weight:300;font-size:1=
+7px;line-height:23px;display:inline-block;text-align:center;vertical-align:=
+middle;font-size:14px;padding-left:12px;}.custom-15cb153{margin-bottom:14px=
+!important;padding-left:20px!important;font-weight:300;font-size:17px;line-=
+height:23px;font-size:13px;color:#888888;margin-top:0;margin-bottom:0;line-=
+height:1.5;}</style></head><body class=3D"custom-hzv07h"><div lang=3D"en-us=
+" dir=3D"ltr" class=3D"ltr custom-qrj5ky" id=3D"email_container"><div id=3D=
+"header_section" class=3D"custom-1ago99h"><div class=3D"header custom-1p2cb=
+qg"><div class=3D"header__container custom-m31y3a"><img height=3D"24" src=
+=3D"https://s.mzstatic.com/email/modern/logo/apple-134-70x84.png" alt=3D"Ap=
+ple"/></div><div class=3D"header__container"><h1 class=3D"custom-108v2mv">R=
+eceipt</h1></div></div></div><div id=3D"body_section" class=3D"custom-6ffxn=
+u"><div><p class=3D"custom-18w16cf">August 22, 2025</p><div><p class=3D"cus=
+tom-f41j3e">Order ID:</p><p class=3D"custom-zresjj">MKB8NJ0S37<br/></p></di=
+v><div><p class=3D"custom-f41j3e">Document:</p><p class=3D"custom-zresjj">7=
+92011660000<br/></p></div><div><p class=3D"custom-f41j3e">Apple Account:</p=
+><p class=3D"custom-zresjj">evanpurkhiser@gmail.com<br/></p></div></div><ta=
+ble width=3D"100%" class=3D"subscription-lockup__container custom-rgm23z"><=
+tr class=3D"subscription-lockup"><td valign=3D"top" class=3D"custom-omvd4k"=
+><img height=3D"60" alt=3D"CapCut - Video Editor" src=3D"https://is1-ssl.mz=
+static.com/image/thumb/Purple221/v4/48/60/32/486032a6-8c26-addf-de85-dc09f3=
+46bfd1/AppIcon-0-0-1x_U007emarketing-0-8-0-0-85-220.png/120x0w.jpg" class=
+=3D"custom-1skwja4"/></td><td valign=3D"top" class=3D"subscription-lockup__=
+content custom-vc9uxc"><p class=3D"custom-gzadzy">CapCut - Video Editor</p>=
+<p class=3D"custom-wogfc8">Monthly Subscription (Monthly)<br/></p><p class=
+=3D"custom-wogfc8">Renews September 22, 2025<br/></p><p class=3D"custom-wog=
+fc8">MXMFJJJF4F<br/></p></td><td valign=3D"top" class=3D"subscription-locku=
+p__bottom-text__col custom-i8xbl3"><p class=3D"custom-137u684">$11.99<br/><=
+/p></td></tr></table><div class=3D"payment-information custom-1y6quhx"><p c=
+lass=3D"custom-1wwfjxf">Billing and Payment<br/></p><div><div class=3D"paym=
+ent-information__col payment-information__left custom-9urhlu"><p class=3D"c=
+ustom-1d5xd7o">Evan Purkhiser</p><p class=3D"custom-1d5xd7o">324 E 4th St. =
+Apt 4B</p><p class=3D"custom-1d5xd7o">New York NY 10009-7083</p><p class=3D=
+"custom-1d5xd7o">United States</p></div><div class=3D"payment-information__=
+col custom-9urhlu"><div class=3D"payment-information__subtotal-group custom=
+-1deqyu"><p class=3D"custom-4tra68">Subtotal<!-- --> </p><div class=3D"cust=
+om-68yyeh"><p class=3D"custom-1s7arqf">$11.99<!-- --> </p></div><p class=3D=
+"custom-4tra68">Tax<!-- --> </p><div class=3D"custom-68yyeh"><p class=3D"cu=
+stom-1s7arqf">$1.06<!-- --> </p></div></div><hr class=3D"custom-pko50u"/><p=
+ class=3D"custom-15zbox7">Visa =E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2 8360<br=
+/></p><div class=3D"custom-68yyeh"><p class=3D"custom-jhluqm">$13.05<br/></=
+p></div></div></div></div></div><div id=3D"footer_section" class=3D"custom-=
+161t2u8"><p class=3D"custom-1cfbe7l">You can view your receipts in App=C2=
+=A0Store settings=C2=A0=E2=80=BA Purchase=C2=A0History, or turn on renewal =
+receipts to get emails like this each time your subscriptions renew.<br/></=
+p><div class=3D"action-button-cell custom-1nn7g7i"><a href=3D"https://link.=
+apple.com/account/toggle-renewal-receipts/e26df5e6-60de-4899-a814-26aa7a9c0=
+10b?storefront=3DUSA&locale=3Den-us" target=3D"_=3Dblank" rel=3D"nofollow">=
+<button class=3D"action custom-4anrg1">Turn On Renewal Receipt Emails</butt=
+on></a></div><div class=3D"custom-1sstyyn"><div class=3D"custom-1okufpp"> <=
+!-- -->Get Help with Subscriptions and Purchases</div><div class=3D"custom-=
+4cxybv"><a href=3D"https://apps.apple.com/account/subscriptions" target=3D"=
+_=3Dblank" rel=3D"nofollow" class=3D"body-link custom-1d15tds">Manage Subsc=
+riptions<!-- --> <!-- -->=E2=80=BA</a></div><div class=3D"custom-4cxybv"><a=
+ href=3D"https://apps.apple.com/account/purchases" target=3D"_=3Dblank" rel=
+=3D"nofollow" class=3D"body-link custom-1d15tds">Purchase History<!-- --> <=
+!-- -->=E2=80=BA</a></div><div class=3D"custom-4cxybv"><a href=3D"https://r=
+eportaproblem.apple.com" target=3D"_=3Dblank" rel=3D"nofollow" class=3D"bod=
+y-link custom-1d15tds">Report a Problem<!-- --> <!-- -->=E2=80=BA</a></div>=
+<div class=3D"custom-4cxybv"><a href=3D"https://buy.itunes.apple.com/WebObj=
+ects/MZFinance.woa/wa/accountSummary?mt=3D8" target=3D"_=3Dblank" rel=3D"no=
+follow" class=3D"body-link custom-1d15tds">View Your Account Information<!-=
+- --> <!-- -->=E2=80=BA</a></div><div class=3D"custom-4cxybv"><a href=3D"ht=
+tps://support.apple.com/billing" target=3D"_=3Dblank" rel=3D"nofollow" clas=
+s=3D"body-link custom-1d15tds">Visit Apple Support<!-- --> <!-- -->=E2=80=
+=BA</a></div></div><div class=3D"promo custom-1xv4psa"><img src=3D"https://=
+s.mzstatic.com/email/images_shared/apple_card_logo_large_2x.png" alt=3D"App=
+le Card logo" height=3D"24" class=3D"custom-14rnozc"/><p class=3D"custom-16=
+u9pil">Save 3% on all your Apple purchases.<sup>1</sup><br/></p><a target=
+=3D"_blank" href=3D"https://wallet.apple.com/apple-card/setup/feature/ccs?r=
+eferrer=3Dcid%3Dapy-120-100003" class=3D"custom-19xkdnh"><img src=3D"https:=
+//s.mzstatic.com/email/images_shared/wallet_icon_large_2x.png" height=3D"32=
+" class=3D"custom-uk6cul"/><p class=3D"custom-1smj2jt">Apply and use in min=
+utes<sup>2</sup><br/></p></a></div><div class=3D"footer-copy custom-1q2yoq2=
+"><ol class=3D"body custom-15cb153">
+<li>3% savings is earned as Daily Cash and is the total amount of Daily Cas=
+h earned for these purchases. You can choose to direct Daily Cash to a Savi=
+ngs account or to an Apple Cash account. If you do not have either set up t=
+o receive your Daily Cash, it can be applied as a statement credit. Apple=
+=C2=A0Card is issued and Savings accounts are provided by Goldman Sachs Ban=
+k USA, Salt Lake City Branch, Member FDIC. Daily Cash is earned on purchase=
+s after the transaction posts to your account. Actual posting times vary by=
+ merchant. Daily Cash is subject to exclusions, and additional details appl=
+y. See the Apple=C2=A0Card Customer Agreement for more information.</li>
+<li>Subject to credit approval.</li>
+</ol>
+<p class=3D"body custom-9smyh7">Apple Payments Services LLC, a subsidiary o=
+f Apple=C2=A0Inc., is a service provider of Goldman Sachs Bank USA for Appl=
+e=C2=A0Card and Savings accounts. Neither Apple=C2=A0Inc. nor Apple Payment=
+s Services LLC is a=C2=A0bank.<br/><br/>To access and use all Apple=C2=A0Ca=
+rd features and products available only to Apple=C2=A0Card users, you must =
+add Apple=C2=A0Card to Wallet on an iPhone or iPad that supports and has th=
+e latest version of iOS or iPadOS. Apple=C2=A0Card is subject to credit app=
+roval, available only for qualifying applicants in the United=C2=A0States, =
+and issued by Goldman Sachs Bank USA, Salt Lake City Branch.<br/><br/>Apple=
+ Payments Services LLC, a subsidiary of Apple Inc., is a service provider o=
+f Goldman Sachs Bank USA for Apple Card and Savings accounts. Neither Apple=
+ Inc. nor Apple Payments Services LLC is a bank.<br/><br/>If you reside in =
+the U.S. territories, please call Goldman Sachs at 1-877=E2=80=91255=E2=80=
+=915923 with questions about Apple=C2=A0Card.<br/></p></div><div class=3D"f=
+ooter-copy custom-1q2yoq2"><p class=3D"body custom-9smyh7">Privacy: We use =
+a <a class=3D"body-link custom-ytumd6" target=3D"_blank" rel=3D"noopener no=
+follow" href=3D"https://support.apple.com/kb/HT207233">Subscriber ID</a> to=
+ provide reports to developers.<br/></p></div><div class=3D"footer-copy cus=
+tom-1q2yoq2"><p class=3D"body custom-9smyh7">TM and =C2=A9 2025 Apple Inc. =
+One Apple Park Way, Cupertino, CA 95014, United States<br/></p></div><div c=
+lass=3D"inline-link-group custom-9ro87k"><span><a href=3D"https://www.apple=
+.com/legal/" class=3D"custom-1p74tef">All Rights Reserved</a><span class=3D=
+"custom-bc7j6f"> | </span></span><span><a href=3D"https://www.apple.com/leg=
+al/privacy/" class=3D"custom-1p74tef">Privacy Policy</a><span class=3D"cust=
+om-bc7j6f"> | </span></span><span><a href=3D"https://www.apple.com/legal/it=
+unes/us/sales.html" class=3D"custom-1p74tef">Terms of Sale</a></span></div>=
+</div></div></body></html>
+------=_Part_51002309_685428488.1755887008965--

@@ -3,16 +3,23 @@ import {Email} from 'postal-mime';
 
 import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
-/**
- * Matches the total cost of the order
- */
-const TOTAL_COST_REGEX = /TOTAL \$(?<totalCostUsd>\d+\.\d{2})/;
-
-/**
- * Matches the order details
- */
-const ORDER_DETAILS_REGEX =
-  /ORDER ID\n(?<orderId>[A-Z0-9]+)[\s\S]*?(?=\n{2,})\n\n[^[]+\[[^\n]+\]\n(?<itemName>[^\n]+)\n(?<subItem>[^\n]+)\n/;
+const MATCHERS = [
+  // Emails from iPhone purchases
+  {
+    testRegex: /TOTAL \$(?<totalCostUsd>\d+\.\d{2})/,
+    totalCostRegex: /TOTAL \$(?<totalCostUsd>\d+\.\d{2})/,
+    orderDetailsRegex:
+      /ORDER ID\n(?<orderId>[A-Z0-9]+)[\s\S]*?(?=\n{2,})\n\n[^[]+\[[^\n]+\]\n(?<itemName>[^\n]+)\n(?<subItem>[^\n]+)\n/,
+  },
+  // Emails from Apple Store on macOS purchases
+  {
+    testRegex: /Apple Account:\s*\n+[^\s@]+@[^ ]+\b/,
+    totalCostRegex:
+      /Subtotal\s*\n\$\d+\.\d{2}\s*\nTax\s*\n\$\d+\.\d{2}[\s\S]*?-{5,}[\s\S]*?\n\$(?<totalCostUsd>\d+\.\d{2})/,
+    orderDetailsRegex:
+      /Order ID:\s*\n+(?<orderId>[A-Z0-9]+)[\s\S]*?Apple Account:\s*\n+[^\n]+\n+(?<itemName>[^\n]+)\n\[[^\n]+\]\n\n[^\n]+\n\n(?<subItem>[^\n]+)/,
+  },
+];
 
 interface OrderDetails {
   itemName: string;
@@ -26,8 +33,14 @@ interface CostDetails {
 function process(email: Email) {
   const emailText = htmlToText(email.html!);
 
-  const orderMatch = emailText.match(ORDER_DETAILS_REGEX);
-  const costMatch = emailText.match(TOTAL_COST_REGEX);
+  const matchers = MATCHERS.find(({testRegex}) => testRegex.test(emailText));
+
+  if (matchers === undefined) {
+    throw new Error('Unknown apple receipt email');
+  }
+
+  const orderMatch = emailText.match(matchers.orderDetailsRegex);
+  const costMatch = emailText.match(matchers.totalCostRegex);
 
   if (orderMatch === null) {
     throw new Error('Failed to match Apple order details');

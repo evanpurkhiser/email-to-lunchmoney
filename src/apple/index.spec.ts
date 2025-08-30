@@ -1,4 +1,5 @@
 import {env} from 'cloudflare:test';
+import {htmlToText} from 'html-to-text';
 import PostalMime from 'postal-mime';
 import {expect, test} from 'vitest';
 
@@ -29,11 +30,20 @@ const testCases = [
       note: 'Timeleft - Meet New People, Timeleft X (Monthly)',
     },
   },
+  {
+    file: 'example-4',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Apple', expectedTotal: 1305},
+      note: 'CapCut - Video Editor, Monthly Subscription (Monthly)',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {
   const emailFile = await import(`./fixtures/${file}.eml?raw`);
   const email = await PostalMime.parse(emailFile.default);
+
   const result = await appleEmailProcessor.process(email, env);
 
   expect(result).toEqual(expected);
