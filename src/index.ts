@@ -73,6 +73,8 @@ async function handleMessage(message: ForwardableEmailMessage, env: Env) {
     return;
   }
 
+  console.log('raw email', forwardedMessage.text);
+
   // The Google App Script forwards the entire "raw" contents of the oirignal
   // message as plain text, so we parse the plain text portion
   const originalMessage = await PostalMime.parse(forwardedMessage.text!);
