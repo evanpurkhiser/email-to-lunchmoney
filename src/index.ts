@@ -79,6 +79,9 @@ async function handleMessage(message: ForwardableEmailMessage, env: Env) {
   // message as plain text, so we parse the plain text portion
   const originalMessage = await PostalMime.parse(forwardedMessage.text!);
 
+  console.log('orig subj', originalMessage.subject);
+  console.log('orig attachments', originalMessage.attachments);
+
   await processEmail(originalMessage, env);
 }
 
