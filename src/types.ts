@@ -12,7 +12,7 @@ export interface EmailProcessor {
   /**
    * Process am email.
    */
-  process: (email: Email, env: Env) => Promise<LunchMoneyAction>;
+  process: (email: Email, env: Env) => Promise<LunchMoneyAction | null>;
 }
 
 export interface LunchMoneyMatch {
