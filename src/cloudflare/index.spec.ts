@@ -125,5 +125,4 @@ describe('cloudflareProcessor', () => {
       note: 'Workers Plan [×3] (IN-99887766)',
     });
   });
-
 });
