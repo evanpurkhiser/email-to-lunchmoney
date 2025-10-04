@@ -44,12 +44,19 @@ async function process(email: Email, env: Env) {
   }
 
   const pdfText = await extractPdfText(pdfAttachment.content as ArrayBuffer);
-  const invoice = await extractInvoice(pdfText, env);
+  const originalInvoice = await extractInvoice(pdfText, env);
 
-  console.log('Got cloudflare invoice', invoice);
+  console.log('Got cloudflare invoice', originalInvoice);
+
+  const invoice = {
+    ...originalInvoice,
+    // Some line-items may be zero
+    lineItems: originalInvoice.lineItems.filter(item => item.totalCents > 0),
+  };
 
   if (invoice.lineItems.length === 0) {
-    throw new Error('No line items found?');
+    console.info('Ignoring empty Cloudflare invoice', {invoiceId: invoice.invoiceId});
+    return null;
   }
 
   const match = {

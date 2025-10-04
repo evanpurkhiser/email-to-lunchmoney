@@ -125,4 +125,61 @@ describe('cloudflareProcessor', () => {
       note: 'Workers Plan [×3] (IN-99887766)',
     });
   });
+
+  it('should filter out zero-dollar line items', async () => {
+    const invoiceWithZeroItems: CloudflareInvoice = {
+      invoiceId: 'IN-22762649',
+      totalCents: 1000,
+      lineItems: [
+        {
+          description: 'Time on Cloudflare Free Plan',
+          shortDescription: 'Free Plan',
+          quantity: 1,
+          totalCents: 0,
+        },
+        {
+          description: 'Advanced Certificate Manager',
+          shortDescription: 'Certificate Manager',
+          quantity: 1,
+          totalCents: 1000,
+        },
+      ],
+    };
+
+    extractInvoiceSpy.mockReturnValueOnce(Promise.resolve(invoiceWithZeroItems));
+
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await cloudflareProcessor.process(email, env);
+
+    expect(result).toEqual({
+      type: 'update',
+      match: {
+        expectedPayee: 'Cloudflare',
+        expectedTotal: 1000,
+      },
+      note: 'Certificate Manager (IN-22762649)',
+    });
+  });
+
+  it('should return null for invoice with only zero-dollar line items', async () => {
+    const allZeroInvoice: CloudflareInvoice = {
+      invoiceId: 'IN-00000000',
+      totalCents: 0,
+      lineItems: [
+        {
+          description: 'Time on Cloudflare Free Plan',
+          shortDescription: 'Free Plan',
+          quantity: 1,
+          totalCents: 0,
+        },
+      ],
+    };
+
+    extractInvoiceSpy.mockReturnValueOnce(Promise.resolve(allZeroInvoice));
+
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await cloudflareProcessor.process(email, env);
+
+    expect(result).toBeNull();
+  });
 });
