@@ -1,12 +1,7 @@
 import {getDocument} from 'pdfjs-serverless';
 import {Email} from 'postal-mime';
 
-import {
-  EmailProcessor,
-  LunchMoneyAction,
-  LunchMoneySplit,
-  LunchMoneyUpdate,
-} from 'src/types';
+import {EmailProcessor, LunchMoneySplit, LunchMoneyUpdate} from 'src/types';
 
 import {extractInvoice} from './prompt';
 import {CloudflareLineItem} from './types';
@@ -35,7 +30,7 @@ function makeItemNote(item: CloudflareLineItem, invoiceId: string): string {
   return `${item.shortDescription}${quantityText} (${invoiceId})`;
 }
 
-async function process(email: Email, env: Env): Promise<LunchMoneyAction> {
+async function process(email: Email, env: Env) {
   const pdfAttachment = email.attachments?.find(
     attachment => attachment.mimeType === 'application/pdf'
   );
