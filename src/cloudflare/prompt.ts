@@ -106,4 +106,3 @@ export async function extractInvoice(
 
   return JSON.parse(response.output_text);
 }
-
