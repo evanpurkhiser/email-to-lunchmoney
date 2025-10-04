@@ -113,6 +113,11 @@ async function process(email: Email, env: Env) {
 
   console.log('Got order details from amazon email', {order});
 
+  if (order.totalCostCents === 0) {
+    console.info('Ignoring Amazon order with zero cost', {orderId: order.orderId});
+    return null;
+  }
+
   return makeAction(order);
 }
 
