@@ -11,6 +11,7 @@ import {cloudflareProcessor} from 'src/cloudflare';
 import {lyftBikeProcessor} from 'src/lyft-bike';
 import {lyftRideProcessor} from 'src/lyft-ride';
 
+import {cleanupNotifiedActions} from './old-action-cleanup';
 import {processActions} from './lunchmoney';
 import {checkOldActionEntries} from './old-actions-checker';
 import {EmailProcessor, LunchMoneyAction} from './types';
@@ -101,6 +102,7 @@ const app: ExportedHandler<Env> = withSentry(
     scheduled: (_controller, env, ctx) => {
       ctx.waitUntil(processActions(env));
       ctx.waitUntil(checkOldActionEntries(env));
+      ctx.waitUntil(cleanupNotifiedActions(env));
     },
   }
 );
