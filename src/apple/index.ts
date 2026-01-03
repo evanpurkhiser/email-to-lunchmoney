@@ -73,7 +73,7 @@ function matchEmail(email: Email) {
 }
 
 export const appleEmailProcessor: EmailProcessor = {
-  identifier: 'lyft-ride',
+  identifier: 'apple',
   matchEmail,
   process,
 };
