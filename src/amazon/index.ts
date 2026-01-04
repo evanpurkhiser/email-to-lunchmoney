@@ -22,12 +22,12 @@ export function extractOrderBlock(emailText: string): string | null {
   }
 
   const orderStartIndex = orderStartMatch.index;
-  const footerIndex = emailText.indexOf('©2025 Amazon.com');
-  if (footerIndex === -1) {
+  const footerMatch = emailText.match(/©\d{4} Amazon\.com/);
+  if (!footerMatch || footerMatch.index === undefined) {
     return null;
   }
 
-  return emailText.slice(orderStartIndex, footerIndex).trim();
+  return emailText.slice(orderStartIndex, footerMatch.index).trim();
 }
 
 /**

@@ -5,6 +5,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import fixtureEmail from './fixtures/example.eml?raw';
 import fixtureOrder from './fixtures/example.json';
 import fixtureEmailText from './fixtures/example.txt';
+import fixture2Email from './fixtures/example-2.eml?raw';
 import {amazonProcessor, computeItemTaxes, extractOrderBlock} from './index';
 import * as prompt from './prompt';
 
@@ -69,6 +70,14 @@ describe('extractOrderBlock', () => {
     const result = extractOrderBlock(incompleteEmailText);
 
     expect(result).toBeNull();
+  });
+
+  it('extracts order block from example-2 email with 2026 footer', async () => {
+    const email = await PostalMime.parse(fixture2Email);
+    const result = extractOrderBlock(email.text ?? '');
+
+    expect(result).not.toBeNull();
+    expect(result).toContain('Order #');
   });
 });
 
