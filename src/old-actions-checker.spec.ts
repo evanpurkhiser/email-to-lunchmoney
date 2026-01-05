@@ -37,7 +37,7 @@ describe('checkOldActionEntries', () => {
     const expectedMessage = [
       '💸 *Unprocessed email\\-to\\-lunchmoney actions*',
       '',
-      'Found 1 action entries older than 14 days:',
+      'Found 1 action entries older than 15 days:',
       '',
       `*test\\-source* \\(${threeWeeksAgo.toLocaleDateString()}\\)`,
       'Update: Test \\- $10\\.00',
@@ -96,7 +96,7 @@ describe('checkOldActionEntries', () => {
     const expectedMessage = [
       '💸 *Unprocessed email\\-to\\-lunchmoney actions*',
       '',
-      'Found 3 action entries older than 14 days:',
+      'Found 3 action entries older than 15 days:',
       '',
       `*amazon* \\(${fourWeeksAgo.toLocaleDateString()}\\)`,
       'Update: Amazon \\- $20\\.00',
@@ -166,7 +166,7 @@ describe('checkOldActionEntries', () => {
     const expectedMessage = [
       '💸 *Unprocessed email\\-to\\-lunchmoney actions*',
       '',
-      'Found 1 action entries older than 14 days:',
+      'Found 1 action entries older than 15 days:',
       '',
       `*test\\_source\\-with\\*special* \\(${threeWeeksAgo.toLocaleDateString()}\\)`,
       'Update: Payee \\(with\\) \\[brackets\\] \\- $10\\.00',
