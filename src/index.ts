@@ -88,23 +88,25 @@ async function handleMessage(message: ForwardableEmailMessage, env: Env) {
   await processEmail(originalMessage, env);
 }
 
+const handlers = {
+  email: (message, env, ctx) => void ctx.waitUntil(handleMessage(message, env)),
+  scheduled: (_controller, env, ctx) => {
+    ctx.waitUntil(processActions(env));
+    ctx.waitUntil(checkOldActionEntries(env));
+    ctx.waitUntil(cleanupNotifiedActions(env));
+  },
+};
+
 const app: ExportedHandler<Env> = withSentry(
   env => ({
-    dsn: 'https://67fbf2b80619df462851d411a66557be@o126623.ingest.us.sentry.io/4509642116890624',
+    dsn: env.SENTRY_DSN,
     release: env.CF_VERSION_METADATA.id,
     tracesSampleRate: 1.0,
     sendDefaultPii: true,
     integrations: [consoleLoggingIntegration({levels: ['log', 'warn', 'error']})],
     enableLogs: true,
   }),
-  {
-    email: (message, env, ctx) => void ctx.waitUntil(handleMessage(message, env)),
-    scheduled: (_controller, env, ctx) => {
-      ctx.waitUntil(processActions(env));
-      ctx.waitUntil(checkOldActionEntries(env));
-      ctx.waitUntil(cleanupNotifiedActions(env));
-    },
-  }
+  handlers
 );
 
 export default app;
