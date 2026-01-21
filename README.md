@@ -12,6 +12,9 @@
 various receipt emails via an email trigger and associates metadata from the
 receipt to transactions in Lunch Money.
 
+> [!TIP]
+> **Want to deploy this service yourself?** There is a detailed guide in [SETUP.md](SETUP.md) with step-by-step instructions for setting up your own instance.
+
 This may be useful for those who want to answer questions like:
 
 > What did I buy on Amazon for $75?
