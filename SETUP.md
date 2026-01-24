@@ -267,7 +267,12 @@ The script needs to run periodically to check for new labeled emails.
 
 5. Click **Save**
 
-6. Grant permissions when prompted (the script needs access to read your Gmail messages)
+6. **Authorize the app** - You'll see a Google security warning screen saying "Google hasn't verified this app":
+   - Click **"Advanced"** at the bottom
+   - Click **"Go to Email to Lunch Money Forwarder (unsafe)"**
+   - Review the permissions and click **"Allow"**
+
+   This is normal for personal Apps Script projects. The script needs permission to read your Gmail messages and make HTTP requests.
 
 ### 2.6 Test the Script
 
@@ -284,13 +289,14 @@ You can manually test the script:
 4. Check the **Execution log** at the bottom to verify it ran without errors. You should see output similar to:
    ```
    Notice    Execution started
-   Info      Found 1 emails to forward...
+   Info      Found 1 emails to process...
+   Info      Successfully sent email: [Email Subject]
    Notice    Execution completed
    ```
 
-5. Check that the email you labeled had the `Fwd / Lunch Money` label removed (indicating it was forwarded)
+5. Check that the email you labeled had the `Fwd / Lunch Money` label removed (indicating it was processed)
 
-**Note:** The script will successfully forward emails, but they won't be received or processed until you configure Cloudflare email routing in Step 3.
+**Note:** The script will successfully POST emails to the worker endpoint once it's deployed in Step 3.
 
 
 ## 3. Cloudflare Workers Deployment
@@ -547,6 +553,20 @@ After the scheduled worker runs (within 30 minutes), check your Lunch Money acco
 - The service matches actions to transactions based on **payee name** and **amount**
 - Transactions must be in the past 180 days
 - Transactions must be uncleared (not marked as cleared/reviewed)
+
+**Clean Up Test Entries:**
+
+If you tested with an email that won't have a matching transaction in Lunch Money, you can remove the test entry from the database:
+
+```bash
+# Remove the most recent action
+wrangler d1 execute email-to-lunchmoney --remote --command "DELETE FROM lunchmoney_actions WHERE id = (SELECT id FROM lunchmoney_actions ORDER BY date_created DESC LIMIT 1)"
+```
+
+Or to clear all actions:
+```bash
+wrangler d1 execute email-to-lunchmoney --remote --command "DELETE FROM lunchmoney_actions"
+```
 
 
 ## Troubleshooting
