@@ -159,12 +159,7 @@ Now you'll create filters to automatically apply this label to specific receipt 
 
 ## 2. Google Apps Script Deployment
 
-The Apps Script monitors emails with the `Fwd / Lunch Money` label and forwards them to the Cloudflare service.
-
-> [!NOTE]
-> **Why use an Apps Script instead of Gmail's built-in forwarding?**
->
-> While Gmail does have the ability to forward emails based on filters, the forwarded emails may not include attachments and plain-text versions of the email, making it impossible to parse all receipt emails correctly. The Apps Script ensures the entirety of the original email (including all MIME parts and attachments) is forwarded to email-to-lunchmoney.
+The Apps Script monitors emails with the `Fwd / Lunch Money` label and POSTs them to the Cloudflare Worker endpoint.
 
 ### 2.1 Install clasp (Google Apps Script CLI)
 
