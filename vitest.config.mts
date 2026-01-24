@@ -17,7 +17,10 @@ export default defineWorkersProject(async () => {
           wrangler: {configPath: './wrangler.jsonc'},
           miniflare: {
             // Add a test-only binding for migrations, so we can apply them in a setup file
-            bindings: {TEST_MIGRATIONS: migrations},
+            bindings: {
+              TEST_MIGRATIONS: migrations,
+              INGEST_TOKEN: 'test-token-12345',
+            },
           },
         },
       },

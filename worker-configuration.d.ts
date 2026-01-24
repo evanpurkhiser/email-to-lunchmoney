@@ -3,7 +3,7 @@
 // Runtime types generated with workerd@1.20250705.0 2025-07-05 nodejs_als
 declare namespace Cloudflare {
   interface Env {
-    ACCEPTED_EMAIL: 'evanpurkhiser@gmail.com';
+    INGEST_TOKEN: string;
     OPENAI_API_KEY: string;
     LUNCHMONEY_API_KEY: string;
     TELEGRAM_TOKEN?: string;

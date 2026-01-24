@@ -3,6 +3,7 @@ import {
   consoleLoggingIntegration,
   withSentry,
 } from '@sentry/cloudflare';
+import {Hono} from 'hono';
 import PostalMime, {Email} from 'postal-mime';
 
 import {amazonProcessor} from 'src/amazon';
@@ -65,31 +66,53 @@ async function processEmail(email: Email, env: Env) {
 }
 
 /**
- * This script receives emails forwarded from my gmail and recordes details
- * about expected transactions that will appear in my lunchmoney.
+ * Process a base64-encoded raw email
  */
-async function handleMessage(message: ForwardableEmailMessage, env: Env) {
-  const forwardedMessage = await PostalMime.parse(message.raw);
-  const from = forwardedMessage.from?.address;
-
-  if (from !== env.ACCEPTED_EMAIL) {
-    console.warn('Recieved email from disallowed address', {from});
-    return;
-  }
-
-  console.log('raw email length', forwardedMessage.text?.length);
-  console.log('raw email text', forwardedMessage.text);
-
-  // The Google App Script forwards the entire "raw" contents of the original
-  // message as base64-encoded text to avoid line wrapping issues
-  const decodedRaw = atob(forwardedMessage.text!);
-  const originalMessage = await PostalMime.parse(decodedRaw);
-
-  await processEmail(originalMessage, env);
+async function processRawEmail(base64Content: string, env: Env) {
+  const decodedRaw = atob(base64Content);
+  const email = await PostalMime.parse(decodedRaw);
+  await processEmail(email, env);
 }
 
+// Create Hono app with Env types
+const app = new Hono<{Bindings: Env}>();
+
+// Apply authentication middleware to /ingest routes
+app.use('/ingest', async (c, next) => {
+  const authHeader = c.req.header('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return c.json({error: 'Missing or invalid Authorization header'}, 401);
+  }
+
+  const token = authHeader.replace('Bearer ', '');
+  if (token !== c.env.INGEST_TOKEN) {
+    return c.json({error: 'Invalid token'}, 401);
+  }
+
+  await next();
+
+  return null;
+});
+
+/**
+ * POST /ingest - Receives base64-encoded raw email content from Google Apps Script
+ */
+app.post('/ingest', async c => {
+  // Validation: Check for body content
+  const body = await c.req.text();
+  if (!body || body.length === 0) {
+    return c.json({error: 'Empty request body'}, 400);
+  }
+
+  // Process asynchronously and return 202 immediately
+  c.executionCtx.waitUntil(processRawEmail(body, c.env));
+
+  return c.json({message: 'Accepted'}, 202);
+});
+
+// Export the Hono fetch handler combined with scheduled handler
 const handlers: ExportedHandler<Env> = {
-  email: (message, env, ctx) => void ctx.waitUntil(handleMessage(message, env)),
+  fetch: app.fetch,
   scheduled: (_controller, env, ctx) => {
     ctx.waitUntil(processActions(env));
     ctx.waitUntil(checkOldActionEntries(env));
@@ -97,7 +120,7 @@ const handlers: ExportedHandler<Env> = {
   },
 };
 
-const app: ExportedHandler<Env> = withSentry(
+const worker: ExportedHandler<Env> = withSentry(
   env => ({
     dsn: env.SENTRY_DSN,
     release: env.CF_VERSION_METADATA.id,
@@ -109,4 +132,4 @@ const app: ExportedHandler<Env> = withSentry(
   handlers
 );
 
-export default app;
+export default worker;

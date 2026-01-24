@@ -78,8 +78,8 @@ Some emails I would like to add
    here](https://github.com/evanpurkhiser/gmailctl-personal/blob/main/evanpurkhiser%40gmail.com.jsonnet)
 
 3. A [Google App Script](https://developers.google.com/apps-script) is used to
-   look for emails labeled as `Fwd / Lunch Money` and it forwards the entire
-   raw email to the Cloudflare worker.
+   look for emails labeled as `Fwd / Lunch Money` and it POSTs the entire
+   raw email to the Cloudflare Worker's HTTP endpoint.
 
    The App Script is in [`./google-app-script`](./google-app-script).
 
@@ -111,12 +111,8 @@ Some emails I would like to add
    - Splitting transactions
    - Adding notes to transactions
 
-> [!NOTE]
-> Ideally the emails could be directly forwarded using the forwarding filter
-> action, however doing so does not forward the entire email, including the
-> plain text version, which is often easier to parse.
-
 ## Secrets
 
+- `INGEST_TOKEN` - Authentication token for the /ingest endpoint (generate a secure random token)
 - `LUNCHMONEY_API_KEY` - Get this in your lunchmoney settings
 - `OPENAI_API_KEY` - Needed for processors that talk to OpenAI

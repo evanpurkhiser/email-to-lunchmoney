@@ -6,10 +6,10 @@ This guide will walk you through setting up the email-to-lunchmoney service to a
 
 The setup process involves four main steps:
 
-1. **Gmail Label Setup** - Configure Gmail to automatically label receipt emails that should be forwarded
-2. **Google Apps Script Deployment** - Deploy a script that monitors labeled emails and forwards them to the service
+1. **Gmail Label Setup** - Configure Gmail to automatically label receipt emails that should be processed
+2. **Google Apps Script Deployment** - Deploy a script that monitors labeled emails and POSTs them to the Worker endpoint
 3. **Cloudflare Workers Deployment** - Deploy the main processing service on Cloudflare
-4. **Service Configuration** - Configure API tokens, optional Telegram notifications, and other settings
+4. **Service Configuration** - Configure API tokens, authentication, optional Telegram notifications, and other settings
 
 The service will parse receipt emails from supported services (Amazon, Lyft, Apple, Cloudflare), extract transaction details, and automatically update your Lunch Money transactions with notes or split them into itemized line items.
 
@@ -37,7 +37,7 @@ If you're an AI agent helping a user set up this service, follow these guideline
 
 8. **Don't assume existing setup** - Treat this as a fresh installation unless the user explicitly tells you otherwise.
 
-The user should have their API keys ready (Lunch Money, OpenAI) and a Cloudflare account with a domain configured for email routing.
+The user should have their API keys ready (Lunch Money, OpenAI) and a Cloudflare account.
 
 </details>
 
@@ -51,9 +51,6 @@ Before starting, ensure you have:
 - A [Lunch Money](https://lunchmoney.app) account
 - An [OpenAI API account](https://platform.openai.com) (for AI-powered parsing)
 - A [Cloudflare account](https://cloudflare.com) (free tier works fine)
-- **A domain registered with or proxied through Cloudflare** (required for Email Routing)
-  - You can [register a domain through Cloudflare](https://developers.cloudflare.com/registrar/get-started/register-domain/) at cost pricing
-  - Or transfer an existing domain to use Cloudflare nameservers
 - Node.js installed (v18 or later recommended)
 - Basic familiarity with command line tools and git
 
@@ -222,7 +219,7 @@ This will open a browser window to authenticate with your Google account. Grant 
 
 ### 2.4 Configure Script Properties
 
-The script needs two configuration properties to be set:
+The script needs configuration properties to be set:
 
 1. Open your Apps Script project:
    ```bash
@@ -233,14 +230,15 @@ The script needs two configuration properties to be set:
 
 3. Scroll down to **Script Properties** and click **Add script property**
 
-4. Add the following two properties:
+4. Add the following properties:
 
    | Property Name | Value | Description |
    |--------------|-------|-------------|
    | `GMAIL_LABEL` | `Fwd / Lunch Money` | The Gmail label to monitor |
-   | `INGEST_EMAIL` | `lunchmoney-details@yourdomain.com` | Your Cloudflare email routing address |
+   | `INGEST_URL` | `https://email-to-lunchmoney.your-subdomain.workers.dev/ingest` | Your Worker endpoint URL |
+   | `INGEST_TOKEN` | _(generate in Step 4)_ | Authentication token for the Worker |
 
-   **Note:** For `INGEST_EMAIL`, you'll configure the Cloudflare email routing address in Step 3. For now, use your intended domain (you can update this property later once the Cloudflare email routing is set up).
+   **Note:** For `INGEST_URL`, replace `your-subdomain` with your actual Cloudflare Workers subdomain (you'll get this after deploying in Step 3). For `INGEST_TOKEN`, you'll generate and set this token in Step 4 after deploying the worker. You can update these properties later.
 
 5. Click **Save script properties**
 
@@ -335,17 +333,9 @@ Open `wrangler.jsonc` and update the placeholder values:
    "database_id": "YOUR_DATABASE_ID_HERE"  // Replace with your database ID
    ```
 
-2. **Replace the email address** with your Gmail address (the one you'll be forwarding from):
-   ```jsonc
-   "ACCEPTED_EMAIL": "youremail@gmail.com"  // Replace with your Gmail address
-   ```
-
-The complete `wrangler.jsonc` should look like:
+The `wrangler.jsonc` should have the database configuration like:
 ```jsonc
 {
-  "vars": {
-    "ACCEPTED_EMAIL": "your-actual-email@gmail.com"
-  },
   "d1_databases": [
     {
       "binding": "DB",
@@ -374,7 +364,7 @@ This will:
 - Bundle your TypeScript code
 - Upload it to Cloudflare Workers
 - Configure the scheduled trigger (every 30 minutes)
-- Set up the email routing handler
+- Set up the HTTP /ingest endpoint
 
 You should see output indicating successful deployment:
 ```
@@ -382,26 +372,34 @@ Published email-to-lunchmoney (X.XX sec)
   https://email-to-lunchmoney.your-subdomain.workers.dev
 ```
 
-### 3.7 Configure Email Routing
+**Important:** Copy this Worker URL - you'll need it to configure the `INGEST_URL` in your Apps Script properties (in Step 4.1).
 
-Now that the worker is deployed, configure Cloudflare Email Routing to send emails to it.
 
-1. Go to your Cloudflare dashboard: [dash.cloudflare.com](https://dash.cloudflare.com)
-2. Select your domain (you must have a domain registered/proxied through Cloudflare)
-3. Go to **Email** → **Email Routing**
-4. If not enabled, click **Enable Email Routing** and verify your domain
-5. Click **Create address** (or **Routing Rules** → **Create address**)
-6. Configure:
-   - **Custom address:** `lunchmoney-details` (or your preferred prefix)
-   - **Action:** `Send to a Worker`
-   - **Destination Worker:** Select `email-to-lunchmoney`
-7. Save the email address
+## 4. Service Configuration
 
-The full email address will be: `lunchmoney-details@yourdomain.com`
+Finally, configure the service with your API tokens and optional settings.
 
-### 3.8 Update Apps Script Configuration
+### 4.1 Required Secrets and Configuration
 
-Now that you have the email routing address, update your Apps Script configuration:
+You'll need to set the following secrets and configuration:
+
+#### INGEST_TOKEN - Authentication Token
+
+First, generate a secure random token for authenticating requests to your Worker:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+This will output a secure random token (e.g., `696b1b2b7fdd1dee2c425cd331740d9f...`). Copy this token.
+
+Set it as a Cloudflare secret:
+```bash
+wrangler secret put INGEST_TOKEN
+```
+Paste your token when prompted.
+
+**Important:** Now update your Apps Script configuration with this token:
 
 1. Open your Apps Script project:
    ```bash
@@ -409,20 +407,10 @@ Now that you have the email routing address, update your Apps Script configurati
    clasp open-script
    ```
 
-2. Go to **Project Settings** (gear icon in the left sidebar)
-
-3. Under **Script Properties**, find the `INGEST_EMAIL` property and update it with your Cloudflare email routing address (e.g., `lunchmoney-details@yourdomain.com`)
-
-4. Click **Save script properties**
-
-
-## 4. Service Configuration
-
-Finally, configure the service with your API tokens and optional settings.
-
-### 4.1 Required Secrets
-
-You'll need to set the following secrets in Cloudflare:
+2. Go to **Project Settings** (gear icon)
+3. Under **Script Properties**, find the `INGEST_TOKEN` property and update it with the token you just generated
+4. While you're here, also update the `INGEST_URL` property with your Worker URL from Step 3.6 (e.g., `https://email-to-lunchmoney.your-subdomain.workers.dev/ingest`)
+5. Click **Save script properties**
 
 #### Lunch Money API Key
 
@@ -498,17 +486,7 @@ If you want centralized error tracking (recommended for production use):
 
 ### 4.4 Configuration Variables
 
-Additional configuration is available in `wrangler.jsonc`:
-
-```jsonc
-{
-  "vars": {
-    "ACCEPTED_EMAIL": "youremail@gmail.com"  // Only accept forwarded emails from this address
-  }
-}
-```
-
-And in the source code:
+Additional configuration is available in the source code:
 
 - **Old Action Threshold** (`src/old-actions-checker.ts`): Currently 15 days. Actions older than this trigger notifications.
 - **Cleanup Threshold** (`src/old-action-cleanup.ts`): Currently 30 days. Notified actions older than this are deleted.
@@ -583,9 +561,16 @@ After the scheduled worker runs (within 30 minutes), check your Lunch Money acco
 ### Emails Not Being Processed
 
 - Check Cloudflare Worker logs: `wrangler tail`
-- Verify the `ACCEPTED_EMAIL` in `wrangler.jsonc` matches your Gmail address
-- Ensure email routing is configured correctly in Cloudflare dashboard
+- Verify the `INGEST_TOKEN` matches between Worker secrets and Apps Script properties
+- Verify the `INGEST_URL` in Apps Script points to the correct Worker endpoint (should end with `/ingest`)
 - Check that your worker is deployed: `wrangler deployments list`
+- Test the endpoint directly with curl:
+  ```bash
+  curl -X POST https://your-worker-url.workers.dev/ingest \
+    -H "Authorization: Bearer YOUR_TOKEN" \
+    -d "$(cat test-email.eml | base64)"
+  ```
+  You should receive a 202 response if everything is configured correctly
 
 ### Actions Not Matching Transactions
 
@@ -653,7 +638,6 @@ The service is designed to be extremely cost-effective:
 |---------|------|
 | **Cloudflare Workers** | Free tier (100,000 requests/day, 10ms CPU time per request) |
 | **Cloudflare D1** | Free tier (5 GB storage, 5 million reads/day, 100k writes/day) |
-| **Cloudflare Email Routing** | Free (unlimited email addresses) |
 | **OpenAI API** | ~$0.01-0.05/month (depends on usage, mostly gpt-4o-mini) |
 | **Google Apps Script** | Free |
 
@@ -662,8 +646,9 @@ The service is designed to be extremely cost-effective:
 
 ## Security Considerations
 
-- **Email Verification:** The service only accepts emails from the `ACCEPTED_EMAIL` address (your Gmail)
+- **Token-Based Authentication:** The service uses a secure Bearer token (`INGEST_TOKEN`) to authenticate requests to the `/ingest` endpoint. Keep this token secret and rotate it if compromised.
 - **API Keys:** All secrets are stored securely in Cloudflare Workers secrets (encrypted at rest)
 - **Database Access:** D1 database is only accessible by your worker
 - **Email Content:** Raw email content is processed and then discarded (not permanently stored)
 - **Action Data:** Only extracted metadata is stored in D1 (no full email bodies or attachments)
+- **Endpoint Security:** The `/ingest` endpoint is publicly accessible but requires the authentication token.
