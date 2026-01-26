@@ -1,60 +1,4 @@
-Delivered-To: evanpurkhiser@gmail.com
-Received: by 2002:a17:504:d417:b0:1dcc:d22c:be3a with SMTP id oc23csp5391062njb;
-        Fri, 26 Dec 2025 22:26:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG2Tr2cX7YCywmm8Z9SUGgF7RyuEe0OK2KV3FQ+5y8hAo7rOYiA0AULkUDori5gajckjZTo
-X-Received: by 2002:a17:903:4405:b0:295:565b:c691 with SMTP id d9443c01a7336-2a2f22292e6mr243899625ad.17.1766816768652;
-        Fri, 26 Dec 2025 22:26:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1766816768; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CYCiJUEu76L8ua55uSyrQm8cz/0hDWel++LcGJgmWhNkaSxgPuGlXkQAekHZHu9L4p
-         HdiDKVtm35/TbwfPjXzE5CqLMwfJVEPV05A10BOJsLYpx9vEuUiUAr1Gd9ZzU7faYJQ9
-         Ar9iMHWROiOrz3ctIYrcZSCf52FYl4sEX2KkjW9za18XU1RU32a8f9u7VpigFx1CQB2f
-         YSAO2Cx4MqG/g0sYjPB6r/im5anZWqnJ0n3ZZLSutanviCg842Z8OntfxhuU37WWD0oR
-         p6yTGJMzslj/aoyKaumarI5xPhJ7vySxgEtvDtciUP/pdXUvTgab7nFNWQbeiVJfPJll
-         G6ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=date:message-id:subject:mime-version:errors-to:reply-to:from:to
-         :dkim-signature;
-        bh=v6XBOfCGvvEL/3AgLcrav+c8mXFYo8mKwSlLuUFeqAA=;
-        fh=AzgSWbqEA2MA9wpJnsc7BysVJ3G5V1E5Wuc226RnrDo=;
-        b=Yww+kk0k6xRbKuONuDFeQCcSSm+OMSa03ZaPyGTt5MwPFZTyXNDGOU8nU3lkcYrzBQ
-         XWMN+effdda9TlSD03y944hewP5+jnBvdnJ3lmRulB/AR8T/4gBvcvYbDmcYuS3YCu0H
-         SVrz4QhUENBFCbUbtszpWBqBd9XkH3n8vuPphikH4vO4yYSTUPMIFqsdrHf5oGmxDEHu
-         nx5TNwZZezruTLyJUlKRZTGxaXSfh6nryZMThf3RgV1KXXRwQcIWy7kmh/nH1L07Zr13
-         ZNPdXtk23ai27vo0fWLgpxYd0J/aqaKeu42QkpVnKpI3FeGKs20lG3m4roNnVWcJTU84
-         pidw==;
-        dara=google.com
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@steampowered.com header.s=smtp header.b=NYB87VWj;
-       spf=pass (google.com: domain of noreply@steampowered.com designates 208.64.202.45 as permitted sender) smtp.mailfrom=noreply@steampowered.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=steampowered.com
-Return-Path: <noreply@steampowered.com>
-Received: from smtp-45.steampowered.com (smtp-45.steampowered.com. [208.64.202.45])
-        by mx.google.com with ESMTPS id d9443c01a7336-2a2f3d5f710si342042615ad.206.2025.12.26.22.26.08
-        for <EvanPurkhiser@gmail.com>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Dec 2025 22:26:08 -0800 (PST)
-Received-SPF: pass (google.com: domain of noreply@steampowered.com designates 208.64.202.45 as permitted sender) client-ip=208.64.202.45;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@steampowered.com header.s=smtp header.b=NYB87VWj;
-       spf=pass (google.com: domain of noreply@steampowered.com designates 208.64.202.45 as permitted sender) smtp.mailfrom=noreply@steampowered.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=steampowered.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=steampowered.com; s=smtp; h=Date:Message-Id:Content-Type:Subject:
-	MIME-Version:Reply-To:From:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=v6XBOfCGvvEL/3AgLcrav+c8mXFYo8mKwSlLuUFeqAA=; b=NYB87VWjNE3yhZ3boD67HONsHD
-	hDABvdZ07K7WNXARrUJNI96IOnHd8Da74bXxym/qfSR5fDtxPAnUiin8KMxfG9tySTR7GCdP3DlLp
-	lCtkKxpTrDHc0XgDzvVO2qINMS34LebDsKv1dtnt10SF7gXgcTPAMaZ84umxYdbiW5t0=;
-Received: from [192.69.99.81] (helo=valvesoftware.com)
-	by smtp-01-tuk1.steampowered.com with smtp (Exim 4.97)
-	(envelope-from <noreply@steampowered.com>)
-	id 1vZNke-00000009HvT-1HNu
-	for EvanPurkhiser@gmail.com;
-	Fri, 26 Dec 2025 22:26:08 -0800
-To: EvanPurkhiser@gmail.com
+To: testuser@example.com
 From: "Steam Support" <noreply@steampowered.com>
 Reply-To: <noreply@steampowered.com>
 Errors-To: <noreply@steampowered.com>
@@ -63,7 +7,7 @@ MIME-Version: 1.0
 Subject: Thank you for your Steam purchase!
 Content-Type: multipart/mixed;
  boundary="m694f7c004923e"
-Message-Id: <E1vZNke-00000009HvT-1HNu@smtp-01-tuk1.steampowered.com>
+Message-Id: <REDACTED@example.com>
 Date: Fri, 26 Dec 2025 22:26:08 -0800
 
 
@@ -77,11 +21,11 @@ Content-Type: multipart/alternative;
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-=0AHello evanpurkhiser
+=0AHello testuser
 =0AThank you for your recent transaction on Steam.  To view the details, pl=
 ease
 visit
-https://store.steampowered.com/email/PurchaseReceipt?sparams=3DeJx9VV1v4jAQ=
+https://store.steampowered.com/email/PurchaseReceipt?sparams=3DREDACTED_SPARAMS=
 _CtRnk8pgQChT23v-lpVQj2popVlnG1i4cSu7cBFp_vvt84HdQLqG8ys17sz3s3fUNC6YgVo2yg=
 Ib8NZ-CPUQEWJv3Mh91QgoLTMamYrWrqQrQVaImpqpaS2UFIuEO7_3hlHK3kCDVnEpBdpuHXnC2=
 uVuX27ebspQKjoSnyf1EBla8vwSLxerdJ4tV6lyO65ELzKCZN1ZXWD9MvWg7maMpS1QF8-HGmla=
@@ -94,7 +38,7 @@ gh8pNZ7Ri4jUF1BRoRsqLANsfIAlflK3j5jLOXknFKSV9YQnB5aMZdyvoxT93axShiU7HSKR2hn=
 04OSVa8cmX9C-1RfkxPBvc39XXgaGaa7ccLuIMflpm1buy4Y7H8b4sH1orgHaAR6snCrJSyB1xa=
 9Z8aHhs-6m9FrP3byfx_ObkK9pvwjqlyHPSM4_7FX52i3m0Y4d-jO2W4JPr97K_dp4uDmDxyCxR=
 bC1UXCvbJA8eIH9CnZ7MXj2dvAk0Rxj_EXPnRXhE5yCV6kPHqPw2bdjnrVzO5vNNqMvgVvqqyhe=
-J1GcbKJ4k47YczM_7yffj-7C31jlU92Y8N9_0vNqTg&check=3D26465029ae786ad36ee3e7e4=
+J1GcbKJ4k47YczM_7yffj-7C31jlU92Y8N9_0vNqTg&check=3DREDACTED_CHECK=
 ed2b46f5d8bf98924f71140d0c9aca3421c58d4f.
 
 =0A=0ACheers,=0AThe Steam Team=0A=0A--=0A=0AThis notification has been sent=
@@ -104,7 +48,7 @@ lp, please visit Steam Support.=0Ahttps://help.steampowered.com=0A=0A=C2=
 =A9 Valve Corporation=0AAll rights reserved. All trademarks are property of=
  their respective owners in the US and other countries.=0A=0A--=0A=0AView t=
 his message on the web:=0Ahttps://store.steampowered.com/email/PurchaseRece=
-ipt?sparams=3DeJx9VV1v4jAQ_CtRnk8pgQChT23v-lpVQj2popVlnG1i4cSu7cBFp_vvt84Hd=
+ipt?sparams=3DREDACTED_SPARAMS=
 QLqG8ys17sz3s3fUNC6YgVo2ygIb8NZ-CPUQEWJv3Mh91QgoLTMamYrWrqQrQVaImpqpaS2UFIu=
 EO7_3hlHK3kCDVnEpBdpuHXnC2uVuX27ebspQKjoSnyf1EBla8vwSLxerdJ4tV6lyO65ELzKCZN=
 1ZXWD9MvWg7maMpS1QF8-HGmlan0ouAGNrNW0MjxDZr2eL5NVOosX82S5SteLgaXMclmRjLb1n4=
@@ -261,7 +205,7 @@ ble width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=0A=09=
 =09=09=09<tr>=0A=09=09=09=09=09<td class=3D"title-36 pb-30 c-grey6 fw-b" st=
 yle=3D"font-size:36px; line-height:42px; font-family:Arial, sans-serif, 'Mo=
 tiva Sans'; text-align:left; padding-bottom: 30px; color:#bfbfbf; font-weig=
-ht:bold;">Hello evanpurkhiser</td>=0A=09=09=09=09</tr>=0A=09=09=09</table>=
+ht:bold;">Hello testuser</td>=0A=09=09=09=09</tr>=0A=09=09=09</table>=
 =0A=09=09=09<!-- End Welcome -->=0A=0A    <!-- Intro  -->=0A    =09=09=09<t=
 able width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=0A=09=
 =09=09=09<tr>=0A=09=09=09=09=09<td class=3D"title-28 c-white pb-30" style=
@@ -409,7 +353,7 @@ left;"></td>=0A                                                            =
             <td valign=3D"top" class=3D"text-12 c-grey4 mt-right" style=3D"=
 font-size:12px; line-height:18px; font-family:'Motiva Sans', Arial, sans-se=
 rif; text-align:left; color:#f1f1f1;">=0A                                  =
-                                          <strong>77254680132456873</strong=
+                                          <strong>11111111111111111</strong=
 >=0A                                                                       =
  </td>=0A                                                                  =
   </tr>=0A                                                                <=
@@ -823,7 +767,7 @@ table>=0A            </td>=0A        </tr>=0A    </table>=0A</center>=0A=0A=
     <center style=3D"font-family:Arial, sans-serif, 'Motiva Sans'; color: #=
 000000; font-size: 11px; margin-bottom: 4px;">=0A        Trouble viewing th=
 is message?        <a href=3D"https://store.steampowered.com//account/recei=
-pt/77254680132456873"=0A            style=3D"font-family:Arial, sans-serif,=
+pt/11111111111111111"=0A            style=3D"font-family:Arial, sans-serif,=
  'Motiva Sans'; color: #000000; font-size: 11px; margin-bottom: 4px;">=0A  =
           Click here.        </a>=0A    </center>=0A=0A</body>=0A</html>=0A
 

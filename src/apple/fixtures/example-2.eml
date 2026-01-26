@@ -1,6 +1,6 @@
 Date: Mon, 9 Oct 2023 23:38:35 +0000 (GMT)
 From: Apple <no_reply@email.apple.com>
-To: evanpurkhiser@gmail.com
+To: testuser@example.com
 Subject: Your receipt from Apple.
 MIME-Version: 1.0
 Content-Type: multipart/alternative; 
@@ -15,11 +15,11 @@ Apple Receipt
 -----------------------------------------------------------
 
 APPLE ID
-evanpurkhiser@gmail.com
+testuser@example.com
 
 BILLED TO
-Visa .... 1890 (Apple=C2=A0Pay)
-Evan  Purkhiser
+Visa .... 1234 (Apple=C2=A0Pay)
+Test User
 1234 16th St
 #301
 San Francisco,  CA  94103
@@ -156,14 +156,14 @@ s-serif;">
 r-style: solid;border-color: white;border-left-width:0;border-right-width:1=
 px;border-bottom-width: 1px;border-top-width: 0px;"><span style=3D"color:rg=
 b(102,102,102);font-size:10px;">
-            APPLE ID</span><br>evanpurkhiser@gmail.com
+            APPLE ID</span><br>testuser@example.com
                       </td>
                     <td width=3D"340" rowspan=3D"3" style=3D"padding-left:2=
 0px;border-style:solid;border-color:white;border-left-width:0px;border-righ=
 t-width:0px;border-top-width:0px; border-bottom-width:0px;">
                       <span style=3D"color:rgb(102,102,102);font-size:10px;=
 ">BILLED TO</span><br>
-            Visa .... 1890 (Apple=C2=A0Pay)<br>            Evan  Purkhiser<=
+            Visa .... 1234 (Apple=C2=A0Pay)<br>            Test User<=
 br>
             1234 16th St<br>#301<br>San Francisco,  CA  94103<br>USA       =
                                                  </td>
@@ -485,7 +485,7 @@ p-width:0px;border-left-width:0;border-right-width:0;border-bottom-width:0p=
 x;padding-top:8px;padding-bottom:8px;">
             <span style=3D"color:rgb(102,102,102);font-size:10px;font-weigh=
 t:600;">BILLED TO</span><br>
-            Visa .... 1890 (Apple=C2=A0Pay)<br>            Evan  Purkhiser<=
+            Visa .... 1234 (Apple=C2=A0Pay)<br>            Test User<=
 br>
             1234 16th St<br>#301<br>San Francisco,  CA  94103<br>USA       =
                                        </td>

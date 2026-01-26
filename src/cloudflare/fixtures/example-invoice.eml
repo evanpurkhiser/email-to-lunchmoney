@@ -1,71 +1,10 @@
-Delivered-To: evanpurkhiser@gmail.com
-Received: by 2002:a17:505:6995:20b0:1da1:483b:b572 with SMTP id zb21-n2csp3038295njb;
-        Mon, 29 Sep 2025 21:05:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGCLzeCs0/FDfnv1mqckr4rO5yHbsBCHDUQSuwnv6yGTZOYmogNBHwphKNjURW43JTeQdJg
-X-Received: by 2002:a05:690c:f01:b0:729:5b86:551c with SMTP id 00721157ae682-77e5c82749amr42276337b3.0.1759205102762;
-        Mon, 29 Sep 2025 21:05:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1759205102; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kLgDwCeFJFLB0lp44MnV/LafEgvFQUmnTUh+iFZhbFmDByz1TeRdfCgzr2TNGKqnjw
-         U4OMi23JNWGQtdAa0fswet8HqiIr8lABrPD4nDL3LXcUofGsV5vkfDco/w5XKSGimAPT
-         S5GAErbRcqLWU39w1FmnlYjk4zYCeOScv/IR2HYguRl7fMBr9kjeAi/8wcywazh8Y4cb
-         jxg4EvjJGlsftfOqAIFulbkv3baScqSmWQ9kmO/qAd8awCErcHyLZZ3bQ+Ze+v6EZxLp
-         A0idvwRMupK/jff/7Kjs8K5xqh+TAVWV52bOrGYfjfclfZfHx3sFftvZp+cSD2dDfXTa
-         Uksg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=list-id:list-unsubscribe-post:list-unsubscribe:from:subject
-         :mime-version:date:message-id:to:dkim-signature;
-        bh=x1oF5GAgK3arl9ol4tskqYcGnx1nPkTyixQ1yoZbWGg=;
-        fh=169V9/7R5Hr0c84w09Eb6qts8GXB7/FdpMEMd03Gbs8=;
-        b=aE7Umvwddky8HcLTwfO3qPtuIpF8W1fzpo3w3MgiVmwJqMdaOVoYwlpRuijWxRaD5a
-         IM0XBkMpXjEaAXsU7q28Orc5f1gbtmSRWInb21z6vLElUAtsCLaIIgzzBLQaw/Qyh7pG
-         GJHyjg+dLqmpbYJpO7m2PMeBEQasULnsKNBRoVbkoobcdUqHTIuH4rjBllrxBOmT4gGX
-         PxGoUMnFKGNr/yyqQzZedgVP6ndOEyn+Y+4UxeBs7xpSjnQmLUZdxhiP1AEF79JTsVcl
-         DXEq19nrv8wO/Gh5/53+WOTj3lriqirB9MRK+/2BE+IGuwP2xP6npECOs4/je0WkQ00G
-         3sIA==;
-        dara=google.com
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@notify.cloudflare.com header.s=scph0619 header.b=CTHTUKFJ;
-       spf=pass (google.com: domain of msprvs1=203682udhdfup=bounces-265094@notify.cloudflare.com designates 147.253.211.95 as permitted sender) smtp.mailfrom="msprvs1=203682udHdFup=bounces-265094@notify.cloudflare.com";
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=notify.cloudflare.com
-Return-Path: <msprvs1=203682udHdFup=bounces-265094@notify.cloudflare.com>
-Received: from mta-253-211-95.sparkpostmail.com (mta-253-211-95.sparkpostmail.com. [147.253.211.95])
-        by mx.google.com with ESMTPS id 956f58d0204a3-636d5b1cc4asi4091291d50.455.2025.09.29.21.05.01
-        for <evanpurkhiser@gmail.com>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Sep 2025 21:05:02 -0700 (PDT)
-Received-SPF: pass (google.com: domain of msprvs1=203682udhdfup=bounces-265094@notify.cloudflare.com designates 147.253.211.95 as permitted sender) client-ip=147.253.211.95;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@notify.cloudflare.com header.s=scph0619 header.b=CTHTUKFJ;
-       spf=pass (google.com: domain of msprvs1=203682udhdfup=bounces-265094@notify.cloudflare.com designates 147.253.211.95 as permitted sender) smtp.mailfrom="msprvs1=203682udHdFup=bounces-265094@notify.cloudflare.com";
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=notify.cloudflare.com
-Return-Path: <msprvs1=203682udHdFup=bounces-265094@notify.cloudflare.com>
-X-MSFBL: XqI9oXGQgdPVUG38u9UW4RqOsKrkTEfa/tDBnynmzl8=|eyJ0ZW5hbnRfaWQiOiJ
-	zcGMiLCJzdWJhY2NvdW50X2lkIjoiMCIsImN1c3RvbWVyX2lkIjoiMjY1MDk0Iiw
-	iciI6ImV2YW5wdXJraGlzZXJAZ21haWwuY29tIiwibWVzc2FnZV9pZCI6IjY4ZDZ
-	lZDU2ZGI2ODkwYWY2ZTViIn0=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=notify.cloudflare.com; s=scph0619; t=1759205101;
-	i=@notify.cloudflare.com;
-	bh=x1oF5GAgK3arl9ol4tskqYcGnx1nPkTyixQ1yoZbWGg=;
-	h=To:Message-ID:Date:Content-Type:Subject:From:List-Unsubscribe:
-	 List-Unsubscribe-Post:From:To:Cc:Subject;
-	b=CTHTUKFJFc/o/D7fCzaGms5BzEBb4T1JcnwYSVPsJuqFvgKYdTqTl6SSvli4is4fT
-	 UkkrUvyCp65x0dyXWb4kyS1NLVV5raTPyM5M41zw1f6iIs06Yn10tVUOZ7x95dQifp
-	 boQ8cWX8516p/Gmgrux33ltS1JPprrfsYo1z2HIc=
-Received: from [10.90.42.103] ([10.90.42.103])
-	by i-03f90cad9aa2b8f2e.mta1vrest.sd.prd.sparkpost (ecelerity 5.1.0.74606 r(msys-ecelerity:tags/5.1.0.11)) with REST
-	id B5/EE-51102-DE65BD86; Tue, 30 Sep 2025 04:05:01 +0000
-To: evanpurkhiser@gmail.com
-Message-ID: <B5.EE.51102.DE65BD86@i-03f90cad9aa2b8f2e.mta1vrest.sd.prd.sparkpost>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
 Date: Tue, 30 Sep 2025 04:05:01 +0000
 Content-Type: multipart/mixed; boundary="_----sUUlH9uqnW/oD9kPRljD0Q===_95/EE-51102-DE65BD86"
 MIME-Version: 1.0
 Subject: Your Cloudflare invoice is attached
 From: "Cloudflare" <noreply@notify.cloudflare.com>
-List-Unsubscribe: <mailto:unsubscribe@unsub.spmta.com?subject=unsubscribe:AkPJWS5xB9qNp6c28qM2ZZawKsgInjsHg733mH1YId8~|eyAicmNwdF90byI6ICJldmFucHVya2hpc2VyQGdtYWlsLmNvbSIsICJ0ZW5hbnRfaWQiOiAic3BjIiwgImN1c3RvbWVyX2lkIjogIjI2NTA5NCIsICJtZXNzYWdlX2lkIjogIjY4ZDZlZDU2ZGI2ODkwYWY2ZTViIiwgInN1YmFjY291bnRfaWQiOiAiMCIgfQ~~>,<https://unsubscribe.spmta.com/u/kjWx5jOkhoONSgWdNzL7Hg~~/AAQLhhA~/Wvko0OvLzRPcxvLmNwRfTe8ZXr6mVoqmK52SYOWuRAioX5wXeEDhONi5fyiTOcluVSVYvKjnuinmL9CojK0PXA~~>
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-List-Id: <spc.265094.0.sparkpostmail.com>
 
 --_----sUUlH9uqnW/oD9kPRljD0Q===_95/EE-51102-DE65BD86
 Content-Type: multipart/alternative; boundary="_----jKNX3FcMQjTIkMI2bEZtyg===_95/EE-51102-DE65BD86"

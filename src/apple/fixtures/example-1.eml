@@ -1,20 +1,11 @@
 Date: Mon, 10 Feb 2025 00:56:22 +0000 (GMT)
 From: Apple <no_reply@email.apple.com>
-To: evanpurkhiser@gmail.com
-Message-ID: <547540714.802609115.1739148982054@email.apple.com>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
 Subject: Your receipt from Apple.
 MIME-Version: 1.0
 Content-Type: multipart/alternative; 
 	boundary="----=_Part_802609113_1958424916.1739148982053"
-X-Broadcast-Id: 10631
-X-Attach-Flag: N
-X-COMMS-C: false
-X-Sent-To: evanpurkhiser@gmail.com,2,%2B%2F8%2B5xfrLs89LAFyZ5xnWQFcMXWwNRbSnEeVtgSXQXj3U4paBzxg3U1kQFVSV%2Fn1%2Bz4m4xQBfWBf%2FqsgGxSjNtuM0beFCa%2F7C4DL6Q6hg41TmvbS9qRLE6GBEPyKLOv2xFs3ybBR7v2CgMzHzoR2HTtXmgPN6vYlPpAXhT1R%2Fh%2BQ5jHL619Y0hBGLsMrn%2Foz%2BC0IbRzQHwf8FpVDsnCcqYGrYDYvZQIDzHoi2ldWtzb%2FxytG0BaxePwOBRAGhXYSl0PEyXeYJvY0kCUwMWyPZgRjfcOyCZl2zux8CvwTxozAz0pqtqteYhrqvj4MIzO%2BG4zS%2Bh9Lmi1h9GLgfqcITfJIRdDO7ZbCFnOuHL1vmGQwIFUjyg4hMF5z4cUn042TOYL4ekLNn61Nj193nWuQH%2BUdnHb7Li%2BK%2FkM3Jg3QX9ZEAzvUKiUT8vJpHsW06DviSBqv7kzz%2BoluWJpr1JA0rQ%3D%3D
-X-TXN_ID: 3445e47e-1221-4d7c-96d9-5366c7c6821e
-X-DKIM_SIGN_REQUIRED: YES
-X-EmailType-Id: 10631
-X-Business-Group: iTunes
-X-Country: US
 
 ------=_Part_802609113_1958424916.1739148982053
 Content-Type: text/html; charset=UTF-8
@@ -113,14 +104,14 @@ s-serif;">
 r-style: solid;border-color: white;border-left-width:0;border-right-width:1=
 px;border-bottom-width: 1px;border-top-width: 0px;"><span style=3D"color:rg=
 b(102,102,102);font-size:10px;">
-            APPLE=C2=A0ACCOUNT</span><br>evanpurkhiser@gmail.com
+            APPLE=C2=A0ACCOUNT</span><br>testuser@example.com
                       </td>
                     <td width=3D"340" rowspan=3D"3" style=3D"padding-left:2=
 0px;border-style:solid;border-color:white;border-left-width:0px;border-righ=
 t-width:0px;border-top-width:0px; border-bottom-width:0px;">
                       <span style=3D"color:rgb(102,102,102);font-size:10px;=
 ">BILLED TO</span><br>
-            Visa .... 1890 (Apple=C2=A0Pay)<br>            Evan  Purkhiser<=
+            Visa .... 1234 (Apple=C2=A0Pay)<br>            Test User<=
 br>
             1234 Pine St Apt 123<br>San Francisco, CA 94109<br>USA         =
                                                </td>
@@ -451,7 +442,7 @@ p-width:0px;border-left-width:0;border-right-width:0;border-bottom-width:0p=
 x;padding-top:8px;padding-bottom:8px;">
             <span style=3D"color:rgb(102,102,102);font-size:10px;font-weigh=
 t:600;">BILLED TO</span><br>
-            Visa .... 1890 (Apple=C2=A0Pay)<br>            Evan  Purkhiser<=
+            Visa .... 1234 (Apple=C2=A0Pay)<br>            Test User<=
 br>
             1234 Pine St Apt 123<br>San Francisco, CA 94109<br>USA         =
                                      </td>

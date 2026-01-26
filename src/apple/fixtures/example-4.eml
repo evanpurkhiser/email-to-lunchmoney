@@ -1,65 +1,10 @@
-Delivered-To: evanpurkhiser@gmail.com
-Received: by 2002:a17:504:8e07:b0:1d4d:f07d:916d with SMTP id gm7csp1324600njb;
-        Fri, 22 Aug 2025 11:23:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE2HVvV8XMNxChpyUdREbXsdqwpW/Bgoz7MegvvK0XzfDYsJX3YM44O4iWrwdXA2WOQDrm4
-X-Received: by 2002:a05:620a:468c:b0:7e3:3384:4a8b with SMTP id af79cd13be357-7ea10fda85emr495353385a.37.1755887009482;
-        Fri, 22 Aug 2025 11:23:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1755887009; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Mr5O9AyDxsCR7en/dI4X57coGv2r7yku+cbUPQ9qoVU+JpqwCETZjJaoKaEOIdp+JQ
-         2ErSNdhDCJlVZ3GI8KoURNEaVN4vME8TTJ2+rJNTm3ldgF1SitFfAM5BHAotOw02IH0R
-         kngRZAkUE309S5GvVTV0pSPm5t8VfA+YPPa2CZVWd6e03Y70mGqx4qITgNDuI6Y367/Y
-         h2fD7++MO0kCLKNh+PRJSHlp9dQhzGsMAxZWSZJOz0RP60X8lrYy25lq7PYBcx0yb2+D
-         vDNsHUvrpuI4E6S0umr2H3PSZuU+ccwJIcUhiroW0oaRh2gVc5ngE8VkSpUofrxkHSGz
-         1jsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=mime-version:subject:message-id:to:from:date:dkim-signature;
-        bh=Hd6yJkURFMswqD7+XyVB+3PNs4RKzf673UbH2RgIPuM=;
-        fh=169V9/7R5Hr0c84w09Eb6qts8GXB7/FdpMEMd03Gbs8=;
-        b=Sj9W6SfbuLLVpeScIdKRVbPJbAg6BWiMCem7hFqn7bdTG8aHkUDwR1oda6uyR66Yme
-         uNTFE+vcSnMJ2QKy8/iOwjHfH3n8+cWkiguZgnMwvjs1jzLluZm6RKZ5P/FYF8HI+Wwb
-         Zhm+b610Riv6vNBJCMQYMk0UTj8gaA9zJh+ZOfVVujcyXPtC1BZujYLbgbrMbKDCXxy2
-         aTS9eUIx5A7/XRHPslODu9XdOIY3jg2zm9NpzTMezhaGWA84ZegNIr/eT3CEx1ZU8svR
-         dUJLCC4S9E8uMHGfriisFjh0PI8q1d9nVtzxPWsUQ+t+6M71JiLwx9/4hMNFVH1dCUxt
-         Ivuw==;
-        dara=google.com
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@email.apple.com header.s=email0517 header.b=e3YjjpQz;
-       spf=pass (google.com: domain of no_reply@email.apple.com designates 17.23.6.38 as permitted sender) smtp.mailfrom=no_reply@email.apple.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=email.apple.com
-Return-Path: <no_reply@email.apple.com>
-Received: from st57p01nt-txnmsbadger006103.apple.com (st57p01nt-txnmsbadger006103.apple.com. [17.23.6.38])
-        by mx.google.com with ESMTPS id af79cd13be357-7ebebcae93fsi17498585a.35.2025.08.22.11.23.29
-        for <evanpurkhiser@gmail.com>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Aug 2025 11:23:29 -0700 (PDT)
-Received-SPF: pass (google.com: domain of no_reply@email.apple.com designates 17.23.6.38 as permitted sender) client-ip=17.23.6.38;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@email.apple.com header.s=email0517 header.b=e3YjjpQz;
-       spf=pass (google.com: domain of no_reply@email.apple.com designates 17.23.6.38 as permitted sender) smtp.mailfrom=no_reply@email.apple.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=email.apple.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.apple.com; s=email0517; t=1755887008; bh=Hd6yJkURFMswqD7+XyVB+3PNs4RKzf673UbH2RgIPuM=; h=Date:From:To:Message-ID:Subject:Content-Type; b=e3YjjpQzTE+Wts6vBceXoI93O3X5knKZkbHoR5EQbbUJMzFuJ4ybY+Ij8D394/+9K
-	 pP0gZw6QVa1+ZYXVhKKQxexaweGAYrTPj0CqyBiFwmoudrJ3xp6rMWVJnn3p04/7ls
-	 YSRnbWTQoq6xdr52RminCyV0USgqWKi/11xccuA2tBD4+1g6DoqvYBfYwgh+jqZttv
-	 IafRNOJQ5e0pGzmix8SKlxklg21kNn44IviDuGyM3LeAwZwzd8HeddsQHbdZk/Bpug
-	 TWnYOYwjlM+zvnMEVbpV/TF2ZN7c36XmszVC9V4R1Gy2Fdn6JTcZlb1CCBRFDi4oaf
-	 TOuG6GLvTf0cQ==
 Date: Fri, 22 Aug 2025 18:23:28 +0000 (GMT)
 From: Apple <no_reply@email.apple.com>
-To: evanpurkhiser@gmail.com
-Message-ID: <259508276.51002311.1755887008965@email.apple.com>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
 Subject: Your receipt from Apple.
 MIME-Version: 1.0
 Content-Type: multipart/alternative; boundary="----=_Part_51002309_685428488.1755887008965"
-X-Broadcast-Id: 10631
-X-Attach-Flag: N
-X-COMMS-C: false
-X-Sent-To: evanpurkhiser@gmail.com,2,FqtWKHs9EiRzY8ASC42Yu92Z8PveDapaGPz3HfL%2B5M9kyXJUnAIbeIpFUZKopOOYnLpsWUqbQ4%2BK9IixjwUR8g%2F2sGdKWYj1tbeNsFasfAIbgQo11CWehbyRdfEQYOKjN%2Bf02gAYzJZhT3Q6JkLalGSC8Jj%2B63eyq9KGxt3wM0uGpnvDOchFM1Bcx%2FBi9eLqxmNCv42U0QSkhi8GIb99NylMwbgrIzm25I9b0icvMtlfmlPSWxzGrtLmjMHJH%2B8cDcvYMC9os8tpN%2BFkv3gQKehNdo3s0%2FqpVymiU3t0DoITA2nTfi8KyLITkgICBuNfU%2FDTeG8nPeLM3gvCqKIBWCF5GLI8IQ%2F%2Faq285UX4YasdN%2FS0Mh0EKl4YY2g1WnHzkpJ%2B%2BC9NcnRFjaR3YRhkHMJmnp8jSUv9K1VzH%2B6zxPavq6k%2F8v4Xtoh5yw8HZ2rVQm2w5GNlvwT8hMBhhdQIrQ%3D%3D
-X-TXN_ID: 84998d9a-1979-4f70-afe1-1ddd81c90585
-X-DKIM_SIGN_REQUIRED: YES
-X-EmailType-Id: 10631
-X-Business-Group: iTunes
-X-Country: US
 
 ------=_Part_51002309_685428488.1755887008965
 Content-Type: text/html; charset=UTF-8
@@ -162,7 +107,7 @@ u"><div><p class=3D"custom-18w16cf">August 22, 2025</p><div><p class=3D"cus=
 tom-f41j3e">Order ID:</p><p class=3D"custom-zresjj">MKB8NJ0S37<br/></p></di=
 v><div><p class=3D"custom-f41j3e">Document:</p><p class=3D"custom-zresjj">7=
 92011660000<br/></p></div><div><p class=3D"custom-f41j3e">Apple Account:</p=
-><p class=3D"custom-zresjj">evanpurkhiser@gmail.com<br/></p></div></div><ta=
+><p class=3D"custom-zresjj">testuser@example.com<br/></p></div></div><ta=
 ble width=3D"100%" class=3D"subscription-lockup__container custom-rgm23z"><=
 tr class=3D"subscription-lockup"><td valign=3D"top" class=3D"custom-omvd4k"=
 ><img height=3D"60" alt=3D"CapCut - Video Editor" src=3D"https://is1-ssl.mz=
@@ -177,7 +122,7 @@ p__bottom-text__col custom-i8xbl3"><p class=3D"custom-137u684">$11.99<br/><=
 /p></td></tr></table><div class=3D"payment-information custom-1y6quhx"><p c=
 lass=3D"custom-1wwfjxf">Billing and Payment<br/></p><div><div class=3D"paym=
 ent-information__col payment-information__left custom-9urhlu"><p class=3D"c=
-ustom-1d5xd7o">Evan Purkhiser</p><p class=3D"custom-1d5xd7o">324 E 4th St. =
+ustom-1d5xd7o">Test User</p><p class=3D"custom-1d5xd7o">324 E 4th St. =
 Apt 4B</p><p class=3D"custom-1d5xd7o">New York NY 10009-7083</p><p class=3D=
 "custom-1d5xd7o">United States</p></div><div class=3D"payment-information__=
 col custom-9urhlu"><div class=3D"payment-information__subtotal-group custom=
@@ -185,7 +130,7 @@ col custom-9urhlu"><div class=3D"payment-information__subtotal-group custom=
 om-68yyeh"><p class=3D"custom-1s7arqf">$11.99<!-- --> </p></div><p class=3D=
 "custom-4tra68">Tax<!-- --> </p><div class=3D"custom-68yyeh"><p class=3D"cu=
 stom-1s7arqf">$1.06<!-- --> </p></div></div><hr class=3D"custom-pko50u"/><p=
- class=3D"custom-15zbox7">Visa =E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2 8360<br=
+ class=3D"custom-15zbox7">Visa =E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2 1234<br=
 /></p><div class=3D"custom-68yyeh"><p class=3D"custom-jhluqm">$13.05<br/></=
 p></div></div></div></div></div><div id=3D"footer_section" class=3D"custom-=
 161t2u8"><p class=3D"custom-1cfbe7l">You can view your receipts in App=C2=

@@ -1,60 +1,4 @@
-Delivered-To: evanpurkhiser@gmail.com
-Received: by 2002:a17:504:c661:b0:1dcc:d22c:be3a with SMTP id cv1csp1420223njb;
-        Sun, 2 Nov 2025 18:24:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEuv6aZSZkItoyWW4ckf+leCFAExlH/UntdKFJGxbkIsgjXiyJtoTFI9hSjNpt8dwlMwy3X
-X-Received: by 2002:a05:6a20:734a:b0:2f6:9592:9075 with SMTP id adf61e73a8af0-348ca960553mr15880545637.25.1762136685994;
-        Sun, 02 Nov 2025 18:24:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1762136685; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Eou6SCFeelNhVv/66D8QzsIlF1N8Re2LJqc0QgxqXe+SqnTp5MHYtlG1Wk8CiIYAOL
-         ZPcPCVCPXpqzGIZQut2SjMLQaH5M+YwsIlgHQFzCFxcj6AnVPLlDr6iHdzeq8IYcz46W
-         sX+uNc7KlxGLh+WlyngNsXKFtrzJE0bst2fGFol9YSMcsN+SUMmm+nQPMwcw568OkOz8
-         6pbdJCgBpQZTFVsZHCLGqkD4CwjiXFvZ0KNpntg9P0gdstaNop8WapQpU16owUvtwe24
-         +G33u+BRjbpw2Cx0vUk75TnDGntcE4o4uKMuPU/VVVh+ZFCjxIjjmx30FO0OQb/u8UwW
-         J88Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=date:message-id:subject:mime-version:errors-to:reply-to:from:to
-         :dkim-signature;
-        bh=n99h9TDRd1Wi1cPTBrTXwZ73in+Ui+te3fZpJxHa6Tc=;
-        fh=AzgSWbqEA2MA9wpJnsc7BysVJ3G5V1E5Wuc226RnrDo=;
-        b=XBrSjzmBh2IzlXa6bqEpxPc/NYxPDPyBdyaXw00EouOZaRMS44MrE3rSlcy2f3S6pX
-         Vuu3YRTz3G34b61qaU5PlpKJCWlF2j/bKqMtual+ODxtWlhoduEtf5Ae4GI6lShTCy91
-         6PdkNrzwZbkSrnG3U5ytIkURGssda/l2/mHPCv6L1b1KYbOInEEom5FK8InMOuAbXrU5
-         0G91dWUQP0/P78YlZTE42haq467WjIAT9TvsKlu+YRC+Ow5MqqmP3PuJsee1zEb41oug
-         OgIKy/l5puDN723EbV3QIsVha1CJJ6gpC5fcfldn6iG3G0oSD+hlfG/jO52LrcvVOThw
-         6izQ==;
-        dara=google.com
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@steampowered.com header.s=smtp header.b=gTVSOh9r;
-       spf=pass (google.com: domain of noreply@steampowered.com designates 208.64.202.45 as permitted sender) smtp.mailfrom=noreply@steampowered.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=steampowered.com
-Return-Path: <noreply@steampowered.com>
-Received: from smtp-45.steampowered.com (smtp-45.steampowered.com. [208.64.202.45])
-        by mx.google.com with ESMTPS id 41be03b00d2f7-b93be6e3330si4380702a12.426.2025.11.02.18.24.45
-        for <EvanPurkhiser@gmail.com>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Nov 2025 18:24:45 -0800 (PST)
-Received-SPF: pass (google.com: domain of noreply@steampowered.com designates 208.64.202.45 as permitted sender) client-ip=208.64.202.45;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@steampowered.com header.s=smtp header.b=gTVSOh9r;
-       spf=pass (google.com: domain of noreply@steampowered.com designates 208.64.202.45 as permitted sender) smtp.mailfrom=noreply@steampowered.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=steampowered.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=steampowered.com; s=smtp; h=Date:Message-Id:Content-Type:Subject:
-	MIME-Version:Reply-To:From:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=n99h9TDRd1Wi1cPTBrTXwZ73in+Ui+te3fZpJxHa6Tc=; b=gTVSOh9rYIRco/Si2/28S0Pyq7
-	39KC9RNo/c0IEptGFCXdBVhzpByYsO7+F1DTEJ6jbMRRgQZuBzpONWBNjFNluIhHI8B5pZKSx0hEc
-	MMCAYvbtYXIdaWv6poRWEpa2vGdLcktTsveHyK2MvDtZ8RDEAXgAOM+NIpvrsfAERPPA=;
-Received: from [192.69.99.89] (helo=valvesoftware.com)
-	by smtp-01-tuk1.steampowered.com with smtp (Exim 4.97)
-	(envelope-from <noreply@steampowered.com>)
-	id 1vFkFQ-00000002tFX-49ZW
-	for EvanPurkhiser@gmail.com;
-	Sun, 02 Nov 2025 18:24:45 -0800
-To: EvanPurkhiser@gmail.com
+To: testuser@example.com
 From: "Steam Support" <noreply@steampowered.com>
 Reply-To: <noreply@steampowered.com>
 Errors-To: <noreply@steampowered.com>
@@ -63,7 +7,7 @@ MIME-Version: 1.0
 Subject: Thank you for your Steam purchase!
 Content-Type: multipart/mixed;
  boundary="m6908126dbdbba"
-Message-Id: <E1vFkFQ-00000002tFX-49ZW@smtp-01-tuk1.steampowered.com>
+Message-Id: <REDACTED@example.com>
 Date: Sun, 02 Nov 2025 18:24:45 -0800
 
 
@@ -77,11 +21,11 @@ Content-Type: multipart/alternative;
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-=0AHello evanpurkhiser
+=0AHello testuser
 =0AThank you for your recent transaction on Steam.  To view the details, pl=
 ease
 visit
-https://store.steampowered.com/email/PurchaseReceipt?sparams=3DeJyFVU2PmzAQ=
+https://store.steampowered.com/email/PurchaseReceipt?sparams=3DREDACTED_SPARAMS=
 _SuIc8USPvKxp23VPXa1UrSHVVqhiZkFK8Z4bZMUVf3vtQ1kTRJtb_DeeJh5zzP8CRl0nNQodS8=
 wvA_j8EsoEVhjnivW7oEZQMi27Ijm0NiQrUZoDKo6IVqpsQHKDDy-PihLi_aEEsuItF6kotqer7=
 UW6v7n3c-7GpmIbsSPSRVy3WlijixWy2SRLpfr3LB7yhjlVUHajmvZG_pl68FUXDJAHDCWj0fgo=
@@ -94,7 +38,7 @@ Lb980t7PXZjH-SqZE0OPO-fIjLh0ZGcamQUYeWHP_hficmdXcCHdKOzCdbRe5XN6MvBGwrm3V7T=
 v8BV54fOnuT8rr0RFJBV2oG3EnHzXvQUX1w0PDszxaeVAJRHd0E4mXgpJGyw6Tm-J_CbxvRsm81=
 bPw4yfR_KTkI8JvwoaNyAti4q-6Zvyuc3l0Zad-lN6WHxPr96e_dhyaZIFj0Gm62Cro-Cr0EH2z=
 Qsc967dhcGzt3gvEiUmxt_u1FoRPuEpeG3lwWOEufJuuks3XnEcb2br34CrLFpmUbqJkmQx_zXc=
-bMX-MobP_QBeg9bAw7__AD3naC0&check=3D71ec6ff30968b8519761766244bc261c51e1715=
+bMX-MobP_QBeg9bAw7__AD3naC0&check=3DREDACTED_CHECK=
 323b5b1143e1c8ac154b3e88e.
 
 =0A=0ACheers,=0AThe Steam Team=0A=0A--=0A=0AThis notification has been sent=
@@ -104,7 +48,7 @@ lp, please visit Steam Support.=0Ahttps://help.steampowered.com=0A=0A=C2=
 =A9 Valve Corporation=0AAll rights reserved. All trademarks are property of=
  their respective owners in the US and other countries.=0A=0A--=0A=0AView t=
 his message on the web:=0Ahttps://store.steampowered.com/email/PurchaseRece=
-ipt?sparams=3DeJyFVU2PmzAQ_SuIc8USPvKxp23VPXa1UrSHVVqhiZkFK8Z4bZMUVf3vtQ1kT=
+ipt?sparams=3DREDACTED_SPARAMS=
 RJtb_DeeJh5zzP8CRl0nNQodS8wvA_j8EsoEVhjnivW7oEZQMi27Ijm0NiQrUZoDKo6IVqpsQHK=
 DDy-PihLi_aEEsuItF6kotqer7UW6v7n3c-7GpmIbsSPSRVy3WlijixWy2SRLpfr3LB7yhjlVUH=
 ajmvZG_pl68FUXDJAHDCWj0fgopOHmiqUhtUSuKKlYZJ4vVnHeZKvkzzJ4jhNJhqIpi0vSnANTN=
@@ -116,7 +60,7 @@ IyZunGWmhKxEnEQaPFDB3M3YVTLb980t7PXZjH-SqZE0OPO-fIjLh0ZGcamQUYeWHP_hficmdXc=
 CHdKOzCdbRe5XN6MvBGwrm3V7Tv8BV54fOnuT8rr0RFJBV2oG3EnHzXvQUX1w0PDszxaeVAJRHd=
 0E4mXgpJGyw6Tm-J_CbxvRsm81bPw4yfR_KTkI8JvwoaNyAti4q-6Zvyuc3l0Zad-lN6WHxPr96=
 e_dhyaZIFj0Gm62Cro-Cr0EH2zQsc967dhcGzt3gvEiUmxt_u1FoRPuEpeG3lwWOEufJuuks3Xn=
-Ecb2br34CrLFpmUbqJkmQx_zXcbMX-MobP_QBeg9bAw7__AD3naC0&check=3D71ec6ff30968b=
+Ecb2br34CrLFpmUbqJkmQx_zXcbMX-MobP_QBeg9bAw7__AD3naC0&check=3DREDACTED_CHECK=
 8519761766244bc261c51e1715323b5b1143e1c8ac154b3e88e
 
 --np6908126dbdbb9
@@ -261,7 +205,7 @@ ble width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=0A=09=
 =09=09=09<tr>=0A=09=09=09=09=09<td class=3D"title-36 pb-30 c-grey6 fw-b" st=
 yle=3D"font-size:36px; line-height:42px; font-family:Arial, sans-serif, 'Mo=
 tiva Sans'; text-align:left; padding-bottom: 30px; color:#bfbfbf; font-weig=
-ht:bold;">Hello evanpurkhiser</td>=0A=09=09=09=09</tr>=0A=09=09=09</table>=
+ht:bold;">Hello testuser</td>=0A=09=09=09=09</tr>=0A=09=09=09</table>=
 =0A=09=09=09<!-- End Welcome -->=0A=0A    <!-- Intro  -->=0A    =09=09=09<t=
 able width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=0A=09=
 =09=09=09<tr>=0A=09=09=09=09=09<td class=3D"title-28 c-white pb-30" style=
@@ -409,7 +353,7 @@ height:0pt; text-align:left;"></td>=0A                                     =
 ey4 mt-right" style=3D"font-size:12px; line-height:18px; font-family:'Motiv=
 a Sans', Arial, sans-serif; text-align:left; color:#f1f1f1;">=0A           =
                                                                  <strong>20=
-8980525825240032</strong>=0A                                               =
+1111111111111111</strong>=0A                                               =
                          </td>=0A                                          =
                           </tr>=0A                                         =
                        </table>=0A                                         =
@@ -822,7 +766,7 @@ s are property of their respective owners in the US and other countries.=09=
 =0A=0A    <center style=3D"font-family:Arial, sans-serif, 'Motiva Sans'; co=
 lor: #000000; font-size: 11px; margin-bottom: 4px;">=0A        Trouble view=
 ing this message?        <a href=3D"https://store.steampowered.com//account=
-/receipt/208980525825240032"=0A            style=3D"font-family:Arial, sans=
+/receipt/111111111111111111"=0A            style=3D"font-family:Arial, sans=
 -serif, 'Motiva Sans'; color: #000000; font-size: 11px; margin-bottom: 4px;=
 ">=0A            Click here.        </a>=0A    </center>=0A=0A</body>=0A</h=
 tml>=0A

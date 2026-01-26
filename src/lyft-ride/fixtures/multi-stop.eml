@@ -1,6 +1,6 @@
 Date: Fri, 04 Jul 2025 00:10:56 +0000
 From: Lyft Receipts <no-reply@lyftmail.com>
-To: evanpurkhiser@gmail.com
+To: testuser@example.com
 Subject: Your ride with Akmal on July 3
 Mime-Version: 1.0
 Content-Type: text/html; charset="utf-8"
@@ -837,7 +837,7 @@ ne-height: 22px; padding-left: 4%;" width=3D"70%"><img alt=3D"Card" class=
 =3D"cc-icon" width=3D"35" height=3D"23" style=3D"border: 0; display: inline=
 -block; vertical-align: middle;" src=3D"https://s3.amazonaws.com/lyft.zimri=
 de.com/images/emails/credit_icons/cc_visa.png" /> <span style=3D"padding-le=
-ft: 2%">Visa *8360</span></td>
+ft: 2%">Visa *1234</span></td>
                                     <td class=3D"value charge-total mobileH=
 eaderSmall" align=3D"right" style=3D"font-size: 30px; color: #11111f; font-=
 family: 'LyftProUI-Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif; f=
@@ -883,7 +883,7 @@ acing=3D"0" border=3D"0">
                                 <tr>
                                     <td class=3D"center" align=3D"center" s=
 tyle=3D"padding: 0 4%;"><img class=3D"center ride-map" src=3D"https://api.l=
-yft.com/v1/staticmap/2101283881851424146?hash=3D768eed68f214f62b97799ca8528=
+yft.com/v1/staticmap/1111111111111111111?hash=3D768eed68f214f62b97799ca8528=
 fa56a68055b534af9365be78474d231d13ae9&amp;template=3Dreceipt&amp;version=3D=
 v2" alt=3D"Ride Map" width=3D"556" style=3D"width: 100%; max-width: 556px; =
 display: block;" />
@@ -1622,7 +1622,7 @@ style=3D"background-color: #F4F4FA; min-width: 100%; max-width: 600px;"><tr=
 =3D"center" style=3D"text-align: center; padding: 0 25px; -webkit-font-smoo=
 thing: antialiased; font-family: 'LyftProUI-Regular', 'Helvetica Neue', Hel=
 vetica, Arial, sans-serif; font-size: 15px; line-height: 15px; text-decorat=
-ion: none; color: #63637B;"> Receipt #2101283881851424146
+ion: none; color: #63637B;"> Receipt #1111111111111111111
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1687,7 +1687,7 @@ fT5GON18sPtvZfGpi-GD4aP-77Hq9Cz9UrUT1_Gq24MH_Eq75q3vfNPvpzUmt9oycklo-KkbBow=
                                         <div class=3D"h-expense-transaction=
 " style=3D"display: none; font-size: 1px; color: #FFFF;">
                                             <span class=3D"p-person-email">=
-evanpurkhiser@gmail.com</span>
+testuser@example.com</span>
                                             <span class=3D"parent-organizat=
 ion-id"></span>
                                             <span class=3D"p-merchant">Lyft=
@@ -1701,7 +1701,7 @@ ion-id"></span>
                                             <span class=3D"p-expense-code">=
 Taxi</span>
                                             <span class=3D"p-unique-referen=
-ce">2101283881851424146</span>
+ce">1111111111111111111</span>
                                             <span class=3D"p-description"><=
 /span>
                                             <span class=3D"p-allocation-cod=

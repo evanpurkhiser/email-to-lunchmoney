@@ -1,70 +1,11 @@
-Delivered-To: evanpurkhiser@gmail.com
-Received: by 2002:a17:907:982:b0:a46:6124:6f78 with SMTP id bf2csp667982ejc;
-        Thu, 14 Mar 2024 17:43:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHYnN8iQUjKTyCZjzzR94sdq+WYhaec7vmMcDeS0DYpwAwnYSq2WGTMGGjd3vFDoKAzOHsf
-X-Received: by 2002:a05:622a:30a:b0:42e:e125:33ef with SMTP id q10-20020a05622a030a00b0042ee12533efmr2576323qtw.33.1710463383005;
-        Thu, 14 Mar 2024 17:43:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1710463382; cv=none;
-        d=google.com; s=arc-20160816;
-        b=WZMA2g268IeTEwYO7o3DSRS76WeBdX3w5N47fvSpVe6gOYYpNVryRd9UDJlsFSjIs1
-         NiqKoQHeJtYMn0xfAKOtlmpfNq9ztpjbRQlu8LcuwmmeiU8SyWQEp6bZERsqQD+gpMen
-         K+45ErjcBWLQkIQ/aoG/bx9SHuOWQi4n9um8A3ey2DaOiShHihmKO9fVD/zbQNFzHkIW
-         92hPpX24Rs7q86qVpTD6cy0UvwLvP0Dq4wYJoINwdbbEajg2w0TrFvBSgDDxWo0XtRom
-         Q9Suw5CS47AXh26nSkrmqn/7Oq1Dgou96aqMNnvmc/GH0j1IdLDOmC1LKwqAYUanDelR
-         oB1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
-        h=mime-version:subject:message-id:to:from:date:dkim-signature;
-        bh=+LDJqgiqf6wU51Po3Rscu6ejGH2nT5bH8rROiSUM0z0=;
-        fh=169V9/7R5Hr0c84w09Eb6qts8GXB7/FdpMEMd03Gbs8=;
-        b=gMGAfeETeRXi5wPHi5qqfhfdJI4Cpy29ITzgYCHGVHEn9Uv2LSLQoXKhnrT1YBp+3T
-         gJzxf+NuYhMZfLvic1Ky1PXkTa7BLbvvgUPNg1lSiZpoGZx3DDewv3kCO19O39vz1IiQ
-         s3suYtJQfTLB/Nsvd8pDm3TjB55cIQyEVSr6H+GzXTmIqnbDRageA9c1YjRdjYV8npmJ
-         EVixkY6fBQfcQo0zEpEZdNR9SkVF6chTA8vJfFgw0cNY7Qlok+ho3yV/60fGgiuRxqM4
-         5d8xpaYAZ6S1YyjtJxZpBH6HOyCmbE7GcFhKH8ajPOb66x7PpzFoMnZcsNMPWkfFnbqT
-         4SlQ==;
-        dara=google.com
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@email.apple.com header.s=email0517 header.b=gTx0fp87;
-       spf=pass (google.com: domain of no_reply@email.apple.com designates 17.111.110.41 as permitted sender) smtp.mailfrom=no_reply@email.apple.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=email.apple.com
-Return-Path: <no_reply@email.apple.com>
-Received: from rn2-txn-msbadger01101.apple.com (rn2-txn-msbadger01101.apple.com. [17.111.110.41])
-        by mx.google.com with ESMTPS id t40-20020a05622a182800b0042ed89af418si2697318qtc.112.2024.03.14.17.43.02
-        for <evanpurkhiser@gmail.com>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Mar 2024 17:43:02 -0700 (PDT)
-Received-SPF: pass (google.com: domain of no_reply@email.apple.com designates 17.111.110.41 as permitted sender) client-ip=17.111.110.41;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@email.apple.com header.s=email0517 header.b=gTx0fp87;
-       spf=pass (google.com: domain of no_reply@email.apple.com designates 17.111.110.41 as permitted sender) smtp.mailfrom=no_reply@email.apple.com;
-       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=email.apple.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.apple.com;
-	s=email0517; t=1710463380;
-	bh=+LDJqgiqf6wU51Po3Rscu6ejGH2nT5bH8rROiSUM0z0=;
-	h=Date:From:To:Message-ID:Subject:Content-Type;
-	b=gTx0fp871fJlKvwiXLsBXCbpDoWE0thE3WR8I8ouIST44uNgVaNp65f9J0kEgQSvr
-	 GFT57n6xT3nUslgOgZuX9fmPC3nkfd0Sk34JXuijqnXHS9QHKVd41cgunL+dz3eib+
-	 7TXhySsSkCavs/8rOVUvC248pEA/iR8VL+KQyaRinfLR8nmlDsnbgBwWW+33RWYqul
-	 1D4vynOtRiRk7+B6PdBBv5D1njOyrqkyLGcyWdcek+A07SZFZVMTaaLiI2uKXuOOYC
-	 dxv7vGuoAKVjaoGmr/eFW2WQS6l2OxJigK/iDIS996UAo5iP+3W2e7xNUH4RblUxwL
-	 /52VwGhzQLD2Q==
 Date: Fri, 15 Mar 2024 00:43:00 +0000 (GMT)
 From: Apple <no_reply@email.apple.com>
-To: evanpurkhiser@gmail.com
-Message-ID: <1167980305.56378336.1710463380041@email.apple.com>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
 Subject: Your receipt from Apple.
 MIME-Version: 1.0
 Content-Type: multipart/alternative; 
 	boundary="----=_Part_56378334_916792109.1710463380041"
-X-Broadcast-Id: 10631
-X-Attach-Flag: N
-X-COMMS-C: N
-X-Sent-To: evanpurkhiser@gmail.com,2,q%2BIz4YAui2W7FZSdajRyfie3oAfF%2FsoPsvxW%2BLBcscX3U4paBzxg3U1kQFVSV%2Fn1%2Bz4m4xQBfWBf%2FqsgGxSjNkBUSpHw9rfjSNvABjY2p7Qi9ExJCm6kHDIXpW9y5eSAOwFXv0QBBwFaOKuR8XhgkWom4ALOy%2FH5dsljRm8V21%2Fg99tbSKINrCKUN2RzizD%2FG36uM1idJ6so2nyYGiRhBYGrYDYvZQIDzHoi2ldWtzb%2FxytG0BaxePwOBRAGhXYSl0PEyXeYJvY0kCUwMWyPZgRjfcOyCZl2zux8CvwTxozAz0pqtqteYhrqvj4MIzO%2BG4zS%2Bh9Lmi1h9GLgfqcITfJIRdDO7ZbCFnOuHL1vmGQwIFUjyg4hMF5z4cUn042TOYL4ekLNn61Nj193nWuQH%2BUdnHb7Li%2BK%2FkM3Jg3QX9ZEAzvUKiUT8vJpHsW06DviSBqv7kzz%2BoluWJpr1JA0rQ%3D%3D
-X-TXN_ID: e5be5cd6-98b2-4d8a-8be8-c1780bd70463
-X-DKIM_SIGN_REQUIRED: YES
-X-EmailType-Id: 10631
-X-Business-Group: iTunes
-X-Country: US
 
 ------=_Part_56378334_916792109.1710463380041
 Content-Type: text/plain; charset=UTF-8
@@ -75,11 +16,11 @@ Apple Receipt
 -----------------------------------------------------------
 
 APPLE ID
-evanpurkhiser@gmail.com
+testuser@example.com
 
 BILLED TO
-Visa .... 1890 (Apple=C2=A0Pay)
-Evan  Purkhiser
+Visa .... 1234 (Apple=C2=A0Pay)
+Test User
 1234 Pine St
 San Francisco,  CA  94109
 USA
@@ -222,14 +163,14 @@ s-serif;">
 r-style: solid;border-color: white;border-left-width:0;border-right-width:1=
 px;border-bottom-width: 1px;border-top-width: 0px;"><span style=3D"color:rg=
 b(102,102,102);font-size:10px;">
-            APPLE ID</span><br>evanpurkhiser@gmail.com
+            APPLE ID</span><br>testuser@example.com
                       </td>
                     <td width=3D"340" rowspan=3D"3" style=3D"padding-left:2=
 0px;border-style:solid;border-color:white;border-left-width:0px;border-righ=
 t-width:0px;border-top-width:0px; border-bottom-width:0px;">
                       <span style=3D"color:rgb(102,102,102);font-size:10px;=
 ">BILLED TO</span><br>
-            Visa .... 1890 (Apple=C2=A0Pay)<br>            Evan  Purkhiser<=
+            Visa .... 1234 (Apple=C2=A0Pay)<br>            Test User<=
 br>
             1234 Pine St<br>San Francisco,  CA  94109<br>USA               =
                                                  </td>
@@ -570,7 +511,7 @@ p-width:0px;border-left-width:0;border-right-width:0;border-bottom-width:0p=
 x;padding-top:8px;padding-bottom:8px;">
             <span style=3D"color:rgb(102,102,102);font-size:10px;font-weigh=
 t:600;">BILLED TO</span><br>
-            Visa .... 1890 (Apple=C2=A0Pay)<br>            Evan  Purkhiser<=
+            Visa .... 1234 (Apple=C2=A0Pay)<br>            Test User<=
 br>
             1234 Pine St<br>San Francisco,  CA  94109<br>USA               =
                                        </td>
