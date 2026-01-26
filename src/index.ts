@@ -13,6 +13,7 @@ import {cloudflareProcessor} from 'src/processors/cloudflare';
 import {lyftBikeProcessor} from 'src/processors/lyft-bike';
 import {lyftRideProcessor} from 'src/processors/lyft-ride';
 import {steamEmailProcessor} from 'src/processors/steam';
+import {uberRideProcessor} from 'src/processors/uber-ride';
 
 import {processActions} from './lunchmoney';
 import {cleanupNotifiedActions} from './old-action-cleanup';
@@ -26,6 +27,7 @@ let EMAIL_PROCESSORS: EmailProcessor[] = [
   appleEmailProcessor,
   cloudflareProcessor,
   steamEmailProcessor,
+  uberRideProcessor,
 ];
 
 /**
