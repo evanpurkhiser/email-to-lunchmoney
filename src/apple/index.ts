@@ -69,7 +69,7 @@ function process(email: Email) {
 function matchEmail(email: Email) {
   const {from, subject} = email;
 
-  return !!from.address?.endsWith('apple.com') && subject === 'Your receipt from Apple.';
+  return !!from?.address?.endsWith('apple.com') && subject === 'Your receipt from Apple.';
 }
 
 export const appleEmailProcessor: EmailProcessor = {

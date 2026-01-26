@@ -74,7 +74,7 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  const isLyft = !!from.address?.endsWith('lyftmail.com');
+  const isLyft = !!from?.address?.endsWith('lyftmail.com');
 
   return isLyft && !!subject?.startsWith('Your ride with');
 }

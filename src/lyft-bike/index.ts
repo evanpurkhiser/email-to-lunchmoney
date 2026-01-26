@@ -79,7 +79,7 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  return !!from.address?.endsWith('lyftmail.com') && subject === 'Your Lyft Bike ride';
+  return !!from?.address?.endsWith('lyftmail.com') && subject === 'Your Lyft Bike ride';
 }
 
 export const lyftBikeProcessor: EmailProcessor = {

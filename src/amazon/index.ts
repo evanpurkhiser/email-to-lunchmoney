@@ -123,7 +123,7 @@ async function process(email: Email, env: Env) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  return !!from.address?.endsWith('amazon.com') && !!subject?.startsWith('Ordered');
+  return !!from?.address?.endsWith('amazon.com') && !!subject?.startsWith('Ordered');
 }
 
 export const amazonProcessor: EmailProcessor = {
