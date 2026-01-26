@@ -6,12 +6,12 @@ import {
 import {Hono} from 'hono';
 import PostalMime, {Email} from 'postal-mime';
 
-import {amazonProcessor} from 'src/amazon';
-import {appleEmailProcessor} from 'src/apple';
-import {cloudflareProcessor} from 'src/cloudflare';
-import {lyftBikeProcessor} from 'src/lyft-bike';
-import {lyftRideProcessor} from 'src/lyft-ride';
-import {steamEmailProcessor} from 'src/steam';
+import {amazonProcessor} from 'src/processors/amazon';
+import {appleEmailProcessor} from 'src/processors/apple';
+import {cloudflareProcessor} from 'src/processors/cloudflare';
+import {lyftBikeProcessor} from 'src/processors/lyft-bike';
+import {lyftRideProcessor} from 'src/processors/lyft-ride';
+import {steamEmailProcessor} from 'src/processors/steam';
 
 import {processActions} from './lunchmoney';
 import {cleanupNotifiedActions} from './old-action-cleanup';

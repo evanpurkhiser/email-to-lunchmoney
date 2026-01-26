@@ -6,10 +6,10 @@ Thank you for contributing to email-to-lunchmoney! This guide will help you add 
 
 ### 1. Create the Parser Directory
 
-Create a new directory under `src/` for your parser:
+Create a new directory under `src/processors/` for your parser:
 
 ```bash
-mkdir -p src/vendor-name
+mkdir -p src/processors/vendor-name
 ```
 
 ### 2. Add Test Fixtures
@@ -17,7 +17,7 @@ mkdir -p src/vendor-name
 Save example emails as `.eml` files in a `fixtures/` subdirectory:
 
 ```bash
-mkdir -p src/vendor-name/fixtures
+mkdir -p src/processors/vendor-name/fixtures
 ```
 
 > [!NOTE]
@@ -102,7 +102,7 @@ test.for(testCases)('does match $file', async ({file}) => {
 Add your parser to `src/index.ts`:
 
 ```typescript
-import {vendorEmailProcessor} from 'src/vendor-name';
+import {vendorEmailProcessor} from 'src/processors/vendor-name';
 
 let EMAIL_PROCESSORS: EmailProcessor[] = [
   amazonProcessor,
@@ -131,7 +131,7 @@ Before committing your code, sanitize the fixture emails to remove personal info
 #### Usage
 
 ```bash
-npx tsx scripts/sanitize-email.mts src/vendor-name/fixtures/example.eml \
+npx tsx scripts/sanitize-email.mts src/processors/vendor-name/fixtures/example.eml \
   --name "John Doe" \
   --address "123 Main Street" \
   --city "San Francisco, CA 94102"
@@ -149,7 +149,7 @@ All arguments (name, address, city) are optional. The script will:
 To sanitize multiple files:
 
 ```bash
-for file in src/vendor-name/fixtures/*.eml; do
+for file in src/processors/vendor-name/fixtures/*.eml; do
   npx tsx scripts/sanitize-email.mts "$file" --name "John Doe"
 done
 ```
