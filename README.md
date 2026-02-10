@@ -63,9 +63,10 @@ Support for the following emails is currently implemented
 - **Steam purchase emails**. Extracts the game name from purchase confirmation
   emails and adds it as a note to the Steam transaction.
 
-Some emails I would like to add
+- **Uber rideshare receipts**. A note is added to each transaction with the
+  start and end location, time of ride, and duration.
 
-- Uber rides. Basically the same as the Lyft rides
+Some emails I would like to add
 
 - All square receipt emails. Since many places use Square's point of sales
   terminals, we can record receipt details on transactions.
