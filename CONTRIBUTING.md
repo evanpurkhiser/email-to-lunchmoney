@@ -138,6 +138,7 @@ npx tsx scripts/sanitize-email.mts src/processors/vendor-name/fixtures/example.e
 ```
 
 All arguments (name, address, city) are optional. The script will:
+
 - Remove tracking and authentication headers (keeping only essential headers)
 - Replace your email address with `testuser@example.com`
 - Replace your username with `testuser`
