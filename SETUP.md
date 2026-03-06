@@ -151,7 +151,7 @@ Now you'll create filters to automatically apply this label to specific receipt 
 2. Click the filter icon (or use the dropdown to select "Show search options")
 3. Configure the filter:
    - **From:** `southwest.com`
-   - **Has the words:** `"You're going to" OR "Flight reservation"`
+   - **Subject:** `You're going to`
 4. Click **"Create filter"**
 5. Check **"Apply the label"** and select `Fwd / Lunch Money`
 6. Click **"Create filter"**
