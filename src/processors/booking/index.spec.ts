@@ -21,6 +21,14 @@ const testCases = [
       note: 'Arlo Chicago — Jul 12–Jul 13 (1 night)',
     },
   },
+  {
+    file: 'confirmation-usd',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Booking.com', expectedTotal: 152633},
+      note: 'Holiday Inn San Francisco - Golden Gateway newly renovated with No Resort Fee — Mar 8–Mar 12 (4 nights)',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {
