@@ -48,9 +48,10 @@ function process(email: Email) {
     throw new Error('Failed to match total from United receipt');
   }
 
-  const totalCents = totals.reduce((sum, match) => {
-    return sum + Math.round(parseFloat(match[1].replace(/,/g, '')) * 100);
-  }, 0);
+  const totalCents = totals.reduce(
+    (sum, match) => sum + Math.round(parseFloat(match[1].replace(/,/g, '')) * 100),
+    0,
+  );
 
   const note = `${origin} → ${destination} (${confirmation})`;
 
