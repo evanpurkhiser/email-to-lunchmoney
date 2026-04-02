@@ -4,9 +4,10 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 import fixture2Email from './fixtures/example-2.eml?raw';
 import fixtureEmail from './fixtures/example.eml?raw';
+import fixtureDiscountedOrder from './fixtures/example-discounted.json';
 import fixtureOrder from './fixtures/example.json';
 import fixtureEmailText from './fixtures/example.txt';
-import {amazonProcessor, computeItemTaxes, extractOrderBlock} from './index';
+import {amazonProcessor, computeItemTaxes, extractOrderBlock, makeDiscountedNote} from './index';
 import * as prompt from './prompt';
 
 const extractOrderSpy = vi.spyOn(prompt, 'extractOrder');
@@ -78,6 +79,111 @@ describe('extractOrderBlock', () => {
 
     expect(result).not.toBeNull();
     expect(result).toContain('Order #');
+  });
+});
+
+describe('Amazon discounted orders', () => {
+  beforeEach(() => {
+    extractOrderSpy.mockReturnValue(Promise.resolve(fixtureDiscountedOrder));
+  });
+
+  it('produces an update action when subtotal exceeds grand total', async () => {
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await amazonProcessor.process(email, env);
+
+    expect(result).toMatchObject({
+      type: 'update',
+      match: {expectedPayee: 'Amazon', expectedTotal: 502},
+    });
+  });
+
+  it('sets note to summarized fallback with order id, subtotal, and charged amount', async () => {
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await amazonProcessor.process(email, env);
+
+    expect(result).toMatchObject({
+      type: 'update',
+      note: 'Amazon order 112-2812184-1194658. Subtotal $18.84, charged $5.02.\n1 item:\n- Aquaphor Healing Ointment',
+    });
+  });
+
+  it('produces a summary update for multi-item discounted orders', async () => {
+    extractOrderSpy.mockReturnValue(
+      Promise.resolve({
+        orderId: '123-1234567-1234567',
+        orderItems: [
+          {name: 'Widget Alpha Long Name', shortName: 'Widget Alpha', quantity: 1, priceEachCents: 2500},
+          {name: 'Widget Beta Long Name', shortName: 'Widget Beta', quantity: 1, priceEachCents: 2932},
+        ],
+        totalCostCents: 3811,
+      }),
+    );
+
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await amazonProcessor.process(email, env);
+
+    expect(result).toMatchObject({
+      type: 'update',
+      match: {expectedPayee: 'Amazon', expectedTotal: 3811},
+      note: 'Amazon order 123-1234567-1234567. Subtotal $54.32, charged $38.11.\n2 items:\n- Widget Alpha\n- Widget Beta',
+    });
+  });
+
+  it('uses split behavior when order math is valid (regression)', async () => {
+    extractOrderSpy.mockReturnValue(Promise.resolve(fixtureOrder));
+
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await amazonProcessor.process(email, env);
+
+    expect(result).toMatchObject({type: 'split'});
+  });
+});
+
+describe('makeDiscountedNote', () => {
+  it('uses shortName when available', () => {
+    const order = {
+      orderId: '111-1111111-1111111',
+      orderItems: [{name: 'Full Product Name', shortName: 'Short Name', quantity: 1, priceEachCents: 1000}],
+      totalCostCents: 500,
+    };
+
+    const note = makeDiscountedNote(order);
+    expect(note).toContain('- Short Name');
+    expect(note).not.toContain('Full Product Name');
+  });
+
+  it('falls back to name when shortName is empty', () => {
+    const order = {
+      orderId: '111-1111111-1111111',
+      orderItems: [{name: 'Full Product Name', shortName: '', quantity: 1, priceEachCents: 1000}],
+      totalCostCents: 500,
+    };
+
+    const note = makeDiscountedNote(order);
+    expect(note).toContain('- Full Product Name');
+  });
+
+  it('uses singular item label for single-item orders', () => {
+    const order = {
+      orderId: '111-1111111-1111111',
+      orderItems: [{name: 'Product', shortName: 'Product', quantity: 1, priceEachCents: 1000}],
+      totalCostCents: 500,
+    };
+
+    expect(makeDiscountedNote(order)).toContain('1 item:');
+  });
+
+  it('uses plural item label for multi-item orders', () => {
+    const order = {
+      orderId: '111-1111111-1111111',
+      orderItems: [
+        {name: 'Product A', shortName: 'A', quantity: 1, priceEachCents: 500},
+        {name: 'Product B', shortName: 'B', quantity: 1, priceEachCents: 600},
+      ],
+      totalCostCents: 400,
+    };
+
+    expect(makeDiscountedNote(order)).toContain('2 items:');
   });
 });
 
