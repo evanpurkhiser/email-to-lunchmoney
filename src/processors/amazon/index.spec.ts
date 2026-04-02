@@ -103,7 +103,7 @@ describe('Amazon discounted orders', () => {
 
     expect(result).toMatchObject({
       type: 'update',
-      note: 'Amazon order 112-2812184-1194658. Subtotal $18.84, charged $5.02.\n1 item:\n- Aquaphor Healing Ointment',
+      note: 'Aquaphor Healing Ointment: Subtotal $18.84, charged $5.02. (112-2812184-1194658)',
     });
   });
 
@@ -125,7 +125,7 @@ describe('Amazon discounted orders', () => {
     expect(result).toMatchObject({
       type: 'update',
       match: {expectedPayee: 'Amazon', expectedTotal: 3811},
-      note: 'Amazon order 123-1234567-1234567. Subtotal $54.32, charged $38.11.\n2 items:\n- Widget Alpha\n- Widget Beta',
+      note: 'Widget Alpha, Widget Beta: Subtotal $54.32, charged $38.11. (123-1234567-1234567)',
     });
   });
 
@@ -148,7 +148,7 @@ describe('makeDiscountedNote', () => {
     };
 
     const note = makeDiscountedNote(order);
-    expect(note).toContain('- Short Name');
+    expect(note).toContain('Short Name');
     expect(note).not.toContain('Full Product Name');
   });
 
@@ -159,21 +159,10 @@ describe('makeDiscountedNote', () => {
       totalCostCents: 500,
     };
 
-    const note = makeDiscountedNote(order);
-    expect(note).toContain('- Full Product Name');
+    expect(makeDiscountedNote(order)).toContain('Full Product Name');
   });
 
-  it('uses singular item label for single-item orders', () => {
-    const order = {
-      orderId: '111-1111111-1111111',
-      orderItems: [{name: 'Product', shortName: 'Product', quantity: 1, priceEachCents: 1000}],
-      totalCostCents: 500,
-    };
-
-    expect(makeDiscountedNote(order)).toContain('1 item:');
-  });
-
-  it('uses plural item label for multi-item orders', () => {
+  it('comma-separates multiple items', () => {
     const order = {
       orderId: '111-1111111-1111111',
       orderItems: [
@@ -183,7 +172,7 @@ describe('makeDiscountedNote', () => {
       totalCostCents: 400,
     };
 
-    expect(makeDiscountedNote(order)).toContain('2 items:');
+    expect(makeDiscountedNote(order)).toContain('A, B');
   });
 });
 

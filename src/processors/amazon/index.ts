@@ -79,12 +79,10 @@ export function makeDiscountedNote(order: AmazonOrder): string {
     (sum, item) => sum + item.priceEachCents * item.quantity,
     0,
   );
-  const itemCount = order.orderItems.length;
-  const itemLabel = itemCount === 1 ? 'item' : 'items';
-  const itemLines = order.orderItems
-    .map(item => `- ${item.shortName || item.name}`)
-    .join('\n');
-  return `Amazon order ${order.orderId}. Subtotal ${centsToDisplay(subtotalCents)}, charged ${centsToDisplay(order.totalCostCents)}.\n${itemCount} ${itemLabel}:\n${itemLines}`;
+  const itemNames = order.orderItems
+    .map(item => item.shortName || item.name)
+    .join(', ');
+  return `${itemNames}: Subtotal ${centsToDisplay(subtotalCents)}, charged ${centsToDisplay(order.totalCostCents)}. (${order.orderId})`;
 }
 
 function makeAction(order: AmazonOrder): LunchMoneyAction {
