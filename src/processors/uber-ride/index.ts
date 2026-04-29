@@ -48,7 +48,7 @@ function process(email: Email) {
   const formattedStart = format(start, 'HH:mm');
   const duration = differenceInMinutes(end, start);
 
-  const amount = costMatch[1].replaceAll(/,/g, '');
+  const amount = costMatch[1].replaceAll(',', '');
   const costInCents = Math.round(Number(amount) * 100);
 
   const eventPath = events.map(e => e.address).join(' → ');

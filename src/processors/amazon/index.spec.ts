@@ -117,7 +117,11 @@ describe('computeItemTaxes', () => {
   });
 
   it('handles small tax split across identical items', () => {
-    const items = Array(5).fill({...i, priceEachCents: 100, quantity: 1});
+    const items = Array.from({length: 5}, () => ({
+      ...i,
+      priceEachCents: 100,
+      quantity: 1,
+    }));
     const total = 505; // subtotal: 500, tax: 5
 
     const taxes = computeItemTaxes(items, total);

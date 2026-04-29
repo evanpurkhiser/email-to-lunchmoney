@@ -49,7 +49,8 @@ function process(email: Email) {
   }
 
   const totalCents = totals.reduce(
-    (sum, match) => sum + Math.round(Number.parseFloat(match[1].replace(/,/g, '')) * 100),
+    (sum, match) =>
+      sum + Math.round(Number.parseFloat(match[1].replaceAll(',', '')) * 100),
     0,
   );
 

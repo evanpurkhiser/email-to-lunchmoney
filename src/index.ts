@@ -101,7 +101,7 @@ const app = new Hono<{Bindings: Env}>();
 app.use(
   '/ingest',
   bearerAuth({
-    verifyToken: async (token, c) => token === c.env.INGEST_TOKEN,
+    verifyToken: (token, c) => token === c.env.INGEST_TOKEN,
   }),
 );
 

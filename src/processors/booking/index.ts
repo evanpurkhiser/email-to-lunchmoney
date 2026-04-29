@@ -72,7 +72,7 @@ function process(email: Email) {
   );
 
   const totalCents = Math.round(
-    Number.parseFloat(amountMatch[1].replace(/,/g, '')) * 100,
+    Number.parseFloat(amountMatch[1].replaceAll(',', '')) * 100,
   );
 
   const note = `${property} — ${checkInFmt}–${checkOutFmt} (${nights} night${nights !== 1 ? 's' : ''})`;

@@ -56,7 +56,9 @@ function process(email: Email) {
   const origin = routeMatch[1].trim();
   const destination = routeMatch[2].trim();
 
-  const totalCents = Math.round(Number.parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
+  const totalCents = Math.round(
+    Number.parseFloat(totalMatch[1].replaceAll(',', '')) * 100,
+  );
 
   const note = `${origin} → ${destination} (${confirmation})`;
 
