@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-import {CloudflareInvoice, CloudflareLineItem} from './types';
+import type {CloudflareInvoice, CloudflareLineItem} from './types';
 
 export const CLOUDFLARE_LINE_ITEM_PROPERTIES = {
   description: {

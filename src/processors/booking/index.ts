@@ -1,7 +1,7 @@
 import {parse, format} from 'date-fns';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches the property name between "Property name" label and "Property address" label.
@@ -59,7 +59,7 @@ function process(email: Email) {
     );
   }
 
-  const property = propertyMatch[1].trim().replace(/\s+/g, ' ');
+  const property = propertyMatch[1].trim().replaceAll(/\s+/g, ' ');
 
   const checkInDate = parse(checkInMatch[1], 'MMMM d, yyyy', new Date());
   const checkOutDate = parse(checkOutMatch[1], 'MMMM d, yyyy', new Date());
@@ -71,7 +71,9 @@ function process(email: Email) {
     (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
   );
 
-  const totalCents = Math.round(parseFloat(amountMatch[1].replace(/,/g, '')) * 100);
+  const totalCents = Math.round(
+    Number.parseFloat(amountMatch[1].replace(/,/g, '')) * 100,
+  );
 
   const note = `${property} — ${checkInFmt}–${checkOutFmt} (${nights} night${nights !== 1 ? 's' : ''})`;
 
@@ -87,9 +89,9 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  const isBookingCom = !!from?.address?.endsWith('@booking.com');
+  const isBookingCom = Boolean(from?.address?.endsWith('@booking.com'));
   const isReceipt = subject === 'This is your receipt';
-  const isConfirmation = !!subject?.match(/Your booking is confirmed at/i);
+  const isConfirmation = Boolean(subject?.match(/Your booking is confirmed at/i));
 
   return isBookingCom && (isReceipt || isConfirmation);
 }

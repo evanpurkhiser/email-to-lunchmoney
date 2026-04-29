@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 const MATCHERS = [
   // Emails from iPhone purchases
@@ -69,7 +69,10 @@ function process(email: Email) {
 function matchEmail(email: Email) {
   const {from, subject} = email;
 
-  return !!from?.address?.endsWith('apple.com') && subject === 'Your receipt from Apple.';
+  return (
+    Boolean(from?.address?.endsWith('apple.com')) &&
+    subject === 'Your receipt from Apple.'
+  );
 }
 
 export const appleEmailProcessor: EmailProcessor = {

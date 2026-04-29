@@ -2,7 +2,7 @@ import {subDays} from 'date-fns';
 import {escapeMarkdown as e} from 'telegram-escape';
 
 import {sendTelegramMessage} from './telegram';
-import {LunchMoneyAction, LunchMoneyActionRow} from './types';
+import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
 
 const OLD_ACTION_THRESHOLD_DAYS = 15;
 

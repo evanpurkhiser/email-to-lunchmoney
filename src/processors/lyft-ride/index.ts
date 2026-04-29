@@ -1,8 +1,8 @@
 import {addDays, differenceInMinutes, format, isBefore, parse} from 'date-fns';
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches ride events (pickup, stops, dropo-off)
@@ -74,9 +74,9 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  const isLyft = !!from?.address?.endsWith('lyftmail.com');
+  const isLyft = Boolean(from?.address?.endsWith('lyftmail.com'));
 
-  return isLyft && !!subject?.startsWith('Your ride with');
+  return isLyft && Boolean(subject?.startsWith('Your ride with'));
 }
 
 export const lyftRideProcessor: EmailProcessor = {

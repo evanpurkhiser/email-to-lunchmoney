@@ -1,8 +1,8 @@
 import {addDays, differenceInMinutes, format, isBefore, parse} from 'date-fns';
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches ride events with time and address on the same line
@@ -48,7 +48,7 @@ function process(email: Email) {
   const formattedStart = format(start, 'HH:mm');
   const duration = differenceInMinutes(end, start);
 
-  const amount = costMatch[1].replace(/,/g, '');
+  const amount = costMatch[1].replaceAll(/,/g, '');
   const costInCents = Math.round(Number(amount) * 100);
 
   const eventPath = events.map(e => e.address).join(' → ');
@@ -67,8 +67,8 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject, html} = email;
-  const isUber = !!from?.address?.endsWith('uber.com');
-  const hasRideSubject = !!subject?.match(/your .+ trip with uber/i);
+  const isUber = Boolean(from?.address?.endsWith('uber.com'));
+  const hasRideSubject = Boolean(subject?.match(/your .+ trip with uber/i));
 
   if (!isUber || !hasRideSubject) {
     return false;

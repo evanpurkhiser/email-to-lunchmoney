@@ -12,7 +12,7 @@ describe('checkOldActionEntries', () => {
     env.TELEGRAM_TOKEN = 'test_token';
     env.TELEGRAM_CHAT_ID = 'test_chat_id';
 
-    vi.spyOn(telegram, 'sendTelegramMessage').mockResolvedValue(undefined);
+    vi.spyOn(telegram, 'sendTelegramMessage').mockResolvedValue();
   });
 
   it('should do nothing when no old actions exist', async () => {

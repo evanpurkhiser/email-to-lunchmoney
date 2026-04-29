@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches the confirmation number from Delta receipts
@@ -56,7 +56,7 @@ function process(email: Email) {
   const origin = routeMatch[1].trim();
   const destination = routeMatch[2].trim();
 
-  const totalCents = Math.round(parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
+  const totalCents = Math.round(Number.parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
 
   const note = `${origin} → ${destination} (${confirmation})`;
 
@@ -72,8 +72,8 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  const isDelta = !!from?.address?.endsWith('@t.delta.com');
-  const isReceipt = !!subject?.includes('Your Flight Receipt');
+  const isDelta = Boolean(from?.address?.endsWith('@t.delta.com'));
+  const isReceipt = Boolean(subject?.includes('Your Flight Receipt'));
 
   return isDelta && isReceipt;
 }

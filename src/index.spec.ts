@@ -3,7 +3,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 import fixtureEmail from './fixtures/example.eml?raw';
 import {overrideProcessors} from './index';
-import {EmailProcessor, LunchMoneyAction} from './types';
+import type {EmailProcessor, LunchMoneyAction} from './types';
 
 describe('/ingest Endpoint', () => {
   const exampleAction: LunchMoneyAction = {

@@ -1,4 +1,4 @@
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
 export interface EmailProcessor {
   /**

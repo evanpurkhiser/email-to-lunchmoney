@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches the confirmation number from Southwest receipts
@@ -65,7 +65,7 @@ function process(email: Email) {
 function matchEmail(email: Email) {
   const {from} = email;
   // Match any email from southwest.com or subdomain (e.g., @southwest.com, @iluv.southwest.com, @ifly.southwest.com)
-  const isSouthwest = !!from?.address?.match(/(@|\.+)southwest\.com$/);
+  const isSouthwest = Boolean(from?.address?.match(/(@|\.+)southwest\.com$/));
 
   return isSouthwest;
 }

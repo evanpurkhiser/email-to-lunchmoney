@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches the confirmation number from United receipts
@@ -49,7 +49,7 @@ function process(email: Email) {
   }
 
   const totalCents = totals.reduce(
-    (sum, match) => sum + Math.round(parseFloat(match[1].replace(/,/g, '')) * 100),
+    (sum, match) => sum + Math.round(Number.parseFloat(match[1].replace(/,/g, '')) * 100),
     0,
   );
 
@@ -67,8 +67,8 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  const isUnited = !!from?.address?.endsWith('@united.com');
-  const isReceipt = !!subject?.includes('eTicket Itinerary and Receipt');
+  const isUnited = Boolean(from?.address?.endsWith('@united.com'));
+  const isReceipt = Boolean(subject?.includes('eTicket Itinerary and Receipt'));
 
   return isUnited && isReceipt;
 }

@@ -5,7 +5,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import fixtureEmail from './fixtures/example-invoice.eml?raw';
 import {cloudflareProcessor} from './index';
 import * as prompt from './prompt';
-import {CloudflareInvoice} from './types';
+import type {CloudflareInvoice} from './types';
 
 const extractInvoiceSpy = vi.spyOn(prompt, 'extractInvoice');
 

@@ -1,6 +1,6 @@
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {
+import type {
   EmailProcessor,
   LunchMoneyAction,
   LunchMoneyMatch,
@@ -9,7 +9,7 @@ import {
 } from 'src/types';
 
 import {extractOrder} from './prompt';
-import {AmazonOrder, AmazonOrderItem} from './types';
+import type {AmazonOrder, AmazonOrderItem} from './types';
 
 /**
  * Extracts the main order block from an Amazon plain text email.
@@ -123,7 +123,10 @@ async function process(email: Email, env: Env) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  return !!from?.address?.endsWith('amazon.com') && !!subject?.startsWith('Ordered');
+  return (
+    Boolean(from?.address?.endsWith('amazon.com')) &&
+    Boolean(subject?.startsWith('Ordered'))
+  );
 }
 
 export const amazonProcessor: EmailProcessor = {

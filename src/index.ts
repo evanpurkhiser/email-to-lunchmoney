@@ -5,7 +5,8 @@ import {
 } from '@sentry/cloudflare';
 import {Hono} from 'hono';
 import {bearerAuth} from 'hono/bearer-auth';
-import PostalMime, {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
+import PostalMime from 'postal-mime';
 
 import {alaskaProcessor} from 'src/processors/airline-alaska';
 import {americanProcessor} from 'src/processors/airline-american';
@@ -24,7 +25,7 @@ import {uberRideProcessor} from 'src/processors/uber-ride';
 import {processActions} from './lunchmoney';
 import {cleanupNotifiedActions} from './old-action-cleanup';
 import {checkOldActionEntries} from './old-actions-checker';
-import {EmailProcessor, LunchMoneyAction} from './types';
+import type {EmailProcessor, LunchMoneyAction} from './types';
 
 let EMAIL_PROCESSORS: EmailProcessor[] = [
   // Airlines

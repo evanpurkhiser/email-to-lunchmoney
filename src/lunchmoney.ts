@@ -1,6 +1,6 @@
 import {format, subDays} from 'date-fns';
 
-import {LunchMoneyAction, LunchMoneyActionRow} from './types';
+import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
 
 const LOOKBACK_DAYS = 180;
 

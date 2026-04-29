@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches the record locator (confirmation code) from American receipts
@@ -46,7 +46,7 @@ function process(email: Email) {
   const origin = routeMatch[1];
   const destination = routeMatch[2];
 
-  const totalCents = Math.round(parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
+  const totalCents = Math.round(Number.parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
 
   const note = `${origin} → ${destination} (${confirmation})`;
 
@@ -62,8 +62,8 @@ function process(email: Email) {
 
 function matchEmail(email: Email) {
   const {from, subject} = email;
-  const isAmerican = !!from?.address?.endsWith('@info.email.aa.com');
-  const isReceipt = !!subject?.includes('Your trip confirmation');
+  const isAmerican = Boolean(from?.address?.endsWith('@info.email.aa.com'));
+  const isReceipt = Boolean(subject?.includes('Your trip confirmation'));
 
   return isAmerican && isReceipt;
 }

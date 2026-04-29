@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 /**
  * Matches the confirmation code from Alaska receipts
@@ -50,7 +50,7 @@ function process(email: Email) {
   const origin = routeMatch[1];
   const destination = routeMatch[2];
 
-  const totalCents = Math.round(parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
+  const totalCents = Math.round(Number.parseFloat(totalMatch[1].replace(/,/g, '')) * 100);
 
   const note = `${origin} → ${destination} (${confirmation})`;
 
@@ -67,9 +67,9 @@ function process(email: Email) {
 function matchEmail(email: Email) {
   const {from, subject} = email;
   const isAlaska =
-    !!from?.address?.endsWith('@email.alaskaair.com') ||
-    !!from?.address?.endsWith('@ifly.alaskaair.com');
-  const isReceipt = !!subject?.includes('Your confirmation receipt');
+    Boolean(from?.address?.endsWith('@email.alaskaair.com')) ||
+    Boolean(from?.address?.endsWith('@ifly.alaskaair.com'));
+  const isReceipt = Boolean(subject?.includes('Your confirmation receipt'));
 
   return isAlaska && isReceipt;
 }

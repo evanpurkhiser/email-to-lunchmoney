@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-import {AmazonOrder, AmazonOrderItem} from './types';
+import type {AmazonOrder, AmazonOrderItem} from './types';
 
 export const AMAZON_ORDER_ITEM_PROPERTIES = {
   name: {

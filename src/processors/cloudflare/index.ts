@@ -1,10 +1,10 @@
 import {getDocument} from 'pdfjs-serverless';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneySplit, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneySplit, LunchMoneyUpdate} from 'src/types';
 
 import {extractInvoice} from './prompt';
-import {CloudflareLineItem} from './types';
+import type {CloudflareLineItem} from './types';
 
 /**
  * Extracts text content from a PDF buffer using pdfjs-serverless
@@ -93,8 +93,8 @@ function matchEmail(email: Email): boolean {
   const {from, subject} = email;
 
   return (
-    !!from?.address?.includes('cloudflare.com') &&
-    !!subject?.toLowerCase().includes('invoice') &&
+    Boolean(from?.address?.includes('cloudflare.com')) &&
+    Boolean(subject?.toLowerCase().includes('invoice')) &&
     email.attachments?.some(attachment => attachment.mimeType === 'application/pdf')
   );
 }
