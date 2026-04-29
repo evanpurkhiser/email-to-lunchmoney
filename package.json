@@ -7,7 +7,7 @@
     "dev": "wrangler dev",
     "start": "wrangler dev",
     "test": "vitest",
-    "lint": "oxlint src/**/*.ts test/**/*.ts",
+    "lint": "oxlint src/ test/",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "cf-typegen": "wrangler types"
@@ -24,11 +24,11 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.12.6",
-    "@evanpurkhiser/oxc-config": "^0.5.0",
+    "@evanpurkhiser/oxc-config": "^0.8.0",
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^25.0.10",
-    "oxfmt": "^0.41.0",
-    "oxlint": "^1.56.0",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
     "typescript": "^5.5.2",
     "vitest": "~3.2.0",
     "wrangler": "^4.24.0"
