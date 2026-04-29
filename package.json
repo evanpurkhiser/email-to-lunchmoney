@@ -2,6 +2,18 @@
   "name": "email-to-lunchmoney",
   "version": "0.0.0",
   "private": true,
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.15.0",
+      "onFail": "download"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "10.33.2",
+      "onFail": "download"
+    }
+  },
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
@@ -33,10 +45,6 @@
     "vitest": "~3.2.0",
     "wrangler": "^4.24.0"
   },
-  "volta": {
-    "node": "24.3.0"
-  },
-  "packageManager": "pnpm@10.12.4",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
