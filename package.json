@@ -5,13 +5,11 @@
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "^24.15.0",
-      "onFail": "download"
+      "version": "^24.15.0"
     },
     "packageManager": {
       "name": "pnpm",
-      "version": "10.33.2",
-      "onFail": "download"
+      "version": "10.33.2"
     }
   },
   "scripts": {
@@ -44,12 +42,5 @@
     "typescript": "^5.5.2",
     "vitest": "~3.2.0",
     "wrangler": "^4.24.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp",
-      "workerd"
-    ]
   }
 }
