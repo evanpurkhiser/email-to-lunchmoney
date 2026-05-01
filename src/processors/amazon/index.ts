@@ -66,17 +66,48 @@ export function computeItemTaxes(items: AmazonOrderItem[], totalCents: number): 
   return taxCents;
 }
 
+function centsToDisplay(cents: number): string {
+  return `$${(cents / 100).toFixed(2)}`;
+}
+
 function makeItemNote(order: AmazonOrder, item: AmazonOrderItem) {
   return `${item.shortName} (${order.orderId})`;
 }
 
+export function makeDiscountedNote(order: AmazonOrder): string {
+  const subtotalCents = order.orderItems.reduce(
+    (sum, item) => sum + item.priceEachCents * item.quantity,
+    0,
+  );
+  const itemNames = order.orderItems
+    .map(item => item.shortName || item.name)
+    .join(', ');
+  return `${itemNames}: Subtotal ${centsToDisplay(subtotalCents)}, charged ${centsToDisplay(order.totalCostCents)}. (${order.orderId})`;
+}
+
 function makeAction(order: AmazonOrder): LunchMoneyAction {
-  const itemsTax = computeItemTaxes(order.orderItems, order.totalCostCents);
+  const subtotalCents = order.orderItems.reduce(
+    (sum, item) => sum + item.priceEachCents * item.quantity,
+    0,
+  );
 
   const match: LunchMoneyMatch = {
     expectedPayee: 'Amazon',
     expectedTotal: order.totalCostCents,
   };
+
+  if (subtotalCents > order.totalCostCents) {
+    const updateAction: LunchMoneyUpdate = {
+      match,
+      type: 'update',
+      note: makeDiscountedNote(order),
+    };
+    // Skip tax computation for discounted orders
+    // Found transactions will not be split.
+    return updateAction;
+  }
+
+  const itemsTax = computeItemTaxes(order.orderItems, order.totalCostCents);
 
   if (order.orderItems.length > 1) {
     const splitAction: LunchMoneySplit = {
