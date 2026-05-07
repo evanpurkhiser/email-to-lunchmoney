@@ -84,7 +84,7 @@ function makeAction(order: AmazonOrder): LunchMoneyAction {
       type: 'split',
       split: order.orderItems.map((item, i) => ({
         note: makeItemNote(order, item),
-        amount: item.priceEachCents + itemsTax[i],
+        amount: item.priceEachCents * item.quantity + itemsTax[i],
       })),
     };
 
