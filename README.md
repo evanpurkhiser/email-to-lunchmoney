@@ -162,3 +162,5 @@ This would enable processors like `booking` to handle international receipts by:
 - `INGEST_TOKEN` - Authentication token for the /ingest endpoint (generate a secure random token)
 - `LUNCHMONEY_API_KEY` - Get this in your lunchmoney settings
 - `OPENAI_API_KEY` - Needed for processors that talk to OpenAI
+- `TELEGRAM_TOKEN` / `TELEGRAM_CHAT_ID` - Optional. Enables Telegram notifications.
+- `VERBOSE_BOT` - Optional. Set to `true` to send Telegram messages when new actions are recorded and when actions are successfully matched.

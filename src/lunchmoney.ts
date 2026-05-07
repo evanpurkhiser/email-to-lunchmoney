@@ -1,8 +1,16 @@
 import {format, subDays} from 'date-fns';
 
+import {formatMatchedActionMessage, sendVerboseTelegramMessage} from './telegram';
 import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
 
 const LOOKBACK_DAYS = 180;
+
+interface LunchMoneyMeResponse {
+  account_id?: number | string;
+  budget?: {
+    account_id?: number | string;
+  };
+}
 
 async function lunchMoneyApi(env: Env, endpoint: string, options: RequestInit = {}) {
   const url = `https://dev.lunchmoney.app/v1${endpoint}`;
@@ -21,6 +29,17 @@ async function lunchMoneyApi(env: Env, endpoint: string, options: RequestInit = 
   }
 
   return response.json() as Record<string, any>;
+}
+
+async function getBudgetAccountId(env: Env): Promise<string> {
+  const me = await lunchMoneyApi(env, '/me') as LunchMoneyMeResponse;
+  const budgetAccountId = me.budget?.account_id ?? me.account_id;
+
+  if (budgetAccountId === undefined || budgetAccountId === null) {
+    throw new Error('Lunch Money /me response did not include budget.account_id');
+  }
+
+  return `${budgetAccountId}`;
 }
 
 function hasNote(note: string | null) {
@@ -64,6 +83,8 @@ export async function processActions(env: Env) {
   // track which transactions we've already assigned
   const assignedTransactions: number[] = [];
 
+  let budgetAccountId: string | null = null;
+
   for (const actionRow of actions) {
     const action: LunchMoneyAction = JSON.parse(actionRow.action);
 
@@ -92,7 +113,7 @@ export async function processActions(env: Env) {
 
     // In a try catch try to process the lunch money action with the found
     // transaction. Either `update` which will just set the note, or `split`
-    // which spits the transaction and sets the note from each split
+    // which splits the transaction and sets the note from each split
     try {
       if (action.type === 'update') {
         const transaction = {
@@ -108,7 +129,6 @@ export async function processActions(env: Env) {
       }
 
       if (action.type === 'split') {
-        // Convert split data from our format to API format
         const split = action.split.map(item => ({
           amount: (item.amount / 100).toFixed(2),
           notes: item.note,
@@ -127,6 +147,20 @@ export async function processActions(env: Env) {
       // Record which lm action IDs have been processed so we can bulk remove them
       // from the database at the end
       processedActionIds.push(actionRow.id);
+
+      if (env.VERBOSE_BOT === 'true') {
+        budgetAccountId ??= await getBudgetAccountId(env);
+        await sendVerboseTelegramMessage(
+          env,
+          formatMatchedActionMessage(
+            actionRow.id,
+            budgetAccountId,
+            matchingTransaction.id,
+            action,
+          ),
+        );
+      }
+
       console.log(`Successfully processed action ${actionRow.id}`);
     } catch (error) {
       console.error(`Failed to process action ${actionRow.id}:`, error);

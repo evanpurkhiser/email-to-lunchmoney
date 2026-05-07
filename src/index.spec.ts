@@ -4,6 +4,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import fixtureEmail from './fixtures/example.eml?raw';
 import {overrideProcessors} from './index';
 import type {EmailProcessor, LunchMoneyAction} from './types';
+import * as telegram from './telegram';
 
 describe('/ingest Endpoint', () => {
   const exampleAction: LunchMoneyAction = {
@@ -20,6 +21,8 @@ describe('/ingest Endpoint', () => {
 
   beforeEach(() => {
     overrideProcessors([exampleProcessor]);
+    env.VERBOSE_BOT = undefined;
+    vi.restoreAllMocks();
   });
 
   it('returns 401 when Authorization header is missing', async () => {
@@ -94,5 +97,32 @@ describe('/ingest Endpoint', () => {
     const {results} = await env.DB.prepare('SELECT * FROM lunchmoney_actions').all();
     expect(results).toHaveLength(1);
     expect(results[0].action).toEqual(JSON.stringify(exampleAction));
+  });
+
+  it('sends a verbose telegram message when a new action is recorded', async () => {
+    env.VERBOSE_BOT = 'true';
+    vi.spyOn(telegram, 'sendVerboseTelegramMessage').mockResolvedValue(undefined);
+
+    const request = new Request('http://localhost/ingest', {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${env.INGEST_TOKEN}`},
+      body: btoa(fixtureEmail),
+    });
+
+    const response = await SELF.fetch(request);
+
+    expect(response.status).toBe(202);
+    for (let i = 0; i < 20; i++) {
+      if (telegram.sendVerboseTelegramMessage.mock.calls.length > 0) {
+        break;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+
+    expect(telegram.sendVerboseTelegramMessage).toHaveBeenCalledOnce();
+    expect(telegram.sendVerboseTelegramMessage.mock.calls[0]?.[1]).toContain(
+      'New action recorded',
+    );
   });
 });

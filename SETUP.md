@@ -463,6 +463,25 @@ If you want to enable Telegram notifications:
 - Alerts when actions are older than 15 days and haven't been matched to transactions
 - This helps you identify receipt emails that couldn't be automatically processed
 
+**Optional: Verbose bot mode**
+
+If you want the bot to also report normal workflow activity, set:
+
+```bash
+wrangler secret put VERBOSE_BOT
+```
+
+and provide:
+
+```text
+true
+```
+
+When `VERBOSE_BOT=true`, the bot will also send messages:
+
+- when a new action is added to the database
+- when an action is successfully matched to an existing Lunch Money transaction
+
 ### 4.3 Optional: Sentry Error Tracking
 
 If you want centralized error tracking (recommended for production use):
