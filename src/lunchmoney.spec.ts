@@ -558,7 +558,11 @@ describe('processActions', () => {
       }),
     ];
 
-    mockLunchMoneyBudget(41432);
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: '/v1/me'})
+      .reply(200, {budget: {account_id: 41432}})
+      .times(1);
 
     fetchMock
       .get('https://dev.lunchmoney.app')

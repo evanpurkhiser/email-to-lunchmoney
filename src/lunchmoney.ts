@@ -83,7 +83,10 @@ export async function processActions(env: Env): Promise<ProcessActionsSummary> {
     pending: 'true',
   });
 
-  const txnsResp = await lunchMoneyApi(env, `/transactions?${params}`) as LunchMoneyTransactionsResponse;
+  const txnsResp = await lunchMoneyApi(
+    env,
+    `/transactions?${params}`,
+  ) as LunchMoneyTransactionsResponse;
 
   console.log(`Got ${txnsResp.transactions.length} Lunch Money Transactions`);
 
