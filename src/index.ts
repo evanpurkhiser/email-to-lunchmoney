@@ -22,7 +22,6 @@ import {lyftRideProcessor} from 'src/processors/lyft-ride';
 import {steamEmailProcessor} from 'src/processors/steam';
 import {uberRideProcessor} from 'src/processors/uber-ride';
 
-<<<<<<< HEAD
 import {runScheduledTasks} from './scheduled-run';
 import {formatNewActionMessage, sendVerboseTelegramMessage} from './telegram';
 import {handleTelegramWebhook} from './telegram-webhook';
