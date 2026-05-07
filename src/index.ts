@@ -22,11 +22,11 @@ import {lyftRideProcessor} from 'src/processors/lyft-ride';
 import {steamEmailProcessor} from 'src/processors/steam';
 import {uberRideProcessor} from 'src/processors/uber-ride';
 
-import {processActions} from './lunchmoney';
-import {cleanupNotifiedActions} from './old-action-cleanup';
-import {checkOldActionEntries} from './old-actions-checker';
-import type {EmailProcessor, LunchMoneyAction} from './types';
+<<<<<<< HEAD
+import {runScheduledTasks} from './scheduled-run';
 import {formatNewActionMessage, sendVerboseTelegramMessage} from './telegram';
+import {handleTelegramWebhook} from './telegram-webhook';
+import type {EmailProcessor, LunchMoneyAction} from './types';
 
 let EMAIL_PROCESSORS: EmailProcessor[] = [
   // Airlines
@@ -129,13 +129,15 @@ app.post('/ingest', async c => {
   return c.json({message: 'Accepted'}, 202);
 });
 
+app.post('/telegram/webhook', async c => {
+  return handleTelegramWebhook(c.req.raw, c.env, c.executionCtx.waitUntil.bind(c.executionCtx));
+});
+
 // Export the Hono fetch handler combined with scheduled handler
 const handlers: ExportedHandler<Env> = {
   fetch: app.fetch,
   scheduled: (_controller, env, ctx) => {
-    ctx.waitUntil(processActions(env));
-    ctx.waitUntil(checkOldActionEntries(env));
-    ctx.waitUntil(cleanupNotifiedActions(env));
+    ctx.waitUntil(runScheduledTasks(env));
   },
 };
 
