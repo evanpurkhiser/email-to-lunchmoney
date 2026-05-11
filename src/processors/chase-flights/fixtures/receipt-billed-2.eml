@@ -1,0 +1,1110 @@
+Delivered-To: evanpurkhiser@gmail.com
+Received: by 2002:a17:505:c9b:b0:1e0f:a311:a97c with SMTP id hp27csp2981963njb;
+        Tue, 17 Feb 2026 02:24:20 -0800 (PST)
+X-Received: by 2002:ac8:5842:0:b0:506:a5f1:e5e5 with SMTP id d75a77b69052e-506a839b823mr188707751cf.76.1771323860269;
+        Tue, 17 Feb 2026 02:24:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771323860; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HoMTl95frRxDNq59SRY9SfSYyZROFJ+1IlX0FyF0Av63U5qity43Y18wtaIqov+kQ1
+         bCRO4NMaK/IdUg+PQn9jRX9IU3SroZLJDeZrJbWwQ8NwFYv1MIH9vwpK5oO/fOH/vFyD
+         fPUz99d/kLvxj1GYWq1A/YhOtF/qugFT1OeLl2D0SxUXrvOyYFC7a6LHDUM3GE44I+xc
+         9ww6LlwUxssTWHKT4xtIfOANRjyjUOCLzc3TWwbAjnuUQxtJ5wfzRP+ruWjjymSa3Qyj
+         HpWHME1BL6ICxWqfPRsKxJsENb/xrG4Lh29cxaprw/WAxyl919B7fZqf80vJmh2OyLOr
+         +V7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=feedback-id:date:message-id:content-transfer-encoding:mime-version
+         :subject:to:reply-to:from:dkim-signature:dkim-signature;
+        bh=phCdSkj86LS/p9W71u/rLpSJcLpnSsONbUYP0UXvmvQ=;
+        fh=169V9/7R5Hr0c84w09Eb6qts8GXB7/FdpMEMd03Gbs8=;
+        b=PH0YDquOicy94HF656xMZleW3Nbk4flA1QojKtPzzIKZ0B9URTLwmTwuqsRMr26doe
+         613OrEoXXZFsbg+d22Tvcl9AcuNrLsG+IfFQnvPQfxM43vp3rWzqEG4bza/J7BVFMqTk
+         Z0lqQv/r+QwrTXqEEv1Lg/n+rED/wbViU/GUcQIeOFjoLTFL0tVDtQBfyJnbvCYP3w62
+         /zljGuXvKtg/1Jtbt/xFHZHsJez8uKeIGgpvxAMLf6kYJNn2DFstcAUhAK9luXm1TiUl
+         xHQE3MQUHjXzEMw6e9H9ea3fH1BEW6zL4JP7AklzNTqmN36XYsOSe53nSUgnQ30y/zmF
+         jtAw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@chasetravel.com header.s=dyuu5dhej74jnplwb6kab3rxscml5smv header.b=jNoWBdN0;
+       dkim=pass header.i=@amazonses.com header.s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw header.b=EdvH6drM;
+       spf=pass (google.com: domain of 02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@amazonses.com designates 54.240.124.193 as permitted sender) smtp.mailfrom=02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@amazonses.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=chasetravel.com
+Return-Path: <02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@amazonses.com>
+Received: from a124-193.smtp-out.amazonses.com (a124-193.smtp-out.amazonses.com. [54.240.124.193])
+        by mx.google.com with ESMTPS id d75a77b69052e-506b151ad02si124649571cf.247.2026.02.17.02.24.20
+        for <evanpurkhiser@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Feb 2026 02:24:20 -0800 (PST)
+Received-SPF: pass (google.com: domain of 02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@amazonses.com designates 54.240.124.193 as permitted sender) client-ip=54.240.124.193;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@chasetravel.com header.s=dyuu5dhej74jnplwb6kab3rxscml5smv header.b=jNoWBdN0;
+       dkim=pass header.i=@amazonses.com header.s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw header.b=EdvH6drM;
+       spf=pass (google.com: domain of 02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@amazonses.com designates 54.240.124.193 as permitted sender) smtp.mailfrom=02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@amazonses.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=chasetravel.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=dyuu5dhej74jnplwb6kab3rxscml5smv; d=chasetravel.com;
+	t=1771323859;
+	h=From:Reply-To:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+	bh=Lp9NDaO2dKuXD6R46vo95ISPvdpjabpIe9PwjWQRK1o=;
+	b=jNoWBdN06eZkwE02hMxERDoOSiWwnsa8kwpVAcXXcgzWN4fj3iPcWRtoRVo7U0LQ
+	qRtj7GoHjhJgtYugy6RB3yzq1VoWfjD28KiIKo9u34raEaKgrtspjGbGFEd827QCs4G
+	NLn8XTDqblXiYwYhsCNTpQkt3SlbKFxLGfGopQxwyM2WvgTfVJxu19MS4eoPXj0uzGZ
+	urQftoM0NEVmSAfjpxREn5n2SC3ihGKwOpOfSuthH4+K6nuxc1ERO94fwvTDn4aNgK/
+	o7PXOnCcBHDGJBbGsG3ZoLXIJ46CzlTIMv7Z49vQ1zxbf/2allut12NBobhyD9QRHrK
+	NDjENp+zSQ==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1771323859;
+	h=From:Reply-To:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+	bh=Lp9NDaO2dKuXD6R46vo95ISPvdpjabpIe9PwjWQRK1o=;
+	b=EdvH6drMverkJyS+RArbzMhCxkm1myuf31SJxp6j06aOM68Rzhhscejk/JtJ7O1e
+	zvblDXkVIkrYpafCOSB2P+eaBQfkjz7Aeanf9nAMCJRZJ9p6ulQ1d5lQo1nGEty9M3N
+	xD5JZK/jWnIBE6ep+lz0Fp6G8IrF9evDUx/4fzxQ=
+From: Chase Travel <donotreply@chasetravel.com>
+Reply-To: Donotreply <donotreply@rewardsengage.com>
+To: evanpurkhiser@gmail.com
+Subject: Travel Reservation Center Trip ID # 1013611616
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000@email.amazonses.com>
+Date: Tue, 17 Feb 2026 10:24:19 +0000
+Feedback-ID: ::1.us-east-1.sN5OszwEhUALn26ZNzacC2LHvLURRIxzxAW7AOrzKoc=:AmazonSES
+X-SES-Outgoing: 2026.02.17-54.240.124.193
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html lang=3D"en" xmlns=3D"ht=
+tp://www.w3.org/1999/xhtml" xmlns:o=3D"urn:schemas-microsoft-com:office:off=
+ice" style=3D"padding:0;Margin:0"><head><meta charset=3D"UTF-8"><meta conte=
+nt=3D"width=3Ddevice-width, initial-scale=3D1" name=3D"viewport"><meta name=
+=3D"x-apple-disable-message-reformatting"><meta http-equiv=3D"X-UA-Compatib=
+le" content=3D"IE=3Dedge"><meta content=3D"telephone=3Dno" name=3D"format-d=
+etection"><title></title>
+ <!--[if (mso 16)]><style type=3D"text/css"> a { text-decoration: none; }=
+=20
+</style><![endif]--><!--[if gte mso 9 ]><style> sup { font-size: 100% !impo=
+rtant; } </style><![endif]--><!--[if gte mso 9 ]><xml><o:OfficeDocumentSett=
+ings><o:AllowPNG></o:AllowPNG><o:PixelsPerInch>96</o:PixelsPerInch></o:Offi=
+ceDocumentSettings></xml ><![endif]--><!--[if gte mso 9]><style>sup { font-=
+size: 100% !important; }</style><![endif]--><!--[if mso]><xml>
+    <w:WordDocument xmlns:w=3D"urn:schemas-microsoft-com:office:word">
+      <w:DontUseAdvancedTypographyReadingMail></w:DontUseAdvancedTypography=
+ReadingMail>
+    </w:WordDocument>
+    </xml><![endif]--><!--[if !mso]><!-- --><!--<![endif]--><style type=3D"=
+text/css">/* ROOT DESCRIPTION font-family - applied to whole body font-fami=
+ly-bold - applied to all bold words card-header-font-family:applied to card=
+ header font template-widh - main template width card-container-width - car=
+d section width border-radius - for card border radius link-color - for url=
+ text primary-font-color - for all main text secondary-font-color - for tex=
+t like arrival time and stops primary-color - for parent background color o=
+f template secondary-color - card background color tertiary-color - for bac=
+kground color of real id req,hotel resort fee blocks tertiary-border-color =
+- for border color of real id req,hotel resort fee blocks card-header-backg=
+round-color - for card header background color card-header-font-color - for=
+ card header font color card-border-color - for card border color positive-=
+green-text - for text like confirmed negative-red-text - for text like canc=
+elled and next day arrival c quaternary-color - for background colr of insu=
+rance block quaternary-border-color - for border color of insurance block q=
+uinary-color:#f8fffc - for background color of trip refund block quinary-bo=
+rder-color - for border color of trip refund block septenary-color - for ba=
+ckground color of suppress flight message block=09septenary-border-color - =
+for border color of suppress flight message block senary-color - for itiner=
+ary inner block background color spacer-line-color - for mytrip details spa=
+cer between trips promo-header-color - for promo header bg color promo-eb-b=
+g-color - for promo email body bg color promo-eb-txt-color - for promo emai=
+l body text color promo-btn-bg-color - for promo button bg color promo-btn-=
+txt-color - for promo button text color*/:root {=09--font-family:Open Sans,=
+ 'Trebuchet MS';=09--font-family-bold:Open Sans Semibold, 'Trebuchet MS';=
+=09--card-header-font-family:Queens, 'Times New Roman';=09--template-width:=
+640px;=09--card-container-width:520px;=09--border-radius:8px;=09--link-colo=
+r:#0060f0;=09--primary-font-color:#101820;=09--secondary-font-color:#565A5D=
+;=09--primary-color:#ffffff;=09--secondary-color:#ffffff;=09--tertiary-colo=
+r:#f5f7f8;=09--tertiary-border-color:#f5f7f8;=09--card-header-background-co=
+lor:#ECEFF1;=09--card-header-font-color:#1A222B;=09--card-border-color:#E2E=
+4E5;=09--positive-green-text:#4ea000;=09--negative-red-text:#b80009;=09--qu=
+aternary-color:#f0f3fa;=09--quaternary-border-color:#2e5aac;=09--quinary-co=
+lor:#f8fffc;=09--quinary-border-color:#4ea000;=09--septenary-color:#fff4f4;=
+=09--septenary-border-color:#d9222a;=09--senary-color:#f5f7f8;=09--spacer-l=
+ine-color:#8c8e90;=09--promo-header-color:#002854;=09--promo-eb-bg-color:#F=
+AF4EE;=09--promo-eb-txt-color:#002855;=09--promo-btn-bg-color:#002855;=09--=
+promo-btn-txt-color:#ffffff;}#outlook a {=09padding:0;}.ExternalClass {=09w=
+idth:100%;}.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalCla=
+ss font,.ExternalClass td,.ExternalClass div {=09line-height:100%;}.es-butt=
+on {=09mso-style-priority:100!important;=09text-decoration:none!important;}=
+a[x-apple-data-detectors] {=09color:inherit!important;=09text-decoration:no=
+ne!important;=09font-size:inherit!important;=09font-family:inherit!importan=
+t;=09font-weight:inherit!important;=09line-height:inherit!important;}.es-de=
+sk-hidden {=09display:none;=09float:left;=09overflow:hidden;=09width:0;=09m=
+ax-height:0;=09line-height:0;=09mso-hide:all;}s {=09text-decoration:line-th=
+rough;}td > img + div {=09display:none;}a:link {=09color:#0060f0;}a:visited=
+ {=09color:#0060f0;}a:hover {=09color:#0060f0;}a:active {=09color:#0060f0;}=
+@media only screen and (max-width:600px) {p, ul li, ol li, a { line-height:=
+150%!important } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120%!important =
+} h1 { font-size:30px!important; text-align:center } h2 { font-size:26px!im=
+portant; text-align:center } h3 { font-size:20px!important; text-align:cent=
+er } .es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a { fo=
+nt-size:30px!important } .es-header-body h2 a, .es-content-body h2 a, .es-f=
+ooter-body h2 a { font-size:26px!important } .es-header-body h3 a, .es-cont=
+ent-body h3 a, .es-footer-body h3 a { font-size:20px!important } .es-menu t=
+d a { font-size:13px!important } .es-header-body p, .es-header-body ul li, =
+.es-header-body ol li, .es-header-body a { font-size:16px!important } .es-f=
+ooter-body p, .es-footer-body ul li, .es-footer-body ol li, .es-footer-body=
+ a { font-size:16px!important } .es-infoblock p, .es-infoblock ul li, .es-i=
+nfoblock ol li, .es-infoblock a { font-size:12px!important } *[class=3D"gma=
+il-fix"] { display:none!important } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-=
+c h2, .es-m-txt-c h3 { text-align:center!important } .es-m-txt-r, .es-m-txt=
+-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right!important } .es-m-=
+txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left!imp=
+ortant } .es-m-txt-r img, .es-m-txt-c img, .es-m-txt-l img { display:inline=
+!important } .es-btn-fw { border-width:10px 0px!important; text-align:cente=
+r!important } .es-adaptive table, .es-btn-fw, .es-btn-fw-brdr, .es-left, .e=
+s-right { width:100%!important } .es-content table, .es-header table, .es-f=
+ooter table, .es-content, .es-footer, .es-header { width:100%!important; ma=
+x-width:600px!important } .es-adapt-td { display:block!important; width:100=
+%!important } .adapt-img { width:100%!important; height:auto!important } .e=
+s-m-p0 { padding:0px!important } .es-m-p0r { padding-right:0px!important } =
+.es-m-p0l { padding-left:0px!important } .es-m-p0t { padding-top:0px!import=
+ant } .es-m-p0b { padding-bottom:0!important } .es-m-p20b { padding-bottom:=
+20px!important } .es-m-p20t { padding-top:20px } .es-m-p25r { padding-right=
+:25px } .es-mobile-hidden, .es-hidden { display:none!important } .m-btn-hid=
+den { display:none!important } tr.es-desk-hidden, td.es-desk-hidden, table.=
+es-desk-hidden { display:table-row!important; width:auto!important; overflo=
+w:visible!important; float:none!important; max-height:inherit!important; li=
+ne-height:inherit!important } .es-desk-menu-hidden { display:table-cell!imp=
+ortant } table.es-table-not-adapt, .esd-block-html table { width:auto!impor=
+tant } table.es-social { display:inline-block!important } table.es-social t=
+d { display:inline-block!important } .es-desk-hidden { display:table-row!im=
+portant; width:auto!important; overflow:visible!important; max-height:inher=
+it!important } .allocate-full-width { display:block!important; width:100%!i=
+mportant } .custom-block-m-p10l { padding-left:10px!important } .custom-ico=
+n-width { width:20%!important } .custom-block-m-display-block { display:blo=
+ck } .pad-m-lr-10 { padding-left:10px!important; padding-right:10px!importa=
+nt } .trip-overview-product-width { width:30%!important } .m-es-p5r { paddi=
+ng-right:5px!important } .m-align-left { text-align:left!important } .m-uns=
+et-width { width:unset!important } .es-content .m-unset-width { width:unset=
+!important } .trip-itinerary-left-half { width:25%!important } .trip-itiner=
+ary-right-half { width:75%!important } .m-es-p8b { padding-bottom:8px!impor=
+tant } .m-es-p16 { padding:16px!important } .m-es-p24 { padding:24px!import=
+ant } .m-d-block { display:block } .m-display-block { display:block!importa=
+nt } .img-m-w-140 { width:140px!important } .m-es-p6b { padding-bottom:6px!=
+important } .m-es-p8t { padding-top:8px!important } .m-es-p10r { padding-ri=
+ght:10px!important } .m-es-p10l { padding-left:10px!important } .m-es-p10b =
+{ padding-bottom:10px!important } .m-es-p11b { padding-bottom:11px!importan=
+t } .m-es-p12t { padding-top:12px!important } .m-es-14t { padding-top:14px!=
+important } .m-es-p14 { padding:14px!important } .m-es-14b { padding-bottom=
+:14px!important } .m-es-p14t { padding-top:14px!important } .m-es-p15r { pa=
+dding-right:15px!important } .m-es-p15l { padding-left:15px!important } .m-=
+es-p15b { padding-bottom:15px!important } .m-es-p16l { padding-left:16px!im=
+portant } .m-es-p16r { padding-right:16px!important } .m-es-p16t { padding-=
+top:16px!important } .m-es-p19t { padding-top:19px!important } .m-es-p16b {=
+ padding-bottom:16px!important } .m-es-p21b { padding-bottom:21px!important=
+ } .m-es-p27b { padding-bottom:27px!important } .m-w-85p { width:85%!import=
+ant } .m-w-100p { width:100%!important } .m-w-max-content { width:max-conte=
+nt!important } .m-es-p3t { padding-top:3px!important } .m-es-p5t { padding-=
+top:5px!important } .m-img-arrow { display:block!important; width:30px!impo=
+rtant } .m-block-d-inline { display:block!important } .m-v-align-top { vert=
+ical-align:top!important } }@media screen and (max-width:384px) {.mail-mess=
+age-content { width:414px!important } }</style>
+ </head>
+ <body style=3D"font-family:'Open Sans', 'Trebuchet MS';color:#101820;width=
+:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Mar=
+gin:0"><div lang=3D"en" class=3D"es-wrapper-color" style=3D"background-colo=
+r:#f8f9fd"><!--[if gte mso 9]>
+=09=09=09<v:background xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"t"=
+>
+=09=09=09=09<v:fill type=3D"tile" color=3D"#f6f6f6"></v:fill>
+=09=09=09</v:background>
+=09=09<![endif]--><table class=3D"es-wrapper" width=3D"100%" cellspacing=3D=
+"0" cellpadding=3D"0" role=3D"none" style=3D"padding:0;Margin:0;width:100%;=
+height:100%;background-image:&quot;&quot;;background-repeat:repeat;backgrou=
+nd-position:center top;background-color:#F6F6F6"><tr><td valign=3D"top"><ta=
+ble class=3D"es-content" cellspacing=3D"0" cellpadding=3D"0" align=3D"cente=
+r" role=3D"none" style=3D"width:100%"><tr><td align=3D"center"><table class=
+=3D"es-content-body" style=3D"background-color:#ffffff;width:600px" cellspa=
+cing=3D"0" cellpadding=3D"0" bgcolor=3D"#ffffff" align=3D"center" role=3D"n=
+one"><table style=3D"display:none !important;font-size:0px;line-height:0;co=
+lor:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all" role=
+=3D"none"><tr><td>Hi, EVAN. Here&#8217;s your travel confirmation for Trip =
+ID # 1013611616.</td></tr></table><table class=3D"es-content-body theme-tem=
+plate-width" style=3D"width:640px;background-color:#ffffff" cellspacing=3D"=
+0" cellpadding=3D"0" bgcolor=3D"#ffffff" align=3D"center" role=3D"none"><tr=
+><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100=
+%" role=3D"none"><tr><td class=3D"m-es-p14t m-es-p14b" align=3D"center" val=
+ign=3D"top" style=3D"padding-bottom:19px;padding-top:21px;width:640px"><tab=
+le cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"=
+><tr><td align=3D"center" style=3D"font-size:0"><img class=3D"adapt-img img=
+-w-180 img-m-w-140" src=3D"https://images.contentstack.io/v3/assets/blta340=
+31bed370a6d3/bltb62a9b14df843aa4/663b21c5aea329eb0e60e07d/travel.png" alt=
+=3D"Chase Travel Brand Logo" loading=3D"lazy" width=3D"180" style=3D"width:=
+180px !important"></td></tr></table></td></tr></table></td></tr></table><ta=
+ble class=3D"es-content-body theme-template-width" cellspacing=3D"0" cellpa=
+dding=3D"0" align=3D"center" bgcolor=3D"#041A58" style=3D"width:640px;backg=
+round-color:#041a58" role=3D"none"><tr><!----></tr></table><table class=3D"=
+es-content-body theme-primary-color" cellspacing=3D"0" cellpadding=3D"0" al=
+ign=3D"center" style=3D"background-color:#FFFFFF;width:640px" role=3D"none"=
+><tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" role=3D"presentation"><!--[if mso]>
+              =09=09=09=09=09=09=09=09=09=09=09=09=09<tr>
+                                                                    <td cla=
+ss=3D"esd-container-frame es-p32t es-p32b" style=3D"padding-top: 32px; padd=
+ing-bottom: 32px" align=3D"center" valign=3D"top">
+                                                                        <ta=
+ble cellpadding=3D"0" cellspacing=3D"0" class=3D"unset-width" role=3D"prese=
+ntation" style=3D"width:unset !important">
+                                                                           =
+     <tr>
+                                                                           =
+         <td align=3D"left" class=3D"es-p15r" style=3D"padding-right: 15px"=
+>
+                                                                           =
+             <p role=3D"heading" aria-level=3D"1" style=3D"Margin:0;line-he=
+ight:36px;color:#565a5d;font-size:24px">Trip ID:  1013611616</p>
+                                                                           =
+         </td>
+                                                                           =
+         <td align=3D"left">
+                                                                           =
+             <span class=3D"es-button-border theme-primary-color" style=3D"=
+border-style:solid;border-color:#0060f0;border-width:1px;display:inline-blo=
+ck;width:auto;mso-border-alt:2px;padding:8px 25px;background-color:#FFFFFF;=
+"><a href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure=
+.chase.com%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FTRIP=
+_DETAILS%2FaccountId:-%2Fspnr:/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-b=
+otqbgcorto0-000000/3rUoRVmDcnwproiXmd8O_bM83DE=3D465" class=3D"es-button th=
+eme-font-family" target=3D"_blank" style=3D"mso-style-priority:100 !importa=
+nt;text-decoration:none;color:#0060f0;font-size:14px;font-family:OpenSans-R=
+egular, 'Trebuchet MS';font-weight:bold;display:inline-block;">See trip</a>=
+</span>
+                                                                           =
+         </td>
+                                                                           =
+     </tr>
+                                                                        </t=
+able>
+                                                                    </td>
+                                                                </tr>
+            =09=09=09=09=09=09=09=09=09=09=09=09=09<![endif]--><!--[if !mso=
+]>--><tr><td class=3D"m-es-p10b es-m-p20t" align=3D"center" valign=3D"top" =
+style=3D"padding-top:32px;padding-bottom:32px"><table cellpadding=3D"0" cel=
+lspacing=3D"0" class=3D"unset-width" role=3D"presentation" style=3D"width:u=
+nset !important"><tr><td align=3D"left" style=3D"padding-right:15px"><p rol=
+e=3D"heading" aria-level=3D"1" style=3D"Margin:0;font-family:'Open Sans', '=
+Trebuchet MS';line-height:36px;color:#565a5d;font-size:24px">Trip ID: 10136=
+11616</p>
+</td><td align=3D"left" class=3D"m-btn-hidden"><span class=3D"es-button-bor=
+der theme-primary-color" style=3D"border-style:solid;border-color:#0060f0;b=
+ackground:#F0F0F0;border-width:1px;display:inline-block;border-radius:4px;w=
+idth:auto;background-color:#FFFFFF;mso-border-alt:10px;padding:8px 25px"><a=
+ href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.cha=
+se.com%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FTRIP_DET=
+AILS%2FaccountId:-%2Fspnr:/2/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqb=
+gcorto0-000000/1BE8WGfOCI4_AvDovJk_nivzRaA=3D465" class=3D"es-button es-but=
+ton-1663412564671 theme-font-family" target=3D"_blank" style=3D"mso-style-p=
+riority:100 !important;text-decoration:underline;font-family:'Open Sans', '=
+Trebuchet MS';color:#0060f0;border-radius:4px;font-size:14px;font-weight:bo=
+ld;display:inline-block;mso-border-alt:10px solid #f5f8fb">See trip</a></sp=
+an></td></tr></table></td></tr>
+ <tr><td align=3D"center" class=3D"m-display-block es-desktop-hidden" style=
+=3D"display:none"><table cellspacing=3D"0" cellpadding=3D"0" class=3D"unset=
+-width" role=3D"presentation" style=3D"width:unset !important"><tr><td alig=
+n=3D"center" class=3D"m-es-p15b es-m-p25r"><span class=3D"es-button-border =
+theme-primary-color" style=3D"border-style:solid;border-color:#0060f0;backg=
+round:#F0F0F0;border-width:1px;display:inline-block;border-radius:4px;width=
+:auto;background-color:#FFFFFF;mso-border-alt:10px;padding:8px 25px"><a hre=
+f=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.chase.c=
+om%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FTRIP_DETAILS=
+%2FaccountId:-%2Fspnr:/3/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcor=
+to0-000000/YzbcfhIWrFOJdhM7MQXu_KeMh34=3D465" class=3D"es-button es-button-=
+1663412564671 theme-font-family" target=3D"_blank" style=3D"mso-style-prior=
+ity:100 !important;text-decoration:underline;font-family:'Open Sans', 'Treb=
+uchet MS';color:#0060f0;border-radius:4px;font-size:14px;font-weight:bold;d=
+isplay:inline-block;mso-border-alt:10px solid #f5f8fb">See trip</a></span><=
+/td></tr></table></td></tr>
+ <!--<![endif]--><tr><td align=3D"center" valign=3D"top"><table cellpadding=
+=3D"0" cellspacing=3D"0" class=3D"theme-secondary-color theme-border-color =
+theme-border-radius" style=3D"background-color:#FFFFFF;border-color:#E2E4E5=
+;border-bottom:1px solid #E2E4E5;border-radius:8px;width:520px;border-width=
+:1px;border-style:solid;border-collapse:separate" role=3D"presentation"><tr=
+><td align=3D"left" class=3D"m-es-p16l m-es-p16r" style=3D"padding-bottom:5=
+px;padding-left:24px;padding-top:25px"><p style=3D"Margin:0;font-family:'Op=
+en Sans', 'Trebuchet MS';line-height:21px;font-size:14px">Hi EVAN,</p></td>=
+</tr>
+ <tr><td align=3D"left" class=3D"m-es-p16l m-es-p16r" style=3D"padding-top:=
+5px;padding-bottom:5px;padding-left:25px;padding-right:25px"><p style=3D"Ma=
+rgin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-size:1=
+4px">Thank you for choosing Chase Travel. Please carefully review your itin=
+erary below to verify all information is correct.</p></td></tr><tr><td alig=
+n=3D"center" class=3D"m-es-p16l m-es-p16r" style=3D"padding-top:10px;paddin=
+g-bottom:10px;padding-left:24px;padding-right:22px;font-size:0"><table bord=
+er=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation"><tr><td class=3D"theme-border-color" style=3D"border=
+-color:#E2E4E5;border-bottom:1px solid #E2E4E5;background:unset;height:1px;=
+width:100%;margin:0px"></td></tr></table></td></tr>
+ <tr><td align=3D"left" class=3D"m-es-p16l m-es-p16r" style=3D"padding-top:=
+5px;padding-bottom:5px;padding-left:24px"><p class=3D"theme-font-family-bol=
+d" role=3D"heading" aria-level=3D"2" style=3D"Margin:0;font-family:'Open Sa=
+ns', 'Trebuchet MS';line-height:24px;font-weight:600;font-size:16px">Manage=
+ your trip online</p></td></tr><tr><td align=3D"left" class=3D"m-es-p16l m-=
+es-p16r" style=3D"padding-top:5px;padding-left:24px;padding-bottom:25px;pad=
+ding-right:22px"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet M=
+S';line-height:21px;font-size:14px">Simply sign in and navigate to the "My =
+Trips" page. From there, you can view your upcoming trips and make changes =
+online.</p></td></tr></table></td></tr></table></td></tr></table><table cla=
+ss=3D"es-content-body theme-primary-color theme-template-width" style=3D"ba=
+ckground-color:#FFFFFF;width:640px;word-break:break-word" cellspacing=3D"0"=
+ cellpadding=3D"0" align=3D"center" role=3D"none"><tr><td align=3D"left"><t=
+able cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"none"><!-- =
+ --><!----><tr><td align=3D"center" valign=3D"top" style=3D"padding-top:24p=
+x"><table cellpadding=3D"0" cellspacing=3D"0" class=3D"theme-card-header-bg=
+-color theme-border-color theme-top-border-radius theme-card-container-widt=
+h" style=3D"background-color:#ECEFF1;border-color:#E2E4E5;border-bottom:1px=
+ solid #E2E4E5;border-top-left-radius:8px;border-top-right-radius:8px;borde=
+r-bottom-left-radius:0;border-bottom-right-radius:0;width:520px;border-widt=
+h:1px;border-style:solid;border-collapse:separate" role=3D"presentation"><t=
+r><td align=3D"left" class=3D"m-es-p16l m-es-p16r m-es-16t m-es-p11b" style=
+=3D"padding-left:24px;padding-top:24px;padding-bottom:19px;padding-right:22=
+px"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"them=
+e-card-header-font-color" role=3D"presentation" style=3D"padding-bottom:15p=
+x;color:#1A222B"><tr><td align=3D"left"><p class=3D"theme-card-header-font-=
+family" style=3D"Margin:0;font-family:Queens, 'Times New Roman' !important;=
+line-height:40px;font-weight:400;font-size:32px" role=3D"heading" aria-leve=
+l=3D"2">Flight</p>
+</td><td align=3D"right"><p style=3D"Margin:0;font-family:'Open Sans', 'Tre=
+buchet MS';line-height:27px;font-size:18px"> $310.60</p></td></tr></table><=
+table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"theme-car=
+d-header-font-color" role=3D"presentation" style=3D"color:#1A222B"><tr><td =
+align=3D"left"><!----><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuc=
+het MS';line-height:27px;font-size:18px">Fri, Feb 27, 2026 - Fri, Feb 27, 2=
+026 </p><!----></td></tr>
+ <tr><td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Treb=
+uchet MS';line-height:27px;font-size:18px"> 2 travelers </p></td></tr></tab=
+le></td></tr></table>
+ <table cellpadding=3D"0" cellspacing=3D"0" class=3D"theme-secondary-color =
+theme-border-color theme-bottom-border-radius theme-card-container-width" s=
+tyle=3D"background-color:#FFFFFF;border-color:#E2E4E5;border-bottom:1px sol=
+id #E2E4E5;border-top-left-radius:0;border-top-right-radius:0;border-bottom=
+-left-radius:8px;border-bottom-right-radius:8px;width:520px;border-width:0p=
+x 1px 1px 1px;border-style:solid;border-collapse:separate" role=3D"presenta=
+tion"><tr><td align=3D"left" class=3D"m-es-p16l m-es-p16r m-es-p16b" style=
+=3D"padding-bottom:24px;padding-left:24px;padding-right:22px"><table cellpa=
+dding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td =
+align=3D"left" class=3D"allocate-full-width" valign=3D"top"><table cellpadd=
+ing=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td al=
+ign=3D"left" style=3D"padding-top:16px !important"><p class=3D"theme-font-f=
+amily-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-=
+height:21px;font-weight:600;font-size:14px">  Airline confirmation:  PHJRT2=
+    </p>
+</td></tr></table></td></tr><tr><td align=3D"center" style=3D"padding-top:1=
+6px !important;padding-bottom:16px;font-size:0"><table border=3D"0" width=
+=3D"100%" height=3D"100%" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation"><tr><td class=3D"theme-border-color" style=3D"border-color:#E2E4E5=
+;border-bottom:1px solid #E2E4E5;background:unset;height:1px;width:100%;mar=
+gin:0px"></td></tr></table></td></tr>
+ <tr><td align=3D"left"><!----><!----><!--  --><table cellpadding=3D"0" cel=
+lspacing=3D"0" class=3D"unset-width" role=3D"presentation" style=3D"width:u=
+nset !important"><tr role=3D"heading" aria-level=3D"3"><td align=3D"left" v=
+align=3D"top" style=3D"padding-right:10px"><table cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation"><tr><td align=3D"left"><p class=3D"theme-f=
+ont-family-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';=
+line-height:27px;font-weight:600;font-size:18px">Taipei (TPE)</p></td></tr>=
+</table></td>
+ <td align=3D"left" valign=3D"middle" class=3D"m-es-p5t m-v-align-top" styl=
+e=3D"padding-right:10px"><table cellpadding=3D"0" cellspacing=3D"0" role=3D=
+"presentation"><tr><td align=3D"center"><img class=3D"adapt-img" src=3D"htt=
+ps://images.contentstack.io/v3/assets/blt5da605fde2f7e5ba/blteb60f7c48ec5e2=
+1e/63a56dab7335502078c0238e/arrow-right.png" alt=3D"to" loading=3D"lazy" st=
+yle=3D"display:block;width:20px !important" width=3D"20"></td></tr></table>=
+</td><td align=3D"left" valign=3D"top"><table cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation"><tr><td align=3D"left"><p class=3D"theme-font-=
+family-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line=
+-height:27px;font-weight:600;font-size:18px">Hong Kong (HKG)</p></td></tr><=
+/table></td></tr></table>
+ <!-- --><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"=
+presentation"><tr><td align=3D"left" style=3D"padding-top:20px"><table cell=
+padding=3D"0" cellspacing=3D"0" style=3D"width:unset !important" role=3D"pr=
+esentation"><tr><td align=3D"left" valign=3D"top"><table cellpadding=3D"0" =
+cellspacing=3D"0" style=3D"width:max-content !important" role=3D"presentati=
+on"><tr><td align=3D"left"><p class=3D"theme-font-family-bold" style=3D"Mar=
+gin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:24px;font-weight:=
+600;font-size:16px">Depart:</p></td></tr></table></td>
+ <td align=3D"left" valign=3D"top"><table cellpadding=3D"0" cellspacing=3D"=
+0" role=3D"presentation"><tr><td align=3D"left" style=3D"padding-left:5px">=
+<p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:24=
+px;font-size:16px"> Fri, Feb 27, 2026 </p></td></tr></table></td></tr></tab=
+le></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:22px"><table cellpadding=3D"0"=
+ cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"ce=
+nter" class=3D"m-align-left m-es-p15l" width=3D"100%"><table cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"w-70p m-w-100p" role=3D"presentation" style=
+=3D"width:70%"><tr><td align=3D"left" class=3D"m-es-p10r" style=3D"padding-=
+right:30px">   <table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" ro=
+le=3D"presentation"><tr><td align=3D"center"><img class=3D"adapt-img" src=
+=3D"https://air-content-images.cnxloyalty.com/images/Airlines/30x30/HX.jpg"=
+ alt=3D"Hong Kong Airlines logo" loading=3D"lazy" style=3D"display:block;wi=
+dth:36px !important" width=3D"36"></td></tr></table>  </td><td align=3D"lef=
+t" valign=3D"top" class=3D"m-es-p10r" style=3D"padding-right:25px;width:120=
+px"><!----><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=
+=3D"presentation"><tr><td align=3D"left"><p class=3D"theme-font-family-bold=
+" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:24p=
+x;font-weight:600;font-size:16px">04:30 pm</p></td></tr>
+ <tr><td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Treb=
+uchet MS';line-height:21px;font-size:14px">TPE</p></td></tr></table><!---->=
+</td><!--[if mso]><td align=3D"center" style=3D"padding-right:20px"><![endi=
+f]--><!--[if !mso]>--><td align=3D"center" class=3D"m-es-p10l m-es-p5r"><!-=
+-<![endif]--><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=
+=3D"presentation"><tr><td align=3D"center"><img class=3D"adapt-img img-arro=
+w m-img-arrow" src=3D"https://images.contentstack.io/v3/assets/blt5da605fde=
+2f7e5ba/blteb60f7c48ec5e21e/63a56dab7335502078c0238e/arrow-right.png" alt=
+=3D"to" width=3D"20" loading=3D"lazy" style=3D"display:block !important;wid=
+th:20px !important"></td></tr></table></td>
+ <td align=3D"right" valign=3D"top"><table cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"100%" role=3D"presentation"><!----><tr><td align=3D"right" cla=
+ss=3D"custom-block-m-p15l"><p class=3D"theme-font-family-bold" style=3D"Mar=
+gin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:24px;font-weight:=
+600;font-size:16px">06:45 pm</p></td></tr><tr><td align=3D"right"><p style=
+=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-=
+size:14px">HKG</p></td></tr><!----><!----></table></td></tr><tr><td align=
+=3D"left" style=3D"padding-top:5px"><table cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"center"></td></tr=
+></table></td><td align=3D"right" valign=3D"top" class=3D"theme-secondary-f=
+ont-color" style=3D"padding-top:5px;color:#565A5D"><p style=3D"Margin:0;fon=
+t-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-size:14px">2h 15=
+m</p></td><td aria-hidden=3D"true" align=3D"center" valign=3D"top" style=3D=
+"padding-top:5px"><!-- --><!----></td>
+ <td align=3D"left" valign=3D"top" style=3D"padding-top:5px"><!-- --><table=
+ cellspacing=3D"0" cellpadding=3D"0" width=3D"100px" role=3D"presentation">=
+<tr><td align=3D"left" class=3D"theme-secondary-font-color" style=3D"color:=
+#565A5D"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-=
+height:21px;font-size:14px"></p></td></tr></table><!----></td></tr></table>=
+</td></tr></table></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:16px !important"><table cellpa=
+dding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td =
+align=3D"left" style=3D"padding-bottom:8px"><table cellpadding=3D"0" cellsp=
+acing=3D"0" class=3D"unset-width" role=3D"presentation" style=3D"width:unse=
+t !important"><tr><td align=3D"left"><p style=3D"Margin:0;font-family:'Open=
+ Sans', 'Trebuchet MS';line-height:27px;font-size:18px;font-weight:400" rol=
+e=3D"heading" aria-level=3D"3">Hong Kong Airlines</p></td></tr></table></td=
+></tr>
+ <tr><td align=3D"left" valign=3D"top" class=3D"allocate-full-width half-wi=
+dth" style=3D"width:50%"><table cellpadding=3D"0" cellspacing=3D"0" role=3D=
+"presentation"><tr><td align=3D"left" style=3D"padding-bottom:8px"><!--  --=
+><!----><table cellpadding=3D"0" cellspacing=3D"0" class=3D"unset-width" ro=
+le=3D"presentation" style=3D"width:unset !important"><tr><td align=3D"left"=
+ valign=3D"top" style=3D"padding-right:5px"><p class=3D"theme-font-family-b=
+old" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:=
+21px;font-weight:600;font-size:14px;width:max-content">HX 265</p></td><td a=
+lign=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';=
+line-height:21px;font-size:14px">Airbus A320 100/200</p></td></tr></table><=
+!----><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"pre=
+sentation"><tr><td><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet=
+ MS';line-height:21px;font-size:14px">operated by Hong Kong Airlines Limite=
+d</p></td></tr></table><!----><!----><!--  --></td></tr>
+ <tr><td align=3D"left"><!----><table cellpadding=3D"0" cellspacing=3D"0" c=
+lass=3D"unset-width" role=3D"presentation" style=3D"padding-right:5px;width=
+:unset !important"><tr><td align=3D"left"><table cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation"><tr><td align=3D"left" style=3D"padding-rig=
+ht:5px"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-h=
+eight:21px;font-weight:600;font-size:14px" class=3D"theme-font-family-bold"=
+>Fare:</p></td><td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sa=
+ns', 'Trebuchet MS';line-height:21px;font-weight:600;font-size:14px" class=
+=3D"theme-font-family-bold">Value</p></td></tr></table></td></tr>
+ <tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" class=3D=
+"unset-width" role=3D"presentation" style=3D"width:unset !important"><tr><t=
+d align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet M=
+S';line-height:21px;font-size:14px">economy   class   S </p></td></tr></tab=
+le></td></tr></table><!-- --></td></tr></table></td>
+ <!-- --><td align=3D"left" valign=3D"top" class=3D"allocate-full-width hal=
+f-width" style=3D"width:50%"><!----><table cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"left" style=3D"pa=
+dding-bottom:8px"> <p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet=
+ MS';line-height:18px;color:#505660;font-size:12px">Included in fare : Chec=
+ked bags, Carry-on bag</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-bottom:8px"> <p style=3D"Margin:0;=
+font-family:'Open Sans', 'Trebuchet MS';line-height:18px;color:#505660;font=
+-size:12px">Available for fee : Seats, Refund, Exchange</p></td></tr>  <tr>=
+<td align=3D"left" style=3D"padding-bottom:8px"></td></tr>
+ <tr><td align=3D"left" style=3D"padding-bottom:8px"></td></tr>  </table><!=
+----></td><!----></tr></table>
+</td></tr><tr><td align=3D"center" style=3D"padding-top:12px;padding-bottom=
+:16px;font-size:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellp=
+adding=3D"0" cellspacing=3D"0" role=3D"presentation"><tr><td class=3D"theme=
+-border-color" style=3D"border-color:#E2E4E5;border-bottom:1px solid #E2E4E=
+5;background:unset;height:1px;width:100%;margin:0px"></td></tr></table></td=
+></tr></table>
+ <!--   --><table cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"=
+><tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" class=3D=
+"unset-width" role=3D"presentation" style=3D"width:unset !important"><tr><t=
+d align=3D"left" style=3D"padding-right:5px"><p class=3D"theme-font-family-=
+bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height=
+:21px;font-weight:600;font-size:14px">Traveler 1:</p></td>
+ <td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuche=
+t MS';line-height:21px;font-size:14px"> EVAN M PURKHISER </p></td></tr></ta=
+ble><!----></td></tr></table>
+ <!----><table cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"><t=
+r><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" class=3D"un=
+set-width" role=3D"presentation" style=3D"width:unset !important"><tr><td a=
+lign=3D"left" style=3D"padding-right:5px"><p class=3D"theme-font-family-bol=
+d" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:21=
+px;font-weight:600;font-size:14px">Traveler 2:</p></td>
+ <td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuche=
+t MS';line-height:21px;font-size:14px"> Wei-Shih  Tsai </p></td></tr></tabl=
+e><!----></td></tr></table>
+ <!----><table border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation"><tr><td align=3D"center" style=3D=
+"padding-top:16px !important;padding-bottom:16px;font-size:0"><table border=
+=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" cellspacing=3D"0" r=
+ole=3D"presentation"><tr><td class=3D"theme-border-color" style=3D"border-c=
+olor:#E2E4E5;border-bottom:1px solid #E2E4E5;background:unset;height:1px;wi=
+dth:100%;margin:0px"></td></tr></table></td></tr></table>
+ <!----><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"p=
+resentation"><tr><td align=3D"left"><p class=3D"theme-font-family-bold" sty=
+le=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:21px;fon=
+t-weight:600;font-size:14px" role=3D"heading" aria-level=3D"3">Important fl=
+ight information</p></td></tr><tr><td align=3D"left" style=3D"padding-top:8=
+px"><ul class=3D"list-section-main-card" style=3D"margin-top:0px;margin-bot=
+tom:0px;padding-left:10px;line-height:21px;font-family:'Open Sans', 'Trebuc=
+het MS';font-size:14px;color:#1A2228">=20
+<li style=3D"margin-left:0;margin-bottom:14px">To verify a seat request, or=
+ if seat assignments are not available, please contact the airline directly=
+ for assistance.</li> <li style=3D"margin-left:0;margin-bottom:14px">Certai=
+n airlines permit free cancellation if your reservation was booked more tha=
+n 7 days before your travel date.</li> <li style=3D"margin-left:0">See Rule=
+s and Policies below.</li> </ul></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:15px"><table cellpadding=3D"0"=
+ cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"le=
+ft"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"them=
+e-tertiary-color-card" role=3D"presentation" style=3D"background-color:#F5F=
+7F8;border:1px solid #F5F7F8"><tr><td align=3D"left" style=3D"padding:16px"=
+><table cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"><tr><td a=
+lign=3D"left"><p class=3D"theme-font-family-bold" style=3D"Margin:0;font-fa=
+mily:'Open Sans', 'Trebuchet MS';line-height:21px;font-weight:600;font-size=
+:14px;color:#414042" role=3D"heading" aria-level=3D"3">Real ID Requirements=
+</p></td></tr>
+ <tr><td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Treb=
+uchet MS';line-height:21px;font-size:14px;color:#414042">Approved, governme=
+nt issued photo identification is required at check in and must match the f=
+ull name on the reservation for travel. Due to the Real ID requirements, yo=
+ur driver's license or ID card may not be accepted for travel after certain=
+ dates.</p></td></tr><tr><td align=3D"left" style=3D"padding-top:15px"><p s=
+tyle=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:21px;c=
+olor:#414042;font-size:14px">For the most current information on the Real I=
+D requirements, please visit: <span class=3D"theme-font-family-bold" style=
+=3D"font-family:'Open Sans', 'Trebuchet MS';font-weight:600"> <a href=3D"ht=
+tps://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fwww.dhs.gov%2Freal-id=
+/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/RUGtHH6laEO=
+CTNugj_1O6tlBsJQ=3D465" style=3D"text-decoration:underline;color:#0060F0;fo=
+nt-size:14px" class=3D"theme-link-color">https://www.dhs.gov/real-id</a>. <=
+/span></p></td></tr>
+  </table></td></tr></table></td></tr></table></td></tr></table><!----></td=
+></tr></table></td></tr></table></td></tr><!----><!-- -->
+ </table></td></tr></table><table class=3D"es-content-body theme-primary-co=
+lor theme-template-width" style=3D"background-color:#FFFFFF;width:640px;wor=
+d-break:break-word" cellspacing=3D"0" cellpadding=3D"0" align=3D"center" ro=
+le=3D"none"><tr><td align=3D"left" style=3D"padding-top:24px"><table cellpa=
+dding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"none"><tr><td align=3D=
+"center" valign=3D"top"><table cellpadding=3D"0" cellspacing=3D"0" class=3D=
+"theme-card-header-bg-color theme-border-color theme-card-header-font-color=
+ theme-top-border-radius theme-card-container-width" style=3D"padding:24px;=
+background-color:#ECEFF1;color:#1A222B;border-color:#E2E4E5;border-bottom:1=
+px solid #E2E4E5;border-top-left-radius:8px;border-top-right-radius:8px;bor=
+der-bottom-left-radius:0;border-bottom-right-radius:0;width:520px;border-wi=
+dth:1px;border-style:solid;border-collapse:separate" role=3D"presentation">=
+<tr><td align=3D"left"><p class=3D"theme-card-header-font-family" role=3D"h=
+eading" aria-level=3D"2" style=3D"Margin:0;font-family:Queens, 'Times New R=
+oman' !important;line-height:40px;font-weight:400;font-size:32px">Payment s=
+ummary </p>
+</td>  </tr></table>
+ <!----><table cellpadding=3D"0" cellspacing=3D"0" class=3D"m-es-p16l m-es-=
+p16r theme-secondary-color theme-border-color theme-card-container-width" s=
+tyle=3D"padding-left:24px;padding-top:16px !important;padding-bottom:16px;p=
+adding-right:22px;background-color:#FFFFFF;border-color:#E2E4E5;border-bott=
+om:1px solid #E2E4E5;width:520px;border-width:0px 1px 1px 1px;border-style:=
+solid;border-collapse:separate;border-radius:0px" role=3D"presentation"><tr=
+><td><!-- --><!-- --><!--  --><table cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" role=3D"presentation"><!-- --><tr><td align=3D"left" valign=3D=
+"top"><table cellpadding=3D"0" cellspacing=3D"0" class=3D"unset-width" role=
+=3D"presentation" style=3D"width:unset !important"><!----><tr><td align=3D"=
+left" style=3D"padding-right:5px"><p style=3D"Margin:0;font-family:'Open Sa=
+ns', 'Trebuchet MS';line-height:21px;font-size:14px">TPE</p></td><td align=
+=3D"center" style=3D"padding-right:5px;font-size:0px"><img class=3D"adapt-i=
+mg" src=3D"https://images.contentstack.io/v3/assets/blt5da605fde2f7e5ba/blt=
+eb60f7c48ec5e21e/63a56dab7335502078c0238e/arrow-right.png" alt=3D"to" style=
+=3D"display:block;width:15px !important" width=3D"15"></td>
+ <td align=3D"left"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuche=
+t MS';line-height:21px;font-size:14px">HKG </p></td></tr><!----></table></t=
+d>
+ <td align=3D"right"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" role=3D"presentation"><tr><td align=3D"right"><p style=3D"Margin:0;font=
+-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-size:14px">      =
+$310.60  </p>
+</td></tr></table></td></tr><!----></table><table cellpadding=3D"0" cellspa=
+cing=3D"0" width=3D"100%" aria-hidden=3D"true" role=3D"presentation"><tr><t=
+d align=3D"center" style=3D"padding-top:5px;padding-bottom:5px;font-size:0"=
+><table border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation"><tr><td class=3D"theme-border-color" sty=
+le=3D"border-color:#E2E4E5;border-bottom:1px solid #E2E4E5;background:unset=
+;height:1px;width:100%;margin:0px"></td></tr></table></td></tr></table>
+ <!--       --><!--        --><!--  --><!----><!----><!----><!----><!----><=
+!----><!----><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=
+=3D"presentation"><tr><td align=3D"left" style=3D"padding-top:5px"><p class=
+=3D"theme-font-family-bold" style=3D"Margin:0;font-family:'Open Sans', 'Tre=
+buchet MS';line-height:21px;font-weight:600;font-size:14px">Trip total</p><=
+/td>
+ <td align=3D"right" style=3D"padding-top:5px"><p class=3D"theme-font-famil=
+y-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-heig=
+ht:21px;font-weight:600;font-size:14px"> $310.60  </p></td></tr><!----></ta=
+ble></td></tr></table>
+ <table cellpadding=3D"0" cellspacing=3D"0" class=3D"m-es-p16l m-es-p16r th=
+eme-border-color theme-secondary-color theme-bottom-border-radius theme-car=
+d-container-width" style=3D"padding-bottom:24px;padding-left:24px;padding-t=
+op:16px !important;padding-right:22px;background-color:#FFFFFF;border-color=
+:#E2E4E5;border-bottom:1px solid #E2E4E5;border-top-left-radius:0;border-to=
+p-right-radius:0;border-bottom-left-radius:8px;border-bottom-right-radius:8=
+px;width:520px;border-width:0px 1px 1px 1px;border-style:solid;border-colla=
+pse:separate" role=3D"presentation"><tr><td><!----><table cellpadding=3D"0"=
+ cellspacing=3D"0" width=3D"100%" role=3D"presentation"><!----><!--  --><tr=
+><!----><!----><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0=
+" width=3D"100%" role=3D"presentation"><tr><td align=3D"left"><p class=3D"t=
+heme-font-family-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuche=
+t MS';line-height:21px;font-weight:600;font-size:14px">Points redeemed</p><=
+/td><td align=3D"right"><p class=3D"theme-font-family-bold" style=3D"Margin=
+:0;font-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-weight:600=
+;font-size:14px">24,767 pts</p></td></tr></table></td>
+ <!----><!----></tr><!--  --><!----><!-- --><!-- --><!-- --><!----><!----><=
+!--  --><tr><td align=3D"left" style=3D"padding-top:13px"><table cellpaddin=
+g=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td alig=
+n=3D"left"><p class=3D"theme-font-family-bold" style=3D"Margin:0;font-famil=
+y:'Open Sans', 'Trebuchet MS';line-height:21px;font-weight:600;font-size:14=
+px">Billed to card</p></td><td align=3D"right"><p class=3D"theme-font-famil=
+y-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-heig=
+ht:21px;font-weight:600;font-size:14px">$62.93</p></td></tr></table></td></=
+tr>
+ <tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" role=3D"presentation"><tr><td align=3D"left"><p style=3D"Margin:0;fo=
+nt-family:'Open Sans', 'Trebuchet MS';line-height:18px;font-size:12px">Visa=
+ ending in 8360</p></td></tr></table></td></tr><!--  --><!--  --><!-- --><!=
+-- --><!----><!--  --><!--  --><!-- --><!-- --><!-- --><!-- --></table><!--=
+--><!----><!----><!--  --><table cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" role=3D"presentation"><tr><td align=3D"left" style=3D"padding-top=
+:8px;padding-bottom:8px"><p style=3D"Margin:0;font-family:'Open Sans', 'Tre=
+buchet MS';line-height:18px;font-size:12px;color:#505660">Please note that =
+you will see CL * Chase Travel on your card billing statement for any amoun=
+t of your transaction that is charged to your credit card.</p></td></tr></t=
+able>
+ <!--  --><!--  --><!-- --><!-- --><!----><!----><!--Code commented for cru=
+ise--><!----><!----><!----><!----><!----><!----></td></tr></table>
+ <!----></td></tr></table></td></tr></table><table class=3D"es-content-body=
+ theme-primary-color theme-template-width" cellspacing=3D"0" cellpadding=3D=
+"0" align=3D"center" role=3D"none" style=3D"background-color:#FFFFFF;width:=
+640px"><tr><td align=3D"center" style=3D"padding-top:24px"><table cellpaddi=
+ng=3D"0" cellspacing=3D"0" class=3D"theme-card-header-bg-color theme-border=
+-color theme-top-border-radius theme-card-container-width" style=3D"backgro=
+und-color:#ECEFF1;border-color:#E2E4E5;border-bottom:1px solid #E2E4E5;bord=
+er-top-left-radius:8px;border-top-right-radius:8px;border-bottom-left-radiu=
+s:0;border-bottom-right-radius:0;width:520px;border-width:1px;border-style:=
+solid;border-collapse:separate" role=3D"none"><tr><td align=3D"left" class=
+=3D"m-es-p16l m-es-p16r m-es-16t m-es-p11b" style=3D"padding-left:24px;padd=
+ing-top:16px !important;padding-right:22px"><table cellpadding=3D"0" cellsp=
+acing=3D"0" width=3D"100%" class=3D"theme-card-header-font-color" role=3D"p=
+resentation" style=3D"padding-bottom:16px;color:#1A222B"><tr><td align=3D"l=
+eft"><p class=3D"theme-card-header-font-family" role=3D"heading" aria-level=
+=3D"2" style=3D"Margin:0;font-family:Queens, 'Times New Roman' !important;l=
+ine-height:40px;font-weight:400;font-size:32px">Add to your trip</p>
+</td></tr></table></td></tr></table>
+ <table class=3D"theme-secondary-color theme-border-radius theme-card-conta=
+iner-width theme-border-color theme-bottom-border-radius" cellpadding=3D"0"=
+ cellspacing=3D"0" style=3D"padding-bottom:24px;padding-left:24px;padding-r=
+ight:22px;background-color:#FFFFFF;border-color:#E2E4E5;border-bottom:1px s=
+olid #E2E4E5;border-radius:8px;border-top-left-radius:0;border-top-right-ra=
+dius:0;border-bottom-left-radius:8px;border-bottom-right-radius:8px;width:5=
+20px;border-width:1px;border-style:solid;border-collapse:separate" role=3D"=
+none"><tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" role=3D"presentation"><!--  --><!--  --><tr><td class=3D"theme-=
+border-color" align=3D"left" style=3D"padding-top:16px !important;padding-b=
+ottom:16px;border-color:#E2E4E5;border-bottom:1px solid #E2E4E5"><a href=3D=
+"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.chase.com%2=
+Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FHOTEL_LANDING%2F=
+/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/jdqzOju0mjm=
+5RdTi6EfdJV61yeY=3D465" target=3D"_blank" style=3D"text-decoration:none" ar=
+ia-label=3D"Book a stay Choose from thousands of hotels worldwide"><table c=
+ellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr=
+><td align=3D"left" class=3D"allocate-full-width" width=3D"25%"><table cell=
+padding=3D"0" cellspacing=3D"0" role=3D"presentation"><tr><td align=3D"left=
+" style=3D"font-size:0"><img class=3D"adapt-img" src=3D"https://images.cont=
+entstack.io/v3/assets/blta34031bed370a6d3/blt7c030dba1c13e33c/hotelcrosssel=
+l.png" alt=3D"" loading=3D"lazy" style=3D"display:block;height:117px;width:=
+208px;object-fit:cover" height=3D"117"></td></tr></table></td>
+ <td align=3D"left" class=3D"custom-block-m-display-block es-m-p0l m-w-85p =
+m-es-p16t" width=3D"75%" style=3D"padding-left:16px"><table cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"=
+left"><table role=3D"presentation"><tr><td align=3D"left"><!--[if mso]><p c=
+lass=3D"theme-font-family-bold" style=3D"Margin:0;line-height:20px"><a href=
+=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.chase.co=
+m%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FHOTEL_LANDING=
+%2F/2/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/HqJD3Jrq=
+kWxZog4Y_-cbeX0x7zk=3D465" target=3D"_blank" class=3D"theme-font-family-bol=
+d theme-font-color" style=3D"font-size:14px;color:#101820;font-weight:600;t=
+ext-decoration:none;font-family:Open Sans Regular,'Trebuchet MS'">Book a st=
+ay</a></p><![endif]--><!--[if !mso]>--><p class=3D"theme-font-family-bold t=
+heme-font-color" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';=
+line-height:20px;font-weight:600;color:#101820;font-size:14px" aria-hidden=
+=3D"true">Book a stay</p><!--
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09<![endif]--></td>
+ </tr><tr><td align=3D"left"><p class=3D"theme-font-color" style=3D"Margin:=
+0;font-family:'Open Sans', 'Trebuchet MS';line-height:14px;color:#101820;fo=
+nt-size:12px" aria-hidden=3D"true">Choose from thousands of hotels worldwid=
+e</p></td></tr></table></td></tr></table></td><td align=3D"left" width=3D"5=
+%" style=3D"padding-left:16px"><img src=3D"https://images.contentstack.io/v=
+3/assets/blta34031bed370a6d3/bltebc788d47bfd33c4/651bae6e2d4fba5daac7f428/r=
+ight_chevron.png" width=3D"16" alt=3D"" loading=3D"lazy" style=3D"display:b=
+lock;width:16px"></td></tr></table></a></td></tr>
+ <!--  --><!--  --><!--  --><tr><td class=3D"theme-border-color" align=3D"l=
+eft" style=3D"padding-top:16px !important;padding-bottom:16px;border-color:=
+#E2E4E5;border-bottom:1px solid #E2E4E5"><a href=3D"https://b11rb8mj.r.us-e=
+ast-1.awstrack.me/L0/https:%2F%2Fsecure.chase.com%2Fweb%2Fauth%2Fdashboard%=
+23%2Fdashboard%2Ftravel%2Frouter%2FCAR_LANDING%2F/1/02000000qosf76mo-p0psi9=
+gd-qutk-q2d9-goj6-botqbgcorto0-000000/cX8pTeIFIEfNEPHgE80p6atsK0I=3D465" ta=
+rget=3D"_blank" style=3D"text-decoration:none" aria-label=3D"Book a car Com=
+pare options from major car rental companies"><table cellpadding=3D"0" cell=
+spacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"left" c=
+lass=3D"allocate-full-width" width=3D"25%"><table cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation"><tr><td align=3D"center" style=3D"font-siz=
+e:0"><img class=3D"adapt-img" src=3D"https://images.contentstack.io/v3/asse=
+ts/blta34031bed370a6d3/bltbc79a8dc58b6d90a/carcrosssell.png" alt=3D"" loadi=
+ng=3D"lazy" style=3D"display:block;height:117px;width:208px;object-fit:cove=
+r" height=3D"117"></td></tr></table></td>
+ <td align=3D"left" class=3D"custom-block-m-display-block es-m-p0l m-w-85p =
+m-es-p16t" width=3D"75%" style=3D"padding-left:16px"><table cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"=
+left"><table role=3D"presentation"><tr><td align=3D"left"><!--[if mso]><p c=
+lass=3D"theme-font-family-bold" style=3D"Margin:0;line-height:20px"><a href=
+=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.chase.co=
+m%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FCAR_LANDING%2=
+F/2/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/8h5zbh6m1J=
+J7Tg7aHTIwbNYocoI=3D465" target=3D"_blank" class=3D"theme-font-family-bold =
+theme-font-color" style=3D"font-size:14px;color:#101820;font-weight:600;tex=
+t-decoration:none;font-family:Open Sans Regular,'Trebuchet MS'">Book a car<=
+/a></p><![endif]--><!--[if !mso]>--><p class=3D"theme-font-family-bold them=
+e-font-color" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';lin=
+e-height:20px;font-weight:600;color:#101820;font-size:14px" aria-hidden=3D"=
+true">Book a car</p><!--
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09<![endif]--></td>
+ </tr><tr><td align=3D"left"><p class=3D"theme-font-color" style=3D"Margin:=
+0;font-family:'Open Sans', 'Trebuchet MS';line-height:14px;color:#101820;fo=
+nt-size:12px" aria-hidden=3D"true">Compare options from major car rental co=
+mpanies</p></td></tr></table></td></tr></table></td><td align=3D"left" widt=
+h=3D"5%" style=3D"padding-left:16px"><img src=3D"https://images.contentstac=
+k.io/v3/assets/blta34031bed370a6d3/bltebc788d47bfd33c4/651bae6e2d4fba5daac7=
+f428/right_chevron.png" width=3D"16" alt=3D"" loading=3D"lazy" style=3D"dis=
+play:block;width:16px"></td></tr></table></a></td></tr>
+ <!--  --><!--  --><tr><td align=3D"left" style=3D"padding-top:16px !import=
+ant"><a href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsec=
+ure.chase.com%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FA=
+CTIVITY_LANDING%2F/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-=
+000000/RbAfBezk7CMFlH7YNFTHiEsxeIY=3D465" target=3D"_blank" style=3D"text-d=
+ecoration:none" aria-label=3D"Book an activity Find activities, attractions=
+ or tours to enhance your stay"><table cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" role=3D"presentation"><tr><td align=3D"left" class=3D"alloca=
+te-full-width" width=3D"25%"><table cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation"><tr><td align=3D"center" style=3D"font-size:0"><img clas=
+s=3D"adapt-img" src=3D"https://images.contentstack.io/v3/assets/blta34031be=
+d370a6d3/blt810107b1c1288c8e/activitycrosssell.png" alt=3D"" loading=3D"laz=
+y" style=3D"display:block;height:117px;width:208px;object-fit:cover" height=
+=3D"117"></td></tr></table></td>
+ <td align=3D"left" class=3D"custom-block-m-display-block es-m-p0l m-w-85p =
+m-es-p16t" width=3D"75%" style=3D"padding-left:16px"><table cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><td align=3D"=
+left"><table role=3D"presentation"><tr><td align=3D"left"><!--[if mso]><p c=
+lass=3D"theme-font-family-bold" style=3D"Margin:0;line-height:20px"><a href=
+=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.chase.co=
+m%2Fweb%2Fauth%2Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FACTIVITY_LAND=
+ING%2F/2/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/fzD0d=
+S_u4SGSbZGRYzlSVTHq-zI=3D465" target=3D"_blank" class=3D"theme-font-family-=
+bold theme-font-color" style=3D"font-size:14px;color:#101820;font-weight:60=
+0;text-decoration:none;font-family:Open Sans Regular,'Trebuchet MS'">Book a=
+n activity</a></p><![endif]--><!--[if !mso]>--><p class=3D"theme-font-famil=
+y-bold theme-font-color" style=3D"Margin:0;font-family:'Open Sans', 'Trebuc=
+het MS';line-height:20px;font-weight:600;color:#101820;font-size:14px" aria=
+-hidden=3D"true">Book an activity</p>
+ <!--
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09=09=09<![endif]--></td></tr><tr><td align=3D"left"><p class=
+=3D"theme-font-color" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet=
+ MS';line-height:14px;color:#101820;font-size:12px" aria-hidden=3D"true">Fi=
+nd activities, attractions or tours to enhance your stay</p></td></tr></tab=
+le></td></tr></table></td><td align=3D"left" width=3D"5%" style=3D"padding-=
+left:16px"><img src=3D"https://images.contentstack.io/v3/assets/blta34031be=
+d370a6d3/bltebc788d47bfd33c4/651bae6e2d4fba5daac7f428/right_chevron.png" wi=
+dth=3D"16" alt=3D"" loading=3D"lazy" style=3D"display:block;width:16px"></t=
+d></tr></table></a></td></tr><!--  --></table></td></tr></table></td></tr><=
+/table><table class=3D"es-content-body theme-primary-color theme-template-w=
+idth" style=3D"background-color:#FFFFFF;width:640px;word-break:break-word" =
+cellspacing=3D"0" cellpadding=3D"0" align=3D"center" role=3D"none"><tr><td =
+align=3D"center" valign=3D"top" style=3D"padding-top:24px"><table cellpaddi=
+ng=3D"0" cellspacing=3D"0" class=3D"theme-secondary-color theme-border-colo=
+r theme-border-radius theme-card-container-width" style=3D"background-color=
+:#FFFFFF;border-color:#E2E4E5;border-bottom:1px solid #E2E4E5;border-radius=
+:8px;width:520px;border-width:1px;border-style:solid;border-collapse:separa=
+te" role=3D"presentation"><tr><td align=3D"left"><table cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%" role=3D"presentation"><tr><!--[if mso]><td =
+align=3D"left" style=3D"padding: 18px 24px 15px 24px" class=3D"esd-containe=
+r-frame"><![endif]--><!--[if !mso]>--><td align=3D"left" style=3D"padding-b=
+ottom:24px;padding-left:24px;padding-top:18px;padding-right:22px"><!--<![en=
+dif]--><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"pr=
+esentation"><tr><td align=3D"left"><p class=3D"theme-font-family-bold" role=
+=3D"heading" aria-level=3D"2" style=3D"Margin:0;font-family:'Open Sans', 'T=
+rebuchet MS';line-height:27px;font-weight:600;font-size:18px">Rules, polici=
+es, and cancellations</p>
+</td></tr></table>
+ <!--  --><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D=
+"presentation"><tr><td align=3D"left" style=3D"padding-top:16px !important"=
+><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presenta=
+tion"><tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"unset-width" role=3D"presentation" style=3D"width:unset !important"><=
+!--  --><tr><td align=3D"left" valign=3D"top"><table cellpadding=3D"0" cell=
+spacing=3D"0" class=3D"unset-width" role=3D"presentation" style=3D"width:un=
+set !important"><tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" role=3D"presentation"><tr role=3D"heading" aria-level=
+=3D"3"><td align=3D"left" style=3D"padding-right:5px"><p class=3D"theme-fon=
+t-family-bold" style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';li=
+ne-height:24px;font-weight:600;font-size:16px"> <!---->TPE <!----></p>
+</td><td align=3D"left" style=3D"padding-right:5px;font-size:0px"><img clas=
+s=3D"adapt-img" src=3D"https://images.contentstack.io/v3/assets/blt5da605fd=
+e2f7e5ba/blteb60f7c48ec5e21e/63a56dab7335502078c0238e/arrow-right.png" alt=
+=3D"to" style=3D"display:block;width:15px !important" width=3D"15"></td><td=
+ align=3D"left"><p class=3D"theme-font-family-bold" style=3D"Margin:0;font-=
+family:'Open Sans', 'Trebuchet MS';line-height:21px;font-weight:600;font-si=
+ze:14px"> <!---->HKG <!----></p></td></tr></table></td></tr></table></td></=
+tr>
+ <tr><td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" role=3D"presentation"><tr><td align=3D"left"><p style=3D"Margin:0;fo=
+nt-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-size:14px" clas=
+s=3D"m-w-max-content"> <!---->Fri, Feb 27, 2026 <!----> - <!----> Fri, Feb =
+27, 2026 <!----></p></td></tr></table></td></tr>
+ <!--    --></table></td></tr><tr><td align=3D"left" style=3D"padding-top:8=
+px"><ul class=3D"list-section-rpc" style=3D"padding-left:10px;font-family:'=
+Open Sans', 'Trebuchet MS';line-height:18px;font-size:12px;color:#505660;ma=
+rgin-bottom:0;margin-top:0;padding-bottom:0"> <!-- -->=20
+<li style=3D"margin-left:0">Seat assignments not available until after chec=
+k-in</li> <li style=3D"margin-left:0">Refunds and ticket changes are not pe=
+rmitted</li> <li style=3D"margin-left:0">Same-day confirmed and same-day st=
+andby travel changes are not permitted</li> <li style=3D"margin-left:0">Pri=
+ority Boarding not available for purchase</li> <!-- --> <!-- --> <li style=
+=3D"margin-left:0"><span class=3D"theme-font-family-bold" style=3D"font-fam=
+ily:'Open Sans', 'Trebuchet MS';font-weight:600">IMPORTANT - Limitation on =
+Use of Flight Credits</span> If you use a flight credit to book a trip thro=
+ugh Chase Travel, any unused portion of the credit will be forfeited, notwi=
+thstanding any provisions to the contrary in the airline contract of carria=
+ge. No such forfeiture will occur if the credit is used for flight of great=
+er or equal value to the credit.</li> <!----> <!-- --> <li style=3D"margin-=
+left:0">Carry-on baggage restrictions will apply. The selected airline's ba=
+ggage fees will apply. Click <a href=3D"https://b11rb8mj.r.us-east-1.awstra=
+ck.me/L0/https:%2F%2Fwww.airlinebaggagecosts.com%2F%3Flcid=3D1033%26cid=3D3=
+142/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/rdvPCNDv=
+PxvhsPmp8Yhn9NcmbaI=3D465" target=3D"_blank" class=3D"theme-link-color" tit=
+le=3D"baggage fee details" style=3D"text-decoration:underline;color:#0060F0=
+;font-size:12px">here</a> for details.</li> <!----> <li style=3D"margin-lef=
+t:0">If this is an international flight, this reservation requires proof of=
+ citizenship. Please contact the consulate destination for current VISA/Pas=
+sport <a href=3D"http://b11rb8mj.r.us-east-1.awstrack.me/L0/http:%2F%2Ftrav=
+el.state.gov%2Fcontent%2Fpassports%2Fen%2Fpassports.html/1/02000000qosf76mo=
+-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/wgYeEo0-jcRUpRTYeHdDqiq171s=3D=
+465" target=3D"_blank" class=3D"theme-link-color" style=3D"text-decoration:=
+underline;color:#0060F0;font-size:12px">entry requirements.</a></li> <!-- -=
+-> <!-- -->=20
+<li style=3D"margin-left:0">The Transportation Security Administration requ=
+ires specific information for each passenger such as full name, date of bir=
+th and gender to be provided to the airline at least 72 hours prior to depa=
+rture. If this information was not provided for each passenger at the time =
+of booking, it is the passenger's responsibility to ensure this information=
+ is provided to the airline to prevent additional screening, travel delays =
+or denied transport. For more information, refer to TSA's website at <a hre=
+f=3D"http://b11rb8mj.r.us-east-1.awstrack.me/L0/http:%2F%2Fwww.tsa.gov/1/02=
+000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/bSTN5Rhp7XCNCTvP=
+O5efiVvZLd4=3D465" target=3D"_blank" class=3D"theme-link-color" style=3D"te=
+xt-decoration:underline;color:#0060F0;font-size:12px">TSA</a>.</li>=20
+<li style=3D"margin-left:0">Important Notice Regarding Airline Fees: Airlin=
+es may charge additional fees for miscellaneous services including baggage.=
+ Fees vary by airline so you must contact the airline directly or check the=
+ir website for up-to-date information and pricing details.</li>=20
+<li style=3D"margin-left:0">Your personal data will be processed in accorda=
+nce with the applicable carrier's privacy policy and, if your booking is ma=
+de via a reservation system provider ("GDS"), with its privacy policy. Thes=
+e are available at <a href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/h=
+ttps:%2F%2Fwww.iatatravelcentre.com%2Fprivacy.htm/1/02000000qosf76mo-p0psi9=
+gd-qutk-q2d9-goj6-botqbgcorto0-000000/Kr2WQHZqxossN6TDYfG23h4pBq4=3D465" ta=
+rget=3D"_blank" class=3D"theme-link-color" style=3D"text-decoration:underli=
+ne;color:#0060F0;font-size:12px">https://www.iatatravelcentre.com/privacy.h=
+tm</a> or from the carrier or GDS directly. You should read this documentat=
+ion, which applies to your booking and specifies, for example, how your per=
+sonal data is collected, stored, used, disclosed and transferred.</li> <!--=
+--> <li style=3D"margin-left:0">Please refer to the <a href=3D"https://b11r=
+b8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fsecure.chase.com%2Fweb%2Fauth%2=
+Fdashboard%23%2Fdashboard%2Ftravel%2Frouter%2FTRAVEL_DISCLOSURES%2F/1/02000=
+000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/QhHh9SYxDXhtyfL_coF=
+lE297GdA=3D465" target=3D"_blank" class=3D"theme-link-color" style=3D"text-=
+decoration:underline;color:#0060F0"> Terms and Conditions </a> for more inf=
+ormation.</li> <!-- --> <li style=3D"margin-left:0">Cancellations may incur=
+ a cancellation fee up to the full amount of the ticket.</li> <li style=3D"=
+margin-left:0">Changes may incur a change fee up to the full amount of the =
+ticket plus any difference in the applicable fare.</li> <li style=3D"margin=
+-left:0">This ticket is non-refundable.</li> <li style=3D"margin-left:0">So=
+me non-refundable tickets can be applied (for a limited time) toward future=
+ travel, upon the collection of a change fee up to the full amount of the t=
+icket plus any difference in the applicable fare.</li> <li style=3D"margin-=
+left:0">Changes to your itinerary are generally permitted upon the collecti=
+on of a change fee up to the full amount of the ticket plus any difference =
+in the applicable fare. Some tickets do not allow changes.</li> </ul></td><=
+/tr></table></td></tr>
+ </table>
+ <!--                       --></td></tr></table></td></tr></table></td></t=
+r></table><table cellpadding=3D"0" cellspacing=3D"0" class=3D"es-content-bo=
+dy theme-primary-color theme-template-width" style=3D"background-color:#FFF=
+FFF;width:640px;word-break:break-word" align=3D"center" role=3D"none"><tr><=
+td align=3D"left"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"=
+ role=3D"none"><tr><td align=3D"center" valign=3D"top" style=3D"padding-bot=
+tom:24px;padding-top:24px"><table cellpadding=3D"0" cellspacing=3D"0" class=
+=3D"theme-border-color theme-border-radius theme-card-container-width theme=
+-secondary-color" style=3D"background-color:#31373d;border-color:#E2E4E5;bo=
+rder-bottom:1px solid #E2E4E5;border-radius:8px;width:520px;border-width:1p=
+x;border-style:solid;border-collapse:separate" bgcolor=3D"#31373d" role=3D"=
+presentation"><tr><td align=3D"center" valign=3D"top" style=3D"padding:24px=
+"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"present=
+ation"><tr><td align=3D"center" contenteditable=3D"true" style=3D"font-size=
+:0"><img alt=3D""></td>
+ </tr><tr><td align=3D"left" style=3D"font-size:0"><img alt=3D"Chase Travel=
+ logo" class=3D"adapt-img img-m-w-140 img-w-180" loading=3D"lazy" src=3D"ht=
+tps://images.contentstack.io/v3/assets/blta34031bed370a6d3/bltd692f8e7b72d7=
+905/661cc1215ca8d2829fcc6eca/Chase-Travel-Logo-White-Questions.png" style=
+=3D"width:180px !important;display:block;font-size:12px" title=3D"Chase Tra=
+vel logo" width=3D"180"></td></tr><tr><td align=3D"left" style=3D"padding-t=
+op:20px"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-=
+height:24px;font-weight:600;font-size:16px;color:#fff" class=3D"theme-font-=
+family-bold">Questions?</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:8px"><p style=3D"Margin:0;font=
+-family:'Open Sans', 'Trebuchet MS';line-height:21px;font-size:14px;color:#=
+fff">If you need more immediate assistance, call a Chase Travel Specialist =
+at <a target=3D"_blank" style=3D"text-decoration:underline;font-size:14px;c=
+olor:#fff" href=3D"http://b11rb8mj.r.us-east-1.awstrack.me/L0/tel:1-855-234=
+-2542/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/ZoPdLS=
+7Aa3SfVdzeKPM2T46gsEo=3D465">1-855-234-2542</a> or<a target=3D"_blank" styl=
+e=3D"text-decoration:underline;font-size:14px;color:#fff" href=3D"http://b1=
+1rb8mj.r.us-east-1.awstrack.me/L0/tel:%2B1-504-324-2345/1/02000000qosf76mo-=
+p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/eiVeDhDiWKsk8iahp03HmtnYS-E=3D4=
+65">&nbsp;+1-504-324-2345</a> (international number, charges may apply) and=
+ have your <strong>Trip ID 1013611616</strong> ready.</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:16px !important"><p style=3D"M=
+argin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:=
+14px;color:#fff">Si tiene alguna pregunta o necesita ayuda para traducirla,=
+ comun=C3=ADquese con nosotros llamando al <a target=3D"_blank" style=3D"te=
+xt-decoration:underline;font-size:14px;line-height:20px;color:#fff" href=3D=
+"http://b11rb8mj.r.us-east-1.awstrack.me/L0/tel:1-855-234-2542/2/02000000qo=
+sf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/TGHih_Cvv6xzjW64qpfmm6d2=
+5qM=3D465">1-855-234-2542</a>.</p></td></tr><tr><td align=3D"left" style=3D=
+"padding-top:20px"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet=
+ MS';line-height:24px;font-weight:600;font-size:16px;color:#fff" class=3D"t=
+heme-font-family-bold">Email security information</p></td></tr><tr><td alig=
+n=3D"left" style=3D"padding-top:16px !important"><p style=3D"Margin:0;font-=
+family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:14px;color:#f=
+ff">Email intended for: EVAN PURKHISER</p>
+<p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20=
+px;font-size:14px;color:#fff"><br></p><p style=3D"Margin:0;font-family:'Ope=
+n Sans', 'Trebuchet MS';line-height:20px;font-size:14px;color:#fff">If you =
+have concerns about the authenticity of this message, please visit <a targe=
+t=3D"_blank" style=3D"text-decoration:underline;font-size:14px;line-height:=
+20px;color:#fff" href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:=
+%2F%2Fchase.com%2Fcustomerservice/1/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj=
+6-botqbgcorto0-000000/foHChyeOtS8-ZDaOuyEs6jgwqok=3D465">chase.com/Customer=
+Service</a> for options on how to contact us.</p></td></tr><tr><td align=3D=
+"left" style=3D"padding-top:20px"><p style=3D"Margin:0;font-family:'Open Sa=
+ns', 'Trebuchet MS';line-height:24px;font-weight:600;font-size:16px;color:#=
+fff" class=3D"theme-font-family-bold">Terms &amp; conditions</p></td></tr>
+ <!----><tr><td align=3D"left" style=3D"padding-top:16px !important"><p sty=
+le=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;fon=
+t-size:14px;color:#fff">Third-party merchants: The listed merchant(s) are i=
+n no way affiliated with Chase, nor are the listed merchant(s) considered s=
+ponsors or co-sponsors of this program. All trademarks are the property of =
+their respective owner(s).</p></td></tr><tr><td align=3D"left" style=3D"pad=
+ding-top:20px"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS'=
+;line-height:24px;font-weight:600;font-size:16px;color:#fff" class=3D"theme=
+-font-family-bold">Seller of travel</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:16px !important"><p style=3D"M=
+argin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:=
+14px;color:#fff">Loyalty Travel Agency LLC (=E2=80=9CLTA=E2=80=9D) is an af=
+filiate of cxLoyalty, Inc., acting only as agent for travel service supplie=
+rs, makes the travel arrangements for you on behalf of Chase Travel and com=
+plies with the laws in the states that require registration in order for an=
+ agency to sell Chase Travel.</p></td></tr><tr><td align=3D"left" style=3D"=
+padding-top:16px !important"><p style=3D"Margin:0;font-family:'Open Sans', =
+'Trebuchet MS';line-height:20px;font-size:14px;color:#fff">These states and=
+ LTA=E2=80=99s registration number in such states are:</p><ul class=3D"them=
+e-font-family" style=3D"font-family:'Open Sans', 'Trebuchet MS';Margin:0;pa=
+dding-left:22px"> <li style=3D"margin-left:0;font-size:14px;line-height:20p=
+x;color:#fff;Margin:0">California* 2146860-50</li>=20
+<li style=3D"margin-left:0;font-size:14px;line-height:20px;color:#fff;Margi=
+n:0">Florida ST38239</li> <li style=3D"margin-left:0;font-size:14px;line-he=
+ight:20px;color:#fff;Margin:0">Hawaii TAR-6750</li> <li style=3D"margin-lef=
+t:0;font-size:14px;line-height:20px;color:#fff;Margin:0">Iowa 987</li> <li =
+style=3D"margin-left:0;font-size:14px;line-height:20px;color:#fff;Margin:0"=
+>Washington 602 868 200</li> </ul></td></tr><tr><td align=3D"left" style=3D=
+"padding-top:16px !important"><p style=3D"Margin:0;font-family:'Open Sans',=
+ 'Trebuchet MS';line-height:20px;font-size:14px;color:#fff">cxLoyalty</p><p=
+ style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px=
+;font-size:14px;color:#fff">77 N. Water Street</p><p style=3D"Margin:0;font=
+-family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:14px;color:#=
+fff">Norwalk, CT 06853</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:16px !important"><p style=3D"M=
+argin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:=
+14px;color:#fff">Registration as a seller of travel does not constitute app=
+roval by the State of California. LTA is not a participant in the Californi=
+a Travel Consumer Restitution Fund.</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:16px !important"><p style=3D"M=
+argin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:=
+14px;color:#fff">For residents in Washington (state): Upon cancellation of =
+the transportation through no fault of the passenger, all sums paid to the =
+seller of travel for services not performed in accordance with the contract=
+ between the seller of travel and the passenger will be, unless the passeng=
+er otherwise advises the travel promoter in writing, promptly refunded by t=
+he seller of travel to the passenger or the party who contracted on behalf =
+of the passenger. Cancellation and change penalties apply to these arrangem=
+ents. Details will be provided upon request.</p></td></tr><tr><td align=3D"=
+left" style=3D"padding-top:20px"><p style=3D"Margin:0;font-family:'Open San=
+s', 'Trebuchet MS';line-height:24px;font-weight:600;font-size:16px;color:#f=
+ff" class=3D"theme-font-family-bold">About this message</p>
+</td></tr><tr><td align=3D"left" style=3D"padding-top:16px !important"><p s=
+tyle=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;f=
+ont-size:14px;color:#fff">You received this email to give you updates and i=
+nformation about your Chase relationship.</p></td></tr><tr><td align=3D"lef=
+t" style=3D"padding-top:16px !important"><p style=3D"Margin:0;font-family:'=
+Open Sans', 'Trebuchet MS';line-height:20px;font-size:14px;color:#fff">This=
+ email was sent from an unmonitored mailbox. Go to <a class=3D"theme-link-c=
+olor" href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/https:%2F%2Fchase=
+.com%2Fcustomerservice/2/02000000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcor=
+to0-000000/5Mb6h7bYeNkI5DsGY2VRdmEJ1bE=3D465" style=3D"text-decoration:unde=
+rline;color:#fff" target=3D"_blank">chase.com/CustomerService</a> for optio=
+ns about how to contact us.</p></td></tr>
+ <tr><td align=3D"left" style=3D"padding-top:16px !important"><p style=3D"M=
+argin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;font-size:=
+14px;color:#fff">Your privacy is important to us. See our online <a class=
+=3D"theme-link-color" href=3D"https://b11rb8mj.r.us-east-1.awstrack.me/L0/h=
+ttps:%2F%2Fwww.chase.com%2Fdigital%2Fresources%2Fprivacy-security/1/0200000=
+0qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/vEeeZfu6ilCNY7WmrTpRR=
+mlzISU=3D465" style=3D"text-decoration:underline;color:#fff" target=3D"_bla=
+nk">Security Center</a> to learn how to protect your information.</p></td><=
+/tr><tr><td align=3D"left" style=3D"padding-bottom:24px;padding-top:16px !i=
+mportant"><p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line=
+-height:20px;font-size:14px;color:#fff">Chase Privacy Operations, P.O. Box =
+734007, Dallas, TX 75373-4007.</p><p style=3D"Margin:0;font-family:'Open Sa=
+ns', 'Trebuchet MS';line-height:20px;font-size:14px;color:#fff"><br></p><p =
+style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20px;=
+font-size:14px;color:#fff">JPMorgan Chase Bank, N.A. Member FDIC</p>
+<p style=3D"Margin:0;font-family:'Open Sans', 'Trebuchet MS';line-height:20=
+px;font-size:14px;color:#fff"><br></p><p style=3D"Margin:0;font-family:'Ope=
+n Sans', 'Trebuchet MS';line-height:20px;font-size:14px;color:#fff">=C2=A9 =
+2026 JPMorgan Chase &amp; Co.</p></td></tr></table></td></tr></table></td><=
+/tr></table></td></tr></table></table></td></tr></table></td></tr></table><=
+/div><img alt=3D"" src=3D"https://b11rb8mj.r.us-east-1.awstrack.me/I0/02000=
+000qosf76mo-p0psi9gd-qutk-q2d9-goj6-botqbgcorto0-000000/DpEiglJQG47O_1xooU_=
+7kxq6FUE=3D465" style=3D"display: none; width: 1px; height: 1px;">
+</body></html>

@@ -13,6 +13,7 @@ import {americanProcessor} from 'src/processors/airline-american';
 import {deltaProcessor} from 'src/processors/airline-delta';
 import {southwestProcessor} from 'src/processors/airline-southwest';
 import {unitedProcessor} from 'src/processors/airline-united';
+import {chaseFlightsProcessor} from 'src/processors/chase-flights';
 import {amazonProcessor} from 'src/processors/amazon';
 import {appleEmailProcessor} from 'src/processors/apple';
 import {bookingProcessor} from 'src/processors/booking';
@@ -34,6 +35,7 @@ let EMAIL_PROCESSORS: EmailProcessor[] = [
   deltaProcessor,
   southwestProcessor,
   unitedProcessor,
+  chaseFlightsProcessor,
   // Other processors
   amazonProcessor,
   bookingProcessor,
