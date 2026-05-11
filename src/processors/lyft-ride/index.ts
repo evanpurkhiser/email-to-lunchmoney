@@ -75,8 +75,11 @@ function process(email: Email) {
 function matchEmail(email: Email) {
   const {from, subject} = email;
   const isLyft = Boolean(from?.address?.endsWith('lyftmail.com'));
+  const isRideReceiptSubject = Boolean(
+    subject?.match(/^(Your ride with|.+['’]s ride with)/),
+  );
 
-  return isLyft && Boolean(subject?.startsWith('Your ride with'));
+  return isLyft && isRideReceiptSubject;
 }
 
 export const lyftRideProcessor: EmailProcessor = {

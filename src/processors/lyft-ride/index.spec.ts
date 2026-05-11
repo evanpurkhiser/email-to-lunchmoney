@@ -21,6 +21,14 @@ const testCases = [
       note: '326 E 4th St, New York, NY → 27 Essex St, New York, NY → 2312 Summit Ave, Union City, NJ [09:00, 45m]',
     },
   },
+  {
+    file: 'rider-possessive-subject',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Lyft', expectedTotal: 2798},
+      note: '326 E 4th St, Test City, TS 12345 → 95 Guernsey St, Test City, TS 12345 [18:48, 21m]',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {
