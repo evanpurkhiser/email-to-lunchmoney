@@ -1,7 +1,7 @@
 import {convert as htmlToText} from 'html-to-text';
-import {Email} from 'postal-mime';
+import type {Email} from 'postal-mime';
 
-import {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
+import type {EmailProcessor, LunchMoneyMatch, LunchMoneyUpdate} from 'src/types';
 
 const CONFIRMATION_REGEX = /Airline confirmation:\s*([A-Z0-9]{6})/i;
 const AIRPORT_CODE_REGEX = /\(([A-Z]{3})\)/g;
@@ -11,7 +11,7 @@ const POINTS_REDEEMED_REGEX = /Points redeemed[\s\S]*?([0-9,]+)\s*(?:pts|points)
 const BILLED_TO_CARD_REGEX = /Billed to card[\s\S]*?\$([0-9,]+\.\d{2})/i;
 
 function parseUsdToCents(value: string) {
-  return Math.round(parseFloat(value.replace(/,/g, '')) * 100);
+  return Math.round(Number.parseFloat(value.replaceAll(',', '')) * 100);
 }
 
 function formatUsdFromCents(cents: number) {
@@ -89,7 +89,9 @@ function process(email: Email) {
 function matchEmail(email: Email) {
   const {from, subject} = email;
   const isChaseTravel = from?.address === 'donotreply@chasetravel.com';
-  const isTripConfirmation = !!subject?.startsWith('Travel Reservation Center Trip ID #');
+  const isTripConfirmation = Boolean(
+    subject?.startsWith('Travel Reservation Center Trip ID #'),
+  );
 
   return isChaseTravel && isTripConfirmation;
 }
