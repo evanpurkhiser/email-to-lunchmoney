@@ -40,6 +40,45 @@ describe('Amazon order EmailProcessor', () => {
       ],
     });
   });
+
+  it('includes item quantity in split amounts for multi-item orders', async () => {
+    extractOrderSpy.mockResolvedValue({
+      orderId: '111-2222222-3333333',
+      totalCostCents: 3700,
+      orderItems: [
+        {
+          name: 'Item A',
+          shortName: 'Item A',
+          priceEachCents: 1000,
+          quantity: 2,
+        },
+        {
+          name: 'Item B',
+          shortName: 'Item B',
+          priceEachCents: 500,
+          quantity: 3,
+        },
+      ],
+    });
+
+    const email = await PostalMime.parse(fixtureEmail);
+    const result = await amazonProcessor.process(email, env);
+
+    expect(result).toEqual({
+      match: {expectedPayee: 'Amazon', expectedTotal: 3700},
+      type: 'split',
+      split: [
+        {
+          note: 'Item A (111-2222222-3333333)',
+          amount: 2114,
+        },
+        {
+          note: 'Item B (111-2222222-3333333)',
+          amount: 1586,
+        },
+      ],
+    });
+  });
 });
 
 describe('extractOrderBlock', () => {
