@@ -49,9 +49,12 @@ test('returns null for a 100% points redemption with no billed-to-card section',
   expect(result).toBeNull();
 });
 
-test.for([...billedCases, {file: 'receipt-points-only-2'}])('does match $file', async ({file}) => {
-  const emailFile = await import(`./fixtures/${file}.eml?raw`);
-  const email = await PostalMime.parse(emailFile.default);
+test.for([...billedCases, {file: 'receipt-points-only-2'}])(
+  'does match $file',
+  async ({file}) => {
+    const emailFile = await import(`./fixtures/${file}.eml?raw`);
+    const email = await PostalMime.parse(emailFile.default);
 
-  expect(chaseFlightsProcessor.matchEmail(email)).toBe(true);
-});
+    expect(chaseFlightsProcessor.matchEmail(email)).toBe(true);
+  },
+);
