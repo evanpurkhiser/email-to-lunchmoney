@@ -1,16 +1,17 @@
 import {format, subDays} from 'date-fns';
 
+import {categorizeAction, fetchAssignableCategories} from './categorization';
 import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
 
 const LOOKBACK_DAYS = 180;
 
-async function lunchMoneyApi(env: Env, endpoint: string, options: RequestInit = {}) {
+async function lunchMoneyApi(token: string, endpoint: string, options: RequestInit = {}) {
   const url = `https://dev.lunchmoney.app/v1${endpoint}`;
 
   const response = await fetch(url, {
     ...options,
     headers: {
-      Authorization: `Bearer ${env.LUNCHMONEY_API_KEY}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
       ...options.headers,
     },
@@ -41,6 +42,7 @@ export async function processActions(env: Env) {
   }
 
   console.log(`Got ${actions.length} pending actions`);
+  const token = env.LUNCHMONEY_API_KEY;
 
   const now = new Date();
   const twoWeeksAgo = subDays(now, LOOKBACK_DAYS);
@@ -52,9 +54,13 @@ export async function processActions(env: Env) {
     pending: 'true',
   });
 
-  const txnsResp = await lunchMoneyApi(env, `/transactions?${params}`);
+  const [txnsResp, categories] = await Promise.all([
+    lunchMoneyApi(token, `/transactions?${params}`),
+    fetchAssignableCategories(token),
+  ]);
 
   console.log(`Got ${txnsResp.transactions.length} Lunch Money Transactions`);
+  console.log(`Got ${categories.length} assignable Lunch Money Categories`);
 
   // iterate through all actions and then use transactions.find to locate a
   // transaction that has a matching payee name to what's expected in the
@@ -94,14 +100,35 @@ export async function processActions(env: Env) {
     // transaction. Either `update` which will just set the note, or `split`
     // which spits the transaction and sets the note from each split
     try {
+      let categorization = null;
+
+      try {
+        const eligibleCategories = categories.filter(
+          category => category.isIncome === matchingTransaction.is_income,
+        );
+
+        categorization = await categorizeAction(
+          env,
+          action,
+          actionRow.source,
+          matchingTransaction.payee,
+          eligibleCategories,
+        );
+      } catch (error) {
+        console.error(`Failed to categorize action ${actionRow.id}:`, error);
+      }
+
       if (action.type === 'update') {
         const transaction = {
           id: matchingTransaction.id,
           notes: action.note,
           status: action.markReviewed ? 'cleared' : 'uncleared',
+          ...(categorization?.kind === 'update' && categorization.categoryId !== null
+            ? {category_id: categorization.categoryId}
+            : {}),
         };
 
-        await lunchMoneyApi(env, `/transactions/${matchingTransaction.id}`, {
+        await lunchMoneyApi(token, `/transactions/${matchingTransaction.id}`, {
           method: 'PUT',
           body: JSON.stringify({transaction}),
         });
@@ -109,14 +136,19 @@ export async function processActions(env: Env) {
 
       if (action.type === 'split') {
         // Convert split data from our format to API format
-        const split = action.split.map(item => ({
-          amount: (item.amount / 100).toFixed(2),
-          notes: item.note,
-          category_id: matchingTransaction.category_id,
-          status: item.markReviewed ? 'cleared' : 'uncleared',
-        }));
+        const split = action.split.map((item, index) => {
+          const categoryId =
+            categorization?.kind === 'split' ? categorization.categoryIds[index] : null;
 
-        await lunchMoneyApi(env, `/transactions/${matchingTransaction.id}`, {
+          return {
+            amount: (item.amount / 100).toFixed(2),
+            notes: item.note,
+            category_id: categoryId ?? matchingTransaction.category_id,
+            status: item.markReviewed ? 'cleared' : 'uncleared',
+          };
+        });
+
+        await lunchMoneyApi(token, `/transactions/${matchingTransaction.id}`, {
           method: 'PUT',
           body: JSON.stringify({split}),
         });

@@ -1,12 +1,15 @@
 import {env, fetchMock} from 'cloudflare:test';
-import {afterEach, beforeAll, beforeEach, describe, expect, it} from 'vitest';
+import {afterEach, beforeAll, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {
   createMockTransactionsResponse,
   createTestTransaction,
 } from './fixtures/lunchmoney-transactions';
+import * as categorization from './categorization';
 import {processActions} from './lunchmoney';
 import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
+
+const mockedCategorizeAction = vi.spyOn(categorization, 'categorizeAction');
 
 beforeAll(() => {
   fetchMock.activate();
@@ -27,6 +30,62 @@ describe('processActions', () => {
   });
 
   const transactionsListPath = /\/v1\/transactions\?.*/;
+  const categoriesPath = '/v2/categories';
+  const categoriesResponse = {
+    categories: [
+      {
+        id: 900,
+        name: 'Health & Fitness',
+        is_group: true,
+        archived: false,
+        children: [
+          {
+            id: 789,
+            name: 'Personal Care',
+            group_id: 900,
+            is_group: false,
+            archived: false,
+            is_income: false,
+          },
+        ],
+      },
+      {
+        id: 901,
+        name: 'Travel',
+        is_group: true,
+        archived: false,
+        children: [
+          {
+            id: 101,
+            name: 'Transportation',
+            group_id: 901,
+            is_group: false,
+            archived: false,
+            is_income: false,
+          },
+          {
+            id: 202,
+            name: 'Tips',
+            group_id: 901,
+            is_group: false,
+            archived: false,
+            is_income: false,
+          },
+        ],
+      },
+      {id: 456, name: 'Groceries', is_group: false, archived: false, is_income: false},
+      {id: 999, name: 'Bonus', is_group: false, archived: false, is_income: true},
+    ],
+  };
+
+  beforeEach(() => {
+    mockedCategorizeAction.mockReset();
+    mockedCategorizeAction.mockImplementation(async (_env, action) =>
+      action.type === 'update'
+        ? {kind: 'update', categoryId: null}
+        : {kind: 'split', categoryIds: action.split.map(() => null)},
+    );
+  });
 
   it('processes no actions when database is empty', async () => {
     await processActions(env);
@@ -67,8 +126,19 @@ describe('processActions', () => {
       .reply(200, createMockTransactionsResponse(mockTransactions))
       .times(1);
 
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse)
+      .times(1);
+
+    mockedCategorizeAction.mockResolvedValue({
+      kind: 'update',
+      categoryId: 456,
+    });
+
     const expectedUpdateBody = JSON.stringify({
-      transaction: {id: 123, notes: action.note, status: 'uncleared'},
+      transaction: {id: 123, notes: action.note, status: 'uncleared', category_id: 456},
     });
 
     fetchMock
@@ -123,10 +193,20 @@ describe('processActions', () => {
       })
       .reply(200, createMockTransactionsResponse(mockTransactions));
 
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
+
+    mockedCategorizeAction.mockResolvedValue({
+      kind: 'split',
+      categoryIds: [101, 202],
+    });
+
     const expectedUpdateBody = JSON.stringify({
       split: [
         {amount: '20.00', notes: 'Ride fare', category_id: 101, status: 'uncleared'},
-        {amount: '15.00', notes: 'Tip', category_id: 101, status: 'uncleared'},
+        {amount: '15.00', notes: 'Tip', category_id: 202, status: 'uncleared'},
       ],
     });
 
@@ -174,6 +254,11 @@ describe('processActions', () => {
       .get('https://dev.lunchmoney.app')
       .intercept({path: transactionsListPath})
       .reply(200, createMockTransactionsResponse(mockTransactions));
+
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
 
     await processActions(env);
 
@@ -237,6 +322,15 @@ describe('processActions', () => {
       .reply(200, createMockTransactionsResponse(mockTransactions));
 
     fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
+
+    mockedCategorizeAction
+      .mockResolvedValueOnce({kind: 'update', categoryId: 456})
+      .mockResolvedValueOnce({kind: 'update', categoryId: 456});
+
+    fetchMock
       .get('https://dev.lunchmoney.app')
       .intercept({path: '/v1/transactions/111', method: 'PUT'})
       .reply(200, {success: true});
@@ -286,6 +380,11 @@ describe('processActions', () => {
       .intercept({path: transactionsListPath})
       .reply(200, createMockTransactionsResponse(mockTransactions));
 
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
+
     await processActions(env);
 
     // Verify the action remains in the database since it wasn't processed
@@ -330,6 +429,16 @@ describe('processActions', () => {
       .get('https://dev.lunchmoney.app')
       .intercept({path: transactionsListPath})
       .reply(200, createMockTransactionsResponse(mockTransactions));
+
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
+
+    mockedCategorizeAction.mockResolvedValue({
+      kind: 'update',
+      categoryId: null,
+    });
 
     fetchMock
       .get('https://dev.lunchmoney.app')
@@ -382,6 +491,11 @@ describe('processActions', () => {
       .get('https://dev.lunchmoney.app')
       .intercept({path: transactionsListPath})
       .reply(200, createMockTransactionsResponse(mockTransactions));
+
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
 
     const expectedUpdateBody = JSON.stringify({
       transaction: {
@@ -438,6 +552,16 @@ describe('processActions', () => {
       .intercept({path: transactionsListPath})
       .reply(200, createMockTransactionsResponse(mockTransactions));
 
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
+
+    mockedCategorizeAction.mockResolvedValue({
+      kind: 'split',
+      categoryIds: [101, null],
+    });
+
     const expectedUpdateBody = JSON.stringify({
       split: [
         {amount: '20.00', notes: 'Ride fare', category_id: 101, status: 'cleared'},
@@ -449,6 +573,61 @@ describe('processActions', () => {
       .get('https://dev.lunchmoney.app')
       .intercept({
         path: '/v1/transactions/789',
+        method: 'PUT',
+        body: expectedUpdateBody,
+      })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    const remainingActions = await getAllTransactions();
+    expect(remainingActions.results).toHaveLength(0);
+  });
+
+  it('still updates notes when categorization fails', async () => {
+    const action: LunchMoneyAction = {
+      type: 'update',
+      match: {
+        expectedPayee: 'Amazon.com',
+        expectedTotal: 2500,
+      },
+      note: 'Amazon purchase - electronics',
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    const mockTransactions = [
+      createTestTransaction({
+        id: 321,
+        payee: 'Amazon.com',
+        amount: '25.0000',
+        notes: null,
+        category_id: 456,
+      }),
+    ];
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath})
+      .reply(200, createMockTransactionsResponse(mockTransactions));
+
+    fetchMock
+      .get('https://api.lunchmoney.dev')
+      .intercept({path: categoriesPath})
+      .reply(200, categoriesResponse);
+
+    mockedCategorizeAction.mockRejectedValue(new Error('OpenAI timeout'));
+
+    const expectedUpdateBody = JSON.stringify({
+      transaction: {id: 321, notes: action.note, status: 'uncleared'},
+    });
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/321',
         method: 'PUT',
         body: expectedUpdateBody,
       })
