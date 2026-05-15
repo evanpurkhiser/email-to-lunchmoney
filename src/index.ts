@@ -23,9 +23,9 @@ import {lyftRideProcessor} from 'src/processors/lyft-ride';
 import {steamEmailProcessor} from 'src/processors/steam';
 import {uberRideProcessor} from 'src/processors/uber-ride';
 
-import {processActions} from './lunchmoney';
-import {cleanupNotifiedActions} from './old-action-cleanup';
-import {checkOldActionEntries} from './old-actions-checker';
+import {runScheduledTasks} from './scheduled-run';
+import {formatNewActionMessage, sendVerboseTelegramMessage} from './telegram';
+import {handleTelegramWebhook} from './telegram-webhook';
 import type {EmailProcessor, LunchMoneyAction} from './types';
 
 let EMAIL_PROCESSORS: EmailProcessor[] = [
@@ -57,10 +57,17 @@ export function overrideProcessors(processors: EmailProcessor[]) {
 /**
  * Records a LunchMoney actions to the database
  */
-function recordAction(action: LunchMoneyAction, source: string, env: Env) {
-  return env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+async function recordAction(action: LunchMoneyAction, source: string, env: Env) {
+  const result = await env.DB.prepare(
+    'INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)',
+  )
     .bind(source, JSON.stringify(action))
     .run();
+
+  const actionId = result.meta.last_row_id;
+  await sendVerboseTelegramMessage(env, formatNewActionMessage(source, actionId, action));
+
+  return result;
 }
 
 async function processEmail(email: Email, env: Env) {
@@ -123,13 +130,15 @@ app.post('/ingest', async c => {
   return c.json({message: 'Accepted'}, 202);
 });
 
+app.post('/telegram/webhook', async c => {
+  return handleTelegramWebhook(c.req.raw, c.env, c.executionCtx.waitUntil.bind(c.executionCtx));
+});
+
 // Export the Hono fetch handler combined with scheduled handler
 const handlers: ExportedHandler<Env> = {
   fetch: app.fetch,
   scheduled: (_controller, env, ctx) => {
-    ctx.waitUntil(processActions(env));
-    ctx.waitUntil(checkOldActionEntries(env));
-    ctx.waitUntil(cleanupNotifiedActions(env));
+    ctx.waitUntil(runScheduledTasks(env));
   },
 };
 

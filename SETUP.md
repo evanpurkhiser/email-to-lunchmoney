@@ -451,17 +451,107 @@ If you want to enable Telegram notifications:
 #### Get Your Chat ID
 
 1. Send a message to your bot (or add it to a group/channel)
-2. Visit: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
-3. Look for the `chat` object in the response and copy the `id` value
-4. Set the chat ID in Cloudflare:
+2. If the bot already has a webhook configured, temporarily remove it:
+   ```bash
+   curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/deleteWebhook"
+   ```
+3. Visit:
+   ```text
+   https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
+   ```
+4. Look for the `chat` object in the response and copy the `id` value
+   - Private chats are usually positive numbers
+   - Group chats are usually negative numbers
+5. Set the chat ID in Cloudflare:
    ```bash
    wrangler secret put TELEGRAM_CHAT_ID
    ```
+6. If you removed the webhook in step 2, re-enable it after finishing the webhook setup steps below.
 
 **What notifications will I receive?**
 
 - Alerts when actions are older than 15 days and haven't been matched to transactions
 - This helps you identify receipt emails that couldn't be automatically processed
+
+**Optional: Verbose bot mode**
+
+If you want the bot to also report normal workflow activity, set:
+
+```bash
+wrangler secret put VERBOSE_BOT
+```
+
+and provide:
+
+```text
+true
+```
+
+When `VERBOSE_BOT=true`, the bot will also send messages:
+
+- when a new action is added to the database
+- when an action is successfully matched to an existing Lunch Money transaction
+
+**Optional: Telegram bot commands**
+
+If you want the bot to respond to commands, set:
+
+```bash
+wrangler secret put TELEGRAM_WEBHOOK_SECRET
+```
+
+and provide a random shared secret value.
+
+Then configure Telegram to send webhooks to your Worker:
+
+```bash
+curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://<your-worker-domain>/telegram/webhook&secret_token=<YOUR_WEBHOOK_SECRET>"
+```
+
+The bot will only respond to the configured `TELEGRAM_CHAT_ID`.
+
+To verify the webhook is configured correctly:
+
+```bash
+curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getWebhookInfo"
+```
+
+Look for:
+
+- `url` set to `https://<your-worker-domain>/telegram/webhook`
+- no `last_error_message`
+
+If you want Telegram to show clickable commands when you type `/`, register them
+in `@BotFather`:
+
+1. Open `@BotFather`
+2. Send `/mybots`
+3. Choose your bot
+4. Choose `Edit Bot` -> `Edit Commands`
+5. Enter:
+
+```text
+show_db - Show recent pending database rows
+run_now - Run the full matching workflow now
+```
+
+Supported commands:
+
+- `/show_db` - shows the most recent pending rows in `lunchmoney_actions`
+- `/run_now` - runs the same full workflow as the scheduled cron trigger
+
+**Troubleshooting Telegram commands**
+
+- `401 Unauthorized` from `/telegram/webhook`
+  The webhook secret in Telegram does not match `TELEGRAM_WEBHOOK_SECRET`.
+- `403 Forbidden` from `/telegram/webhook`
+  The incoming `chat.id` does not match `TELEGRAM_CHAT_ID`.
+- Telegram `400 can't parse entities`
+  The bot attempted to send malformed MarkdownV2. Check worker logs for the
+  exact message and deploy the latest fixes.
+- `getUpdates` returns an error while webhook is active
+  This is expected. Use `deleteWebhook` first, then `getUpdates`, and finally
+  re-run `setWebhook`.
 
 ### 4.3 Optional: Sentry Error Tracking
 
