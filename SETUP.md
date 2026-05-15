@@ -414,6 +414,11 @@ Paste your token when prompted.
    ```
    Paste your token when prompted.
 
+If you need to match against multiple Lunch Money budgets, you can use
+`LUNCHMONEY_API_KEYS` instead. Set it as an ordered comma-delimited list of
+API tokens, and the worker will try each budget in order for actions that
+remain unmatched after checking the earlier budgets.
+
 #### OpenAI API Key
 
 1. Log in to [OpenAI Platform](https://platform.openai.com)
