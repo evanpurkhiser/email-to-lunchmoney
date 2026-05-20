@@ -77,7 +77,7 @@ function process(email: Email) {
   const note = `${origin} → ${destination} (${confirmationMatch[1]}) [used ${pointsRedeemed} pts, ${discountPercent}% discount, originally $${originalPriceDisplay}]`;
 
   const match: LunchMoneyMatch = {
-    expectedPayee: 'CL * Chase Travel',
+    expectedPayee: 'Chase Travel',
     expectedTotal: billedToCardCents,
   };
 
