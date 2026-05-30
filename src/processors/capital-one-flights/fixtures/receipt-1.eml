@@ -1,0 +1,2701 @@
+Delivered-To: evanpurkhiser@gmail.com
+Received: by 2002:a17:504:98d1:b0:1e3a:693f:1053 with SMTP id d17csp11934njn;
+        Thu, 28 May 2026 18:30:51 -0700 (PDT)
+X-Received: by 2002:a05:620a:45a8:b0:914:c48c:4acf with SMTP id af79cd13be357-9152fcc55eemr120796685a.4.1780018251236;
+        Thu, 28 May 2026 18:30:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780018251; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XMpgXkMFBc7ickuHWWLhYfsUED+maQKDrm9Y9CciApZd334MFOS39/iVXLeyMt9WQa
+         NYGSnch/ASa9z7nD4NEIRCSNvm/Mise1/y9ipqV8GQMoso2P865C31U02tpROIa58vTu
+         +KXIa7U5osvu3RQvVYwYQBMEZwB9WEkNTHGgDBIqiWDLFRXz5rH2tU/z63eyVAbTUez1
+         DeOFpphKlrH0wLdfG3sGUFufDWZ3DH5uP4lOKqXknb91r4mmkzp3ctPmFmi6o+vg657P
+         ZVghQj/lJSaBs6p2LVpysW+LsivVo8WP8ySITN1SDChRXuJ64mHXPcWSfmOGbO+joPVG
+         wusQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:mime-version:date:message-id:feedback-id
+         :to:subject:from:dkim-signature:dkim-signature;
+        bh=PJdiXPs2IFy5iD5p1nCEu+73hgaCJnJCpFHeKd6cywA=;
+        fh=6ledkmzjifHfs5heN0iUnSBGUNYZi3HkNC6pd90xUm4=;
+        b=bXZKUc9+UxgdqMkAneJ7z9BSRvqy210EU6bRiE5n54us1Nf8XnI3//Cjspc0/gLCUP
+         mtLe3l4iqa8SiU6yLl5grHNo0WjK0zWr+m1fpetlutwfA7dz34DX1bI0S2jTSqxHK1sJ
+         dgR6zPu/sS2JAo9zIIFSAsf8Y4ofeBSOiPzFE7yTSHx/sTi7M+k09QNdHJeTaEeHEXmM
+         o18Ogrc4R2DFLOXcxLcDe6iTb4WpzsMWN90rJvOaY1+ImKvoIB02bgZeORX19Gy6WjTu
+         2CWZt0nndq3IyhKY7o9ae/vXCKJKz2INiYcyYNrMNLnohs3nV2fYdOrPSByHxXFBLvMw
+         Zieg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@mandrillapp.com header.s=mte1 header.b="N5/2MRNU";
+       dkim=pass header.i=@capitalonebooking.com header.s=mte1 header.b=YyBRlA3y;
+       spf=pass (google.com: domain of bounce-md_31229592.6a18ec4a.v1-e559cd6190e6474887e13839e39a80fc@mandrill.capitalonebooking.com designates 198.2.177.1 as permitted sender) smtp.mailfrom=bounce-md_31229592.6a18ec4a.v1-e559cd6190e6474887e13839e39a80fc@mandrill.capitalonebooking.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=capitalonebooking.com
+Return-Path: <bounce-md_31229592.6a18ec4a.v1-e559cd6190e6474887e13839e39a80fc@mandrill.capitalonebooking.com>
+Received: from mail177-1.suw61.mandrillapp.com (mail177-1.suw61.mandrillapp.com. [198.2.177.1])
+        by mx.google.com with ESMTPS id af79cd13be357-915326c34f1si2146985a.466.2026.05.28.18.30.51
+        for <evanpurkhiser@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2026 18:30:51 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-md_31229592.6a18ec4a.v1-e559cd6190e6474887e13839e39a80fc@mandrill.capitalonebooking.com designates 198.2.177.1 as permitted sender) client-ip=198.2.177.1;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@mandrillapp.com header.s=mte1 header.b="N5/2MRNU";
+       dkim=pass header.i=@capitalonebooking.com header.s=mte1 header.b=YyBRlA3y;
+       spf=pass (google.com: domain of bounce-md_31229592.6a18ec4a.v1-e559cd6190e6474887e13839e39a80fc@mandrill.capitalonebooking.com designates 198.2.177.1 as permitted sender) smtp.mailfrom=bounce-md_31229592.6a18ec4a.v1-e559cd6190e6474887e13839e39a80fc@mandrill.capitalonebooking.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=capitalonebooking.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com;
+	s=mte1; t=1780018250; x=1780288250;
+	bh=PJdiXPs2IFy5iD5p1nCEu+73hgaCJnJCpFHeKd6cywA=;
+	h=From:Subject:To:Feedback-ID:Message-Id:Date:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:CC:Date:Subject:From;
+	b=N5/2MRNU3MCJYfRNlnJzDfskSoFpi85E3RxWn3pL0SOstLOetTRKSOPIsRNTvACqF
+	 /78eWJda7eKmjhTZA3A/dmuSUNA/VIPNuotRQghKilU8Ei4dL2TkEgMZrJ6jRUvJXN
+	 oC2owgEBZ8QyVYtxrc7Y6ylUZl524PoFh/rfP12Ab3M5W40zBfQ9mddfQSzd9A92on
+	 A5Ylp2UJjFSz3kq652dyoQhcB6kl5QM75Gm2EqwfLaonwBZnf1Qj1LRhSoFdhWzXRB
+	 wSKY1VNWNylmAH4KIlS+qyYli3UbtvMs+IBzQxlZvTur199WGNrHNqODZKgQH677k7
+	 oQL2nJMvW3Gww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=capitalonebooking.com; s=mte1; t=1780018250; x=1780278750;
+	i=capitalone@capitalonebooking.com;
+	bh=PJdiXPs2IFy5iD5p1nCEu+73hgaCJnJCpFHeKd6cywA=;
+	h=From:Subject:To:Feedback-ID:Message-Id:Date:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:CC:Date:Subject:From;
+	b=YyBRlA3yt3B1p9ZZhyyJQ7RKfhoSjhnMsdRkH89Gim/HItYVDvhuajmnCKRyzD49K
+	 Vac2Ljz6XuOjenE0zBNLUa8+JwKb2YFOvx4VFf6YJ4v3EoNhIXM4efTGsLFIgXxO9d
+	 4NRSZM1yFYN0uch3MpyB5WgEY1k96TJWOd+Ja3JN98yrxEbgOVjw6gmrTAP01ampYx
+	 6ZwFY5MwUwAEa74gH0MIr7n5yqLAHGZD5H8MI4Eh1MvoLzWDTgV58Wo5Fy6H+hH2L7
+	 0pDgQeuWANFo1Msxdn89xMzrL9NKO6aBOIGUqUSDL3aWZBI8AKQbam7Fr5OiN8sSRk
+	 DIVQXFoLujolg==
+Received: from mta007-md-use2.delv.a.intuit.com (localhost [127.0.0.1])
+	by mail177-1.suw61.mandrillapp.com (Mailchimp) with ESMTP id 4gRQmB52DBz11ms
+	for <evanpurkhiser@gmail.com>; Fri, 29 May 2026 01:30:50 +0000 (UTC)
+From: "Capital One" <capitalone@capitalonebooking.com>
+Subject: =?utf-8?Q?View=20your=20flight=20details=20for=20your=20Chicago=20trip?=
+Received: from [34.134.171.135] by mandrillapp.com id e559cd6190e6474887e13839e39a80fc; Fri, 29 May 2026 01:30:50 +0000
+To: "Evan Purkhiser" <evanpurkhiser@gmail.com>
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D31229592.e559cd6190e6474887e13839e39a80fc?=
+X-Mandrill-User: md_31229592
+Feedback-ID: 31229592:31229592.20260529:md
+Message-Id: <31229592.20260529013050.6a18ec4aa3e2f8.84142564@mail177-1.suw61.mandrillapp.com>
+Date: Fri, 29 May 2026 01:30:50 +0000
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml">
+
+<head>
+  
+  <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8">
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1.0">
+  <title>View your flight details for your Chicago trip</title>
+
+  <style type=3D"text/css">
+  @font-face {
+    font-family: 'Optimist_Rg';
+    font-weight: normal;
+    src: url(https://travel.capitalone.com/email-assets/fonts/Optimist_Rg.t=
+tf);
+  }
+  @font-face {
+    font-family: 'Optimist_W_Bd';
+    font-weight: 600;
+    src: url(https://travel.capitalone.com/email-assets/fonts/Optimist_W_SB=
+d.ttf);
+  }
+  body,#bodyTable,#bodyCell{
+    height:100% !important;
+    margin:0;
+    padding:0;
+    width:100% !important;
+  }
+  table{
+    border-collapse:collapse;
+  }
+  img,a img{
+    border:0;
+    outline:none;
+    text-decoration:none;
+  }
+  h1,h2,h3,h4,h5,h6{
+    margin:0;
+    padding:0;
+  }
+  p{
+    margin:1em 0;
+    padding:0;
+  }
+  a{
+    word-wrap:break-word;
+  }
+  .ReadMsgBody{
+    width:100%;
+  }
+  .ExternalClass{
+    width:100%;
+  }
+  .ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.=
+ExternalClass td,.ExternalClass div{
+    line-height:100%;
+  }
+  table,td{
+    mso-table-lspace:0pt;
+    mso-table-rspace:0pt;
+  }
+  #outlook a{
+    padding:0;
+  }
+  img{
+    -ms-interpolatio1n-mode:bicubic;
+  }
+  body,table,td,p,a,li,blockquote{
+    -ms-text-size-adjust:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  #bodyCell{
+    padding:0px;
+  }
+  .mcnImage{
+    vertical-align:bottom;
+  }
+  .mcnTextContent img{
+    height:auto !important;
+  }
+  /*
+  @tab Page
+  @section background style
+  @tip Set the background color and top border for your email. You may want=
+ to choose colors that match your company's branding.
+  */
+  body,#bodyTable{
+    /*@editable*/background-color:#F2F2F2;
+  }
+  /*
+  @tab Page
+  @section background style
+  @tip Set the background color and top border for your email. You may want=
+ to choose colors that match your company's branding.
+  */
+  #bodyCell{
+    /*@editable*/border-top:0;
+  }
+  /*
+  @tab Page
+  @section email border
+  @tip Set the border for your email.
+  */
+  #templateContainer{
+    /*@editable*/border:0;
+  }
+  /*
+  @tab Page
+  @section heading 1
+  @tip Set the styling for all first-level headings in your emails. These s=
+hould be the largest of your headings.
+  @style heading 1
+  */
+  h1{
+    /*@editable*/color:#606060 !important;
+    display:block;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:40px;
+    /*@editable*/font-style:normal;
+    /*@editable*/font-weight:bold;
+    /*@editable*/line-height:125%;
+    /*@editable*/letter-spacing:-1px;
+    margin:0;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Page
+  @section heading 2
+  @tip Set the styling for all second-level headings in your emails.
+  @style heading 2
+  */
+  h2{
+    /*@editable*/color:#404040 !important;
+    display:block;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:26px;
+    /*@editable*/font-style:normal;
+    /*@editable*/font-weight:bold;
+    /*@editable*/line-height:125%;
+    /*@editable*/letter-spacing:-.75px;
+    margin:0;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Page
+  @section heading 3
+  @tip Set the styling for all third-level headings in your emails.
+  @style heading 3
+  */
+  h3{
+    /*@editable*/color:#606060 !important;
+    display:block;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:18px;
+    /*@editable*/font-style:normal;
+    /*@editable*/font-weight:bold;
+    /*@editable*/line-height:125%;
+    /*@editable*/letter-spacing:-.5px;
+    margin:0;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Page
+  @section heading 4
+  @tip Set the styling for all fourth-level headings in your emails. These =
+should be the smallest of your headings.
+  @style heading 4
+  */
+  h4{
+    /*@editable*/color:#808080 !important;
+    display:block;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:16px;
+    /*@editable*/font-style:normal;
+    /*@editable*/font-weight:bold;
+    /*@editable*/line-height:125%;
+    /*@editable*/letter-spacing:normal;
+    margin:0;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Preheader
+  @section preheader style
+  @tip Set the background color and borders for your email's preheader area=
+.
+  */
+  #templatePreheader{
+    /*@editable*/background-color:#F2F2F2;
+    /*@editable*/border-top:0;
+    /*@editable*/border-bottom:0;
+  }
+  /*
+  @tab Preheader
+  @section preheader text
+  @tip Set the styling for your email's preheader text. Choose a size and c=
+olor that is easy to read.
+  */
+  .preheaderContainer .mcnTextContent,.preheaderContainer .mcnTextContent p=
+{
+    /*@editable*/color:#ffffff;
+    /*@editable*/font-family:Tahoma, Verdana, Segoe, sans-serif;
+    /*@editable*/font-size:14px;
+    /*@editable*/line-height:125%;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Preheader
+  @section preheader link
+  @tip Set the styling for your email's header links. Choose a color that h=
+elps them stand out from your text.
+  */
+  .preheaderContainer .mcnTextContent a{
+    /*@editable*/color:#606060;
+    /*@editable*/font-weight:normal;
+    /*@editable*/text-decoration:none;
+  }
+  /*
+  @tab Header
+  @section header style
+  @tip Set the background color and borders for your email's header area.
+  */
+  #templateHeader{
+    /*@editable*/background-color:#63B67F;
+    /*@editable*/border-top:0;
+    /*@editable*/border-bottom:0;
+  }
+  /*
+  @tab Header
+  @section header text
+  @tip Set the styling for your email's header text. Choose a size and colo=
+r that is easy to read.
+  */
+  .headerContainer .mcnTextContent,.headerContainer .mcnTextContent p{
+    /*@editable*/color:#ffffff;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:16px;
+    /*@editable*/line-height:150%;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Header
+  @section header link
+  @tip Set the styling for your email's header links. Choose a color that h=
+elps them stand out from your text.
+  */
+  .headerContainer .mcnTextContent a{
+    /*@editable*/color:#6DC6DD;
+    /*@editable*/font-weight:normal;
+    /*@editable*/text-decoration:none;
+  }
+  /*
+  @tab Body
+  @section body style
+  @tip Set the background color and borders for your email's body area.
+  */
+  #templateBody{
+    /*@editable*/background-color:#F2F2F2;
+    /*@editable*/border-top:0;
+    /*@editable*/border-bottom:0;
+  }
+  /*
+  @tab Body
+  @section body text
+  @tip Set the styling for your email's body text. Choose a size and color =
+that is easy to read.
+  */
+  .bodyContainer .mcnTextContent,.bodyContainer .mcnTextContent p{
+    /*@editable*/color:#878787;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:16px;
+    /*@editable*/line-height:150%;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Body
+  @section body link
+  @tip Set the styling for your email's body links. Choose a color that hel=
+ps them stand out from your text.
+  */
+  .bodyContainer .mcnTextContent a{
+    /*@editable*/color:#01AAE4;
+    /*@editable*/font-weight:normal;
+    /*@editable*/text-decoration:none;
+  }
+  /*
+  @tab Footer
+  @section footer style
+  @tip Set the background color and borders for your email's footer area.
+  */
+  #templateFooter{
+    /*@editable*/background-color:#F2F2F2;
+    /*@editable*/border-top:0;
+    /*@editable*/border-bottom:0;
+  }
+  /*
+  @tab Footer
+  @section footer text
+  @tip Set the styling for your email's footer text. Choose a size and colo=
+r that is easy to read.
+  */
+  .footerContainer .mcnTextContent,.footerContainer .mcnTextContent p{
+    /*@editable*/color:#606060;
+    /*@editable*/font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Aria=
+l, sans-serif;
+    /*@editable*/font-size:11px;
+    /*@editable*/line-height:125%;
+    /*@editable*/text-align:left;
+  }
+  /*
+  @tab Footer
+  @section footer link
+  @tip Set the styling for your email's footer links. Choose a color that h=
+elps them stand out from your text.
+  */
+  .footerContainer .mcnTextContent a{
+    /*@editable*/color:#606060;
+    /*@editable*/font-weight:normal;
+    /*@editable*/text-decoration:none;
+  }
+  /*
+  @Style for payment charge and commission disclaimer
+  */
+  .fareDisclaimer {
+    font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-seri=
+f;
+    font-size: 12px;
+    color: #878787;
+    letter-spacing: 0px;
+    font-style: italic;
+  }
+</style>
+  <!--[if mso]>
+  <style>
+    span, strong, p, td, table, div {
+      font-family:  Helvetica Neue, Helvetica, Arial, serif !important;
+    }
+  </style>
+  <![endif]-->
+</head>
+
+
+
+<div style=3D"display:none;font-size:1px;color:#333333;line-height:1px;max-=
+height:0px;max-width:0px;opacity:0;overflow:hidden;">
+    Here are your Capital One Travel and airline confirmation codes
+</div>
+
+
+<body leftmargin=3D"0" marginwidth=3D"0" topmargin=3D"0" marginheight=3D"0"=
+ offset=3D"0">
+
+<div style=3D"display:none; line-height:0;">
+  
+
+  
+    
+      <div itemscope=3D"" itemtype=3D"http://schema.org/FlightReservation" =
+style=3D"display:none; line-height:0;">
+        <span itemprop=3D"underName" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Person">
+          <meta itemprop=3D"name" content=3D"WeiShih Tsai">
+        </span>
+        <span itemprop=3D"reservationFor" itemscope=3D"" itemtype=3D"http:/=
+/schema.org/Flight">
+          <span itemprop=3D"airline" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Airline">
+            <meta itemprop=3D"name" content=3D"American Airlines">
+            <meta itemprop=3D"iataCode" content=3D"AA">
+          </span>
+          <span itemprop=3D"departureAirport" itemscope=3D"" itemtype=3D"ht=
+tp://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"LaGuardia Airport">
+            <meta itemprop=3D"iataCode" content=3D"LGA">
+          </span>
+          <meta itemprop=3D"flightNumber" content=3D"3100">
+          
+          <meta itemprop=3D"departureTime" content=3D"2026-07-15T09:44:00.0=
+00">
+          <meta itemprop=3D"arrivalTime" content=3D"2026-07-15T11:30:00.000=
+">
+          <span itemprop=3D"arrivalAirport" itemscope=3D"" itemtype=3D"http=
+://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"O&#x27;Hare International Ai=
+rport">
+            <meta itemprop=3D"iataCode" content=3D"ORD">
+          </span>
+        </span>
+
+        <br>
+        <link itemprop=3D"reservationStatus" href=3D"http://schema.org/Tick=
+eted">
+
+        
+        
+          <meta itemprop=3D"reservationNumber" content=3D"LMTRZQ">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"KZUAUU">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"H-H-G4K8NY7KW4">
+        
+      </div>
+    
+  
+    
+      <div itemscope=3D"" itemtype=3D"http://schema.org/FlightReservation" =
+style=3D"display:none; line-height:0;">
+        <span itemprop=3D"underName" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Person">
+          <meta itemprop=3D"name" content=3D"Evan Purkhiser">
+        </span>
+        <span itemprop=3D"reservationFor" itemscope=3D"" itemtype=3D"http:/=
+/schema.org/Flight">
+          <span itemprop=3D"airline" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Airline">
+            <meta itemprop=3D"name" content=3D"American Airlines">
+            <meta itemprop=3D"iataCode" content=3D"AA">
+          </span>
+          <span itemprop=3D"departureAirport" itemscope=3D"" itemtype=3D"ht=
+tp://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"LaGuardia Airport">
+            <meta itemprop=3D"iataCode" content=3D"LGA">
+          </span>
+          <meta itemprop=3D"flightNumber" content=3D"3100">
+          
+          <meta itemprop=3D"departureTime" content=3D"2026-07-15T09:44:00.0=
+00">
+          <meta itemprop=3D"arrivalTime" content=3D"2026-07-15T11:30:00.000=
+">
+          <span itemprop=3D"arrivalAirport" itemscope=3D"" itemtype=3D"http=
+://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"O&#x27;Hare International Ai=
+rport">
+            <meta itemprop=3D"iataCode" content=3D"ORD">
+          </span>
+        </span>
+
+        <br>
+        <link itemprop=3D"reservationStatus" href=3D"http://schema.org/Tick=
+eted">
+
+        
+        
+          <meta itemprop=3D"reservationNumber" content=3D"LMTRZQ">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"KZUAUU">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"H-H-G4K8NY7KW4">
+        
+      </div>
+    
+  
+
+  
+    
+      <div itemscope=3D"" itemtype=3D"http://schema.org/FlightReservation" =
+style=3D"display:none; line-height:0;">
+        <span itemprop=3D"underName" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Person">
+          <meta itemprop=3D"name" content=3D"WeiShih Tsai">
+        </span>
+        <span itemprop=3D"reservationFor" itemscope=3D"" itemtype=3D"http:/=
+/schema.org/Flight">
+          <span itemprop=3D"airline" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Airline">
+            <meta itemprop=3D"name" content=3D"American Airlines">
+            <meta itemprop=3D"iataCode" content=3D"AA">
+          </span>
+          <span itemprop=3D"departureAirport" itemscope=3D"" itemtype=3D"ht=
+tp://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"O&#x27;Hare International Ai=
+rport">
+            <meta itemprop=3D"iataCode" content=3D"ORD">
+          </span>
+          <meta itemprop=3D"flightNumber" content=3D"1421">
+          
+          <meta itemprop=3D"departureTime" content=3D"2026-07-19T16:30:00.0=
+00">
+          <meta itemprop=3D"arrivalTime" content=3D"2026-07-19T20:04:00.000=
+">
+          <span itemprop=3D"arrivalAirport" itemscope=3D"" itemtype=3D"http=
+://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"John F. Kennedy Internationa=
+l Airport">
+            <meta itemprop=3D"iataCode" content=3D"JFK">
+          </span>
+        </span>
+
+        <br>
+        <link itemprop=3D"reservationStatus" href=3D"http://schema.org/Tick=
+eted">
+
+        
+        
+          <meta itemprop=3D"reservationNumber" content=3D"LMTRZQ">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"KZUAUU">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"H-H-G4K8NY7KW4">
+        
+      </div>
+    
+  
+    
+      <div itemscope=3D"" itemtype=3D"http://schema.org/FlightReservation" =
+style=3D"display:none; line-height:0;">
+        <span itemprop=3D"underName" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Person">
+          <meta itemprop=3D"name" content=3D"Evan Purkhiser">
+        </span>
+        <span itemprop=3D"reservationFor" itemscope=3D"" itemtype=3D"http:/=
+/schema.org/Flight">
+          <span itemprop=3D"airline" itemscope=3D"" itemtype=3D"http://sche=
+ma.org/Airline">
+            <meta itemprop=3D"name" content=3D"American Airlines">
+            <meta itemprop=3D"iataCode" content=3D"AA">
+          </span>
+          <span itemprop=3D"departureAirport" itemscope=3D"" itemtype=3D"ht=
+tp://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"O&#x27;Hare International Ai=
+rport">
+            <meta itemprop=3D"iataCode" content=3D"ORD">
+          </span>
+          <meta itemprop=3D"flightNumber" content=3D"1421">
+          
+          <meta itemprop=3D"departureTime" content=3D"2026-07-19T16:30:00.0=
+00">
+          <meta itemprop=3D"arrivalTime" content=3D"2026-07-19T20:04:00.000=
+">
+          <span itemprop=3D"arrivalAirport" itemscope=3D"" itemtype=3D"http=
+://schema.org/Airport">
+            <meta itemprop=3D"name" content=3D"John F. Kennedy Internationa=
+l Airport">
+            <meta itemprop=3D"iataCode" content=3D"JFK">
+          </span>
+        </span>
+
+        <br>
+        <link itemprop=3D"reservationStatus" href=3D"http://schema.org/Tick=
+eted">
+
+        
+        
+          <meta itemprop=3D"reservationNumber" content=3D"LMTRZQ">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"KZUAUU">
+        
+          <meta itemprop=3D"reservationNumber" content=3D"H-H-G4K8NY7KW4">
+        
+      </div>
+    
+  
+
+</div>
+
+<center>
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+height=3D"100%" width=3D"100%" id=3D"bodyTable" style=3D"background-color:#=
+F2F2F2;">
+    <tr>
+      <td align=3D"center" valign=3D"top" id=3D"bodyCell">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"45=
+0" id=3D"templateContainer">
+          <tr>
+            <td align=3D"center" valign=3D"top">
+              
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"450" id=3D=
+"templatePreheader">
+  <tbody class=3D"mcnImageBlockOuter">
+    <tr>
+      <td valign=3D"top" style=3D"padding: 10px 0px 5px 18px; background: #=
+FFFFFF;" class=3D"mcnImageBlockInner">
+        <table align=3D"left" width=3D"100%" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" class=3D"mcnImageContentContainer">
+          <tbody><tr>
+            <td class=3D"mcnImageContent" valign=3D"top" style=3D"text-alig=
+n: left;">
+              
+              <img align=3D"center" alt=3D"" src=3D"https://travel.capitalo=
+ne.com/email-assets/C1-travel-lockup-horizontal.png" width=3D"148" style=3D=
+"max-width: 148px; padding-bottom: 0; display: inline !important; vertical-=
+align: bottom;" class=3D"mcnImage">
+              
+            </td>
+          </tr>
+        </tbody></table>
+        
+        <table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" class=3D"mcnImageContentContainer">
+          <tbody>
+          <tr>
+            <td class=3D"mcnImageContent" valign=3D"top" style=3D"text-alig=
+n: left; padding-left: 200px; padding-right: 200px;">
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+              <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" class=3D"mcnTextBlock">
+                <tbody class=3D"mcnTextBlockOuter">
+                <tr>
+                  <td valign=3D"top" class=3D"mcnTextBlockInner">
+
+                    <table align=3D"left" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"450" class=3D"mcnTextContentContainer">
+                      <tbody>
+                      <tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 20px 18px 30px; text-align: center; font-family: 'Optimist_Rg'=
+, Helvetica Neue, Helvetica, Arial, sans-serif; background-color: #fff;">
+                          <span style=3D"font-size: 32px; line-height: 42px=
+; color: #013D5B;">Pack your bags for Chicago!</span>
+                          <br /><br />
+                          <span style=3D"font-size: 20px; line-height: 25px=
+; color: #141414;">Check out your full receipt with flight and passenger de=
+tails below.</span>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr><td align=3D"center" valign=3D"top">
+      
+      
+<tr>
+  <td align=3D"center" valign=3D"top">
+    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"450" i=
+d=3D"templateHeader" style=3D"background: #142444;" "color: #fff;">
+      <tr><td valign=3D"top" class=3D"headerContainer" style=3D"padding-bot=
+tom: 10px;">
+        
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"=
+100%" class=3D"mcnTextBlock">
+            <tbody class=3D"mcnTextBlockOuter"><tr>
+              <td valign=3D"top" class=3D"mcnTextBlockInner">
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" width=3D"450" class=3D"mcnTextContentContainer" style=3D"color:=
+ #fff;">
+                  <tbody><tr>
+                    <td valign=3D"top" class=3D"mcnTextContent" style=3D"pa=
+dding: 26px 0px 32px;">
+                      <div style=3D"text-align: center;"><span style=3D"fon=
+t-size: 16px; text-transform: uppercase; font-family: 'Optimist_Rg', Helvet=
+ica Neue, Helvetica, Arial, sans-serif;">Your confirmation codes</span></di=
+v>
+                    </td>
+                  </tr></tbody>
+                </table>
+              </td>
+            </tr></tbody>
+          </table>
+        
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock">
+          <tbody class=3D"mcnTextBlockOuter"><tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner">
+              
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"450" class=3D"mcnTextContentContainer">
+  
+    <tr>
+      <td>
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"400" class=3D"mcnTextContentContainer" style=3D"color: #fff=
+; margin-bottom: 30px;">
+          <tbody>
+          <tr>
+            
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"vertical-a=
+lign: middle;">
+              <div style=3D"text-align: left; font-size: 16px; line-height:=
+ 16px;">
+                <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, =
+Helvetica, Arial, sans-serif;">American Airlines</span>
+              </div>
+            </td>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"vertical-a=
+lign: middle;">
+              <div style=3D"text-align: right; font-size: 24px; line-height=
+: 24px;">
+                <span style=3D"letter-spacing: 0.69px; font-family: 'Optimi=
+st_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">LMTRZQ</span>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  
+    <tr>
+      <td>
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"400" class=3D"mcnTextContentContainer" style=3D"color: #fff=
+; margin-bottom: 30px;">
+          <tbody>
+          <tr>
+            
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"vertical-a=
+lign: middle;">
+              <div style=3D"text-align: left; font-size: 16px; line-height:=
+ 16px;">
+                <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, =
+Helvetica, Arial, sans-serif;">American Airlines</span>
+              </div>
+            </td>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"vertical-a=
+lign: middle;">
+              <div style=3D"text-align: right; font-size: 24px; line-height=
+: 24px;">
+                <span style=3D"letter-spacing: 0.69px; font-family: 'Optimi=
+st_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">KZUAUU</span>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  
+    <tr>
+      <td>
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"400" class=3D"mcnTextContentContainer" style=3D"color: #fff=
+; margin-bottom: 30px;">
+          <tbody>
+          <tr>
+            
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"vertical-a=
+lign: middle;">
+              <div style=3D"text-align: left; font-size: 16px; line-height:=
+ 16px;">
+                <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, =
+Helvetica, Arial, sans-serif;">Capital One Travel</span>
+              </div>
+            </td>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"vertical-a=
+lign: middle;">
+              <div style=3D"text-align: right; font-size: 24px; line-height=
+: 24px;">
+                <span style=3D"letter-spacing: 0.69px; font-family: 'Optimi=
+st_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">H-H-G4K8NY7KW4</span=
+>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  
+</table>
+
+            </td>
+          </tr></tbody>
+        </table>
+      </td></tr>
+    </table>
+  </td>
+</tr>
+
+    </td></tr>
+    <tr>
+      <td align=3D"center" valign=3D"top">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"45=
+0" id=3D"templateBody">
+          <tr>
+            <td class=3D"bodyContainer">
+              
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff;">
+  <tbody>
+  <tr>
+    <td style=3D"border-bottom: 1px solid #E6E6E6; text-align: center; padd=
+ing-top: 24px; padding-bottom: 26px; line-height: 48px;">
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"back=
+ground: #0276B1; border-radius: 4px;" width=3D"300" height=3D"48" align=3D"=
+center">
+        <tbody border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%">
+        <tr>
+          <td align=3D"center" valign=3D"center">
+            <a href=3D"https://links.capitalone.com/partner-linkout?usecase=
+=3Dtravel&path=3D/trips/?tripId=3Db0425050-ac5c-4fc2-a774-5b159e5a8775&trip=
+sFilter=3DUpcoming%20Trips" style=3D"border-radius: 4px; text-decoration: n=
+one;">
+              <span style=3D"font-size: 20px; line-height: 48px; font-famil=
+y: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif; color: #FFF=
+FFF;">Manage Your Trip</span>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+
+  
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-bottom: 6px;">
+  <tr>
+    <td style=3D"padding: 16px 0px 16px 24px;">
+
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" class=3D"mcnTextBlock">
+        <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+          <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"white-spa=
+ce:nowrap;">
+
+            
+
+
+            <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"40" class=3D"mcnTextContentContainer">
+              <tbody>
+              <tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"line-h=
+eight: 100%; padding-top: 5px;">
+                  <img src=3D"https://travel.capitalone.com/email-assets/Tr=
+avel-Airplane.png" alt=3D"" width=3D"40" style=3D"max-width: 40px;" class=
+=3D"mcnImage">
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+
+            
+            <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"350" style=3D"margin-left: 15px;" class=3D"mcnTextContentC=
+ontainer">
+              <tbody>
+              <tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"text-a=
+lign: left; white-space:normal;">
+                  <span style=3D"font-weight: 600; font-size: 18px; line-he=
+ight: 25px; color: #013D5B; font-family: 'Optimist_Rg', Helvetica Neue, Hel=
+vetica, Arial, sans-serif; white-space: nowrap;">
+                    You=E2=80=99re flying with multiple itineraries.
+                  </span>
+                  <span style=3D"font-size: 16px; line-height: 25px; color:=
+ #7D7D7D; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, san=
+s-serif;">
+                    Restrictions may differ between your flights.
+                    Cancellations or changes to one of your flights will no=
+t alter the other automatically.
+                  </span>
+                  
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</table>
+
+
+
+  
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff;">
+  <tr>
+    <td>
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" class=3D"mcnTextBlock">
+        <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+          <td valign=3D"top" class=3D"mcnTextBlockInner">
+            <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"300" class=3D"mcnTextContentContainer">
+              <tbody><tr>
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g-top:18px; padding-right: 18px; padding-bottom: 0px; padding-left: 18px;">
+                  <span style=3D"font-size: 18px; line-height: 23px; font-f=
+amily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif; color: =
+#3D3D3D; letter-spacing: 0.3px;">
+                    Outbound to Chicago
+                  </span>
+                </td>
+              </tr></tbody>
+            </table>
+            <table align=3D"right" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" width=3D"150" class=3D"mcnTextContentContainer">
+              <tbody>
+              <tr>
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g-top: 18px; padding-right: 18px; padding-bottom: 0px; padding-left: 18px; =
+text-align: right;">
+                  <span style=3D"font-size: 16px; line-height: 21px; font-f=
+amily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif; color: =
+#7D7D7D;">
+                    Basic Economy
+                  </span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" clas=
+s=3D"mcnTextBlock">
+  <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"207" class=3D"mcnTextContentContainer">
+          <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent" style=3D"padding-=
+top:4px; padding-left:18px; padding-bottom:9px; padding-right:0;">
+                <span style=3D"font-size: 16px; color: #7D7D7D; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">July 15, 20=
+26</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"207" class=3D"mcnTextContentContainer">
+          <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent" style=3D"padding-=
+top:4px; padding-right:18px; padding-bottom:9px; padding-left:0;">
+                <div style=3D"text-align: right;">
+                  <span style=3D"font-size: 16px; color: #7D7D7D; font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                    2h 46m&nbsp;
+                    
+                      Nonstop
+                    
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" clas=
+s=3D"mcnCaptionBlock">
+  <tbody class=3D"mcnCaptionBlockOuter">
+    <tr>
+      <td class=3D"mcnCaptionBlockInner" valign=3D"top" style=3D"padding:0p=
+x 9px;">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"mc=
+nCaptionRightContentOuter" width=3D"100%">
+          <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnCaptionRightContentInner" styl=
+e=3D"padding:0 9px; padding-top: 24px; border-top: 1px solid #F2F2F2;">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+      
+
+
+
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnCaptionBlock">
+    <tbody class=3D"mcnCaptionBlockOuter">
+      <tr>
+        <td class=3D"mcnCaptionBlockInner" valign=3D"top" style=3D"padding:=
+ 0px 9px 9px 9px;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"=
+mcnCaptionRightContentOuter" width=3D"100%">
+            <tbody><tr>
+                <td valign=3D"top" class=3D"mcnCaptionRightContentInner" st=
+yle=3D"padding:0 9px;">
+                  <table align=3D"left" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" class=3D"mcnCaptionRightImageContentContainer">
+                    <tbody><tr>
+                        <td class=3D"mcnCaptionRightImageContent" valign=3D=
+"top">
+                          <img alt=3D"" src=3D"https://www.hopper.com/airli=
+ne_icons/AA.png" width=3D"25" style=3D"max-width:25px;margin-right:16px;" c=
+lass=3D"mcnImage">
+                        </td>
+                      </tr>
+                  </tbody></table>
+                  <table class=3D"mcnCaptionRightTextContentContainer" alig=
+n=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"240">
+                    <tbody><tr>
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding-top: 5px; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica=
+, Arial, sans-serif;">
+                          <div style=3D"text-align: left; color: #7D7D7D; f=
+ont-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                            American Airlines - AA3100
+                          </div>
+                        </td>
+                      </tr>
+                  </tbody></table>
+                  
+                </td>
+              </tr>
+          </tbody></table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+      <tr>
+        <td valign=3D"top" class=3D"mcnTextBlockInner">
+
+          
+
+          
+          <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"140px" class=3D"mcnTextContentContainer">
+            <tbody><tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g: 6px 0px 9px 18px; line-height: 200%;">
+                  <div style=3D"position: relative; font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                    <span style=3D"position: absolute; left: 0px; font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">New York =
+City</span><br>
+                    <span style=3D"font-size: 28px; color: #3D3D3D; font-fa=
+mily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><strong=
+>LGA</strong></span><br>
+                    9:44 a.m.
+                  </div>
+                </td>
+              </tr>
+          </tbody></table>
+
+          
+          <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"170px" class=3D"mcnTextContentContainer">
+            <tbody><tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g: 6px 9px 9px 9px; line-height: 200%;">
+                  <div style=3D"text-align: center; font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><br>
+                    <table align=3D"left" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"150">
+                      <tr>
+                        <td style=3D"padding: 0px 0px 5px 0px;">
+                          <img src=3D"https://cdn.hoppercot.com/media/segme=
+nts.png?1474399311113" alt=3D"" width=3D"150" style=3D"max-width:150px;" cl=
+ass=3D"mcnImage">
+                        </td>
+                      </tr>
+                    </table>
+                    <br>
+                    2h 46m
+                  </div>
+                </td>
+              </tr>
+          </tbody></table>
+
+          
+          <table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"140px" class=3D"mcnTextContentContainer">
+            <tbody><tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g: 6px 18px 9px 0px; line-height: 200%;">
+                  <div style=3D"text-align: right; position: relative; font=
+-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                    <span style=3D"position: absolute; right: 0px; font-fam=
+ily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">Chicago<=
+/span><br>
+                    <span style=3D"font-size: 28px; color: #3D3D3D; font-fa=
+mily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><strong=
+>ORD</strong></span><br>
+                    11:30 a.m.
+                  </div>
+                </td>
+              </tr>
+          </tbody></table>
+
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  
+
+
+      
+
+
+    </td>
+  </tr>
+</table>
+
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  <tr>
+    <td>
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" class=3D"mcnTextBlock">
+        <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+          <td valign=3D"top" class=3D"mcnTextBlockInner">
+            <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"300" class=3D"mcnTextContentContainer">
+              <tbody>
+              <tr>
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g-top: 18px; padding-right: 18px; padding-bottom: 0px; padding-left: 18px;"=
+>
+                  <span style=3D"font-size: 18px; font-family: 'Optimist_Rg=
+', Helvetica Neue, Helvetica, Arial, sans-serif; color: #3D3D3D; letter-spa=
+cing: 0.3px;">
+                    Return to New York City
+                  </span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <table align=3D"right" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" width=3D"150" class=3D"mcnTextContentContainer">
+              <tbody>
+              <tr>
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g-top: 18px; padding-right: 18px; padding-bottom: 0px; padding-left: 18px; =
+text-align: right;">
+                  <span style=3D"font-size: 16px; line-height: 21px; font-f=
+amily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif; color: =
+#7D7D7D;">
+                    Basic Economy
+                  </span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" clas=
+s=3D"mcnTextBlock">
+  <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"207" class=3D"mcnTextContentContainer">
+          <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent" style=3D"padding-=
+top:4px; padding-left:18px; padding-bottom:9px; padding-right:0;">
+                <span style=3D"font-size: 16px; color: #7D7D7D; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">July 19, 20=
+26</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"207" class=3D"mcnTextContentContainer">
+          <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent" style=3D"padding-=
+top:4px; padding-right:18px; padding-bottom:9px; padding-left:0;">
+                <div style=3D"text-align: right;">
+                  <span style=3D"font-size: 16px; color: #7D7D7D; font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                    2h 34m&nbsp;
+                    
+                      Nonstop
+                    
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" clas=
+s=3D"mcnCaptionBlock">
+  <tbody class=3D"mcnCaptionBlockOuter">
+    <tr>
+      <td class=3D"mcnCaptionBlockInner" valign=3D"top" style=3D"padding:0p=
+x 9px;">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"mc=
+nCaptionRightContentOuter" width=3D"100%">
+          <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnCaptionRightContentInner" styl=
+e=3D"padding:0 9px; padding-top: 24px; border-top: 1px solid #F2F2F2;">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+      
+
+
+
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnCaptionBlock">
+    <tbody class=3D"mcnCaptionBlockOuter">
+      <tr>
+        <td class=3D"mcnCaptionBlockInner" valign=3D"top" style=3D"padding:=
+ 0px 9px 9px 9px;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"=
+mcnCaptionRightContentOuter" width=3D"100%">
+            <tbody><tr>
+                <td valign=3D"top" class=3D"mcnCaptionRightContentInner" st=
+yle=3D"padding:0 9px;">
+                  <table align=3D"left" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" class=3D"mcnCaptionRightImageContentContainer">
+                    <tbody><tr>
+                        <td class=3D"mcnCaptionRightImageContent" valign=3D=
+"top">
+                          <img alt=3D"" src=3D"https://www.hopper.com/airli=
+ne_icons/AA.png" width=3D"25" style=3D"max-width:25px;margin-right:16px;" c=
+lass=3D"mcnImage">
+                        </td>
+                      </tr>
+                  </tbody></table>
+                  <table class=3D"mcnCaptionRightTextContentContainer" alig=
+n=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"240">
+                    <tbody><tr>
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding-top: 5px; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica=
+, Arial, sans-serif;">
+                          <div style=3D"text-align: left; color: #7D7D7D; f=
+ont-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                            American Airlines - AA1421
+                          </div>
+                        </td>
+                      </tr>
+                  </tbody></table>
+                  
+                </td>
+              </tr>
+          </tbody></table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+      <tr>
+        <td valign=3D"top" class=3D"mcnTextBlockInner">
+
+          
+
+          
+          <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"140px" class=3D"mcnTextContentContainer">
+            <tbody><tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g: 6px 0px 9px 18px; line-height: 200%;">
+                  <div style=3D"position: relative; font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                    <span style=3D"position: absolute; left: 0px; font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">Chicago</=
+span><br>
+                    <span style=3D"font-size: 28px; color: #3D3D3D; font-fa=
+mily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><strong=
+>ORD</strong></span><br>
+                    4:30 p.m.
+                  </div>
+                </td>
+              </tr>
+          </tbody></table>
+
+          
+          <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"170px" class=3D"mcnTextContentContainer">
+            <tbody><tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g: 6px 9px 9px 9px; line-height: 200%;">
+                  <div style=3D"text-align: center; font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><br>
+                    <table align=3D"left" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"150">
+                      <tr>
+                        <td style=3D"padding: 0px 0px 5px 0px;">
+                          <img src=3D"https://cdn.hoppercot.com/media/segme=
+nts.png?1474399311113" alt=3D"" width=3D"150" style=3D"max-width:150px;" cl=
+ass=3D"mcnImage">
+                        </td>
+                      </tr>
+                    </table>
+                    <br>
+                    2h 34m
+                  </div>
+                </td>
+              </tr>
+          </tbody></table>
+
+          
+          <table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"140px" class=3D"mcnTextContentContainer">
+            <tbody><tr>
+
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g: 6px 18px 9px 0px; line-height: 200%;">
+                  <div style=3D"text-align: right; position: relative; font=
+-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                    <span style=3D"position: absolute; right: 0px; font-fam=
+ily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">New York=
+ City</span><br>
+                    <span style=3D"font-size: 28px; color: #3D3D3D; font-fa=
+mily: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><strong=
+>JFK</strong></span><br>
+                    8:04 p.m.
+                  </div>
+                </td>
+              </tr>
+          </tbody></table>
+
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  
+
+
+      
+
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+      <tr>
+        <td valign=3D"top" class=3D"mcnTextBlockInner">
+          <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"450" class=3D"mcnTextContentContainer">
+            <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent" style=3D"line-hei=
+ght: 200%; padding: 0px 18px 9px 18px;">
+                <table border=3D"0" style=3D"border-collapse: collapse;" ce=
+llpadding=3D"0" cellspacing=3D"0" width=3D"100%">
+                  
+                    <tr>
+                      <td style=3D"border-top: 2px dashed #F2F2F2; padding:=
+ 6px 0; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-=
+serif;">
+                        <div style=3D"font-family: 'Optimist_Rg', Helvetica=
+ Neue, Helvetica, Arial, sans-serif;">This trip departs from LGA but return=
+s to JFK.</div>
+                      </td>
+                    </tr>
+                  
+                </table>
+              </td>
+            </tr>
+            </tbody>
+        </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+    </td>
+  </tr>
+</table>
+
+
+
+
+            </td>
+          </tr>
+          
+          <tr>
+            <td class=3D"bodyContainer">
+              
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  <tbody>
+  <tr>
+    <td style=3D"padding: 24px 18px;">
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" style=3D"font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sa=
+ns-serif;">
+        <tbody>
+        <tr><td style=3D"border-bottom: 1px solid #F2F2F2; padding-bottom: =
+18px; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-se=
+rif;">
+          <span style=3D"font-size: 18px; color: #013D5B;"><strong>Fare Det=
+ails</strong></span>
+        </td></tr>
+        <tr><td>
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"=
+100%" class=3D"mcnTextBlock">
+            <tbody class=3D"mcnTextBlockOuter" style=3D"font-family: 'Optim=
+ist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 16px; col=
+or: #7D7D7D; letter-spacing: 0px; line-height: 22px;">
+            
+            
+            <tr><td style=3D"padding-top:18px;font-family: 'Optimist_Rg', H=
+elvetica Neue, Helvetica, Arial, sans-serif;">
+              <span style=3D"font-weight: bold; color: #3D3D3D;">WeiShih Ts=
+ai</span>
+              
+            </td></tr>
+            
+              <tr>
+                <td><span style=3D"color: #7D7D7D;font-family: 'Optimist_Rg=
+', Helvetica Neue, Helvetica, Arial, sans-serif;">Base Fare:</span></td>
+                <td width=3D"25%" style=3D"text-align: right; font-family: =
+'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$140.47</td>
+              </tr>
+              <tr>
+                <td> <span style=3D"color: #7D7D7D;font-family: 'Optimist_R=
+g', Helvetica Neue, Helvetica, Arial, sans-serif;">Taxes and Fees:</span> <=
+/td>
+                <td width=3D"25%" style=3D"text-align: right; font-family: =
+'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$41.33</td>
+              </tr>
+            
+            
+            
+            
+            
+              
+              <tr>
+                <td style=3D"padding-bottom: 18px;
+                  border-bottom: 1px solid #F2F2F2;">&nbsp;</td>
+                <td style=3D"padding-bottom: 18px;
+                  border-bottom: 1px solid #F2F2F2;">&nbsp;</td>
+              </tr>
+            
+            
+            <tr><td style=3D"padding-top:18px;font-family: 'Optimist_Rg', H=
+elvetica Neue, Helvetica, Arial, sans-serif;">
+              <span style=3D"font-weight: bold; color: #3D3D3D;">Evan Purkh=
+iser</span>
+              
+            </td></tr>
+            
+              <tr>
+                <td><span style=3D"color: #7D7D7D;font-family: 'Optimist_Rg=
+', Helvetica Neue, Helvetica, Arial, sans-serif;">Base Fare:</span></td>
+                <td width=3D"25%" style=3D"text-align: right; font-family: =
+'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$140.47</td>
+              </tr>
+              <tr>
+                <td> <span style=3D"color: #7D7D7D;font-family: 'Optimist_R=
+g', Helvetica Neue, Helvetica, Arial, sans-serif;">Taxes and Fees:</span> <=
+/td>
+                <td width=3D"25%" style=3D"text-align: right; font-family: =
+'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$41.33</td>
+              </tr>
+            
+            
+            
+            
+              <tr><td style=3D"font-size: 12px;font-style: italic;line-heig=
+ht: 18px;font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans=
+-serif;">Known Traveler #: 998606310</td></tr>
+            
+            
+              
+              <tr>
+                <td style=3D"padding-bottom: 18px;
+                  border-bottom: 1px solid #F2F2F2;">&nbsp;</td>
+                <td style=3D"padding-bottom: 18px;
+                  border-bottom: 1px solid #F2F2F2;">&nbsp;</td>
+              </tr>
+            
+            
+            
+              
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              
+              
+              
+                <tr>
+                  <td style=3D"color: #7D7D7D; font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">Seat Selection</td>
+                  <td width=3D"25%" style=3D"text-align: right; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$105.44</td=
+>
+                </tr>
+              
+              
+              
+              <tr>
+                <td><strong><span style=3D"font-size: 16px; color: #3D3D3D;=
+ font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"=
+>Total</span></strong></td>
+                <td width=3D"25%" style=3D"text-align: right; font-family: =
+'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                  <strong><span style=3D"font-size: 16px; color: #3D3D3D; f=
+ont-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">U=
+S$469.04</span></strong>
+                </td>
+              </tr>
+              
+              <tr>
+                <td style=3D"border-bottom: 1px solid #F2F2F2;">&nbsp;</td>
+                <td style=3D"border-bottom: 1px solid #F2F2F2;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              
+
+
+<tr>
+        <td>
+          <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, Helvet=
+ica, Arial, sans-serif;">Card Payment from Capital One Venture X Visa *1684=
+</span>
+        </td>
+        <td width=3D"25%" valign=3D"top" style=3D"text-align: right;">
+          <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, Helvet=
+ica, Arial, sans-serif;">$169.04</span>
+        </td>
+      </tr>
+
+
+
+
+
+  <tr>
+    <td style=3D"padding: 18px 0px 0px;">
+      <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, Helvetica,=
+ Arial, sans-serif; font-size: 16px; line-height: 22px; color: #63B67F;">Ve=
+nture X...1684 Annual Travel Credit Applied</span>
+    </td>
+    <td width=3D"25%" valign=3D"top" style=3D"padding: 18px 0px 0px; text-a=
+lign: right;">
+      <span style=3D"font-family: 'Optimist_Rg', Helvetica Neue, Helvetica,=
+ Arial, sans-serif; font-size: 16px; line-height: 22px; color: #63B67F;">-$=
+300.00</span>
+    </td>
+  </tr>
+
+
+
+
+
+            
+            </tbody>
+          </table>
+        </td></tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+            </td>
+          </tr>
+
+          
+            <tr>
+              <td class=3D"bodyContainer">
+                
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  <tbody>
+  <tr>
+    <td style=3D"padding: 24px 18px;">
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" style=3D"font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Arial, san=
+s-serif;">
+        <tbody>
+          <tr>
+            <td style=3D"border-bottom: 1px solid #F2F2F2; padding-bottom: =
+18px; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-se=
+rif;">
+              <span style=3D"font-size: 18px; font-weight: 600; color: #013=
+D5B;"><strong>Payment Info</strong></span>
+            </td>
+          </tr>
+          <tr>
+            <td style=3D"padding-top:12px">
+              <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" class=3D"mcnTextBlock">
+                <tbody class=3D"mcnTextBlockOuter" style=3D"font-family: 'O=
+ptimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 16px;c=
+olor: #7D7D7D;letter-spacing: 0px;line-height: 22px;">
+                  
+                    <tr>
+                      
+                        <td valign=3D"top" class=3D"mcnTextContent" width=
+=3D"40" style=3D"padding: 9px 12px 0 3px; line-height: 100%; font-size:14px=
+;">
+                          <img src=3D"https://ecm.capitalone.com/ProductBra=
+nding/cc/1/1213/cardart_prim_323x203.png" alt=3D"Capital One Venture X Visa=
+ *1684" width=3D"40" style=3D"max-width:40px;" class=3D"mcnImage">
+                        </td>
+                      
+                      <td valign=3D"top" class=3D"mcnTextContent" style=3D"=
+font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;li=
+ne-height: 22px; font-size:16px; text-align: left; padding: 3px 0px 0px;">
+                        <span> Capital One Venture X Visa *1684</span> <br =
+/>
+                        <span> &bull;&bull;&bull;&bull;1684</span> <br />
+                        
+                          <span>Evan Purkhiser</span> <br />
+                        
+                        
+                          <span>11/2030</span> <br />
+                        
+                      </td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+              </td>
+            </tr>
+          
+          
+          <tr>
+            <td class=3D"bodyContainer">
+              
+                
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  <tbody>
+  <tr>
+    <td style=3D"padding: 24px 18px;">
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" style=3D"font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Arial, san=
+s-serif;">
+  <tbody>
+    <tr><td style=3D"border-bottom: 1px solid #F2F2F2; padding-bottom: 18px=
+;font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"=
+>
+      <span style=3D"font-size:18px; color: #4A4A4A;"><strong>Seat Selectio=
+n</strong></span>
+    </td></tr>
+      
+      
+      <tr><td style=3D"border-bottom: 1px solid #F2F2F2; padding-bottom: 18=
+px;font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif=
+;">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock">
+          <tbody class=3D"mcnTextBlockOuter" style=3D"font-family: 'Optimis=
+t_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 16px;color: =
+#878787;letter-spacing: 0px;line-height: 22px;">
+            
+              <tr><td style=3D"padding-top:18px;font-family: 'Optimist_Rg',=
+ Helvetica Neue, Helvetica, Arial, sans-serif;">
+                <span style=3D"font-weight:bold;color:#4A4A4A;">New York Ci=
+ty to Chicago</span>
+              </td></tr>
+              
+                <tr>
+                  <td><span style=3D"color: #878787;font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">WeiShih Tsai: 25E</span=
+></td>
+                  <td width=3D"25%" style=3D"text-align: right; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$22.96</td>
+                </tr>
+              
+                <tr>
+                  <td><span style=3D"color: #878787;font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">Evan Purkhiser: 25D</sp=
+an></td>
+                  <td width=3D"25%" style=3D"text-align: right; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$24.24</td>
+                </tr>
+              
+            
+              <tr><td style=3D"padding-top:18px;font-family: 'Optimist_Rg',=
+ Helvetica Neue, Helvetica, Arial, sans-serif;">
+                <span style=3D"font-weight:bold;color:#4A4A4A;">Chicago to =
+New York City</span>
+              </td></tr>
+              
+                <tr>
+                  <td><span style=3D"color: #878787;font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">WeiShih Tsai: 31B</span=
+></td>
+                  <td width=3D"25%" style=3D"text-align: right; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$29.12</td>
+                </tr>
+              
+                <tr>
+                  <td><span style=3D"color: #878787;font-family: 'Optimist_=
+Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">Evan Purkhiser: 31C</sp=
+an></td>
+                  <td width=3D"25%" style=3D"text-align: right; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">$29.12</td>
+                </tr>
+              
+            
+          </tbody>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock">
+          <tbody class=3D"mcnTextBlockOuter" style=3D"font-family: 'Optimis=
+t_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 16px;color: =
+#878787;letter-spacing: 0px;line-height: 22px;">
+            <tr>
+              <td style=3D"padding-top:18px;font-family: 'Optimist_Rg', Hel=
+vetica Neue, Helvetica, Arial, sans-serif;"><strong><span style=3D"font-siz=
+e: 16px; color: #4A4A4A; font-family: 'Optimist_Rg', Helvetica Neue, Helvet=
+ica, Arial, sans-serif;">Total</span></strong></td>
+              <td width=3D"25%" style=3D"padding-top:18px; text-align: righ=
+t; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif=
+;">
+                <strong><span style=3D"font-size: 16px; color: #4A4A4A; fon=
+t-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">US$=
+105.44</span></strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td></tr>
+    
+  </tbody>
+</table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+              
+            </td>
+          </tr>
+          
+          
+            <tr>
+              <td class=3D"bodyContainer">
+                
+
+
+
+
+
+
+
+
+
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  <tbody>
+  <tr>
+    <td style=3D"padding: 24px 18px;">
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" style=3D"font-family:'Optimist_Rg', Helvetica Neue, Helvetica, Arial, san=
+s-serif;">
+  <tbody>
+  
+  <tr>
+    <td style=3D"border-bottom: 1px solid #F2F2F2; padding-bottom: 18px; fo=
+nt-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+      <span style=3D"font-size: 18px; font-weight: 600; color: #013D5B; fon=
+t-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><st=
+rong>Airline Fare Rules</strong></span>
+    </td>
+  </tr>
+
+  
+    
+      
+
+        
+            
+              <tr>
+                <td style=3D"padding-top:16px; font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                  
+                  
+                    <span style=3D"font-size:16px; color: #4A4A4A;"><strong=
+>Outbound Flight</strong></span>
+                  
+                </td>
+              </tr>
+              <tr>
+                
+                  <td style=3D"border-bottom: 1px solid #F2F2F2; padding-bo=
+ttom: 18px; padding-top:12px ">
+                
+                    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%" class=3D"mcnTextBlock">
+                      <tbody class=3D"mcnTextBlockOuter" style=3D"font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;font-size: =
+16px;color: #878787;letter-spacing: 0px;line-height: 22px;">
+                        
+                         
+  <tr>
+    <td> <img src=3D"https://cdn.hoppercot.com/media/grey_cross.png" alt=3D=
+"" width=3D"24" style=3D"max-width:24px; padding-top: 2px; padding-bottom: =
+2px;" class=3D"mcnImage" /> </td>
+    <td> <span style=3D"color:#878787;font-family: 'Optimist_Rg', Helvetica=
+ Neue, Helvetica, Arial, sans-serif;">Cancellation:</span> </td>
+    <td style=3D"text-align: right;font-family: 'Optimist_Rg', Helvetica Ne=
+ue, Helvetica, Arial, sans-serif;  color: #CC2427; ">Nonrefundable by airli=
+ne</td>
+  </tr>
+ 
+                         
+  <tr>
+    <td> <img src=3D"https://cdn.hoppercot.com/media/grey_cross.png" alt=3D=
+"" width=3D"24" style=3D"max-width:24px; padding-top: 2px; padding-bottom: =
+2px;" class=3D"mcnImage" /> </td>
+    <td> <span style=3D"color:#878787;font-family: 'Optimist_Rg', Helvetica=
+ Neue, Helvetica, Arial, sans-serif;">Itinerary changes:</span> </td>
+    <td style=3D"text-align: right;font-family: 'Optimist_Rg', Helvetica Ne=
+ue, Helvetica, Arial, sans-serif;  color: #CC2427; ">Not Permitted</td>
+  </tr>
+ 
+                        
+  
+
+                        
+  
+
+                      </tbody>
+                    </table>
+                  </td>
+              </tr>
+            
+              <tr>
+                <td style=3D"padding-top:16px; font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                  
+                  
+                    <span style=3D"font-size:16px; color: #4A4A4A;"><strong=
+>Returning Flight</strong></span>
+                  
+                </td>
+              </tr>
+              <tr>
+                
+                  <td style=3D"padding-bottom: 12px; padding-top:12px ">
+                
+                    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%" class=3D"mcnTextBlock">
+                      <tbody class=3D"mcnTextBlockOuter" style=3D"font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;font-size: =
+16px;color: #878787;letter-spacing: 0px;line-height: 22px;">
+                        
+                         
+  <tr>
+    <td> <img src=3D"https://cdn.hoppercot.com/media/grey_cross.png" alt=3D=
+"" width=3D"24" style=3D"max-width:24px; padding-top: 2px; padding-bottom: =
+2px;" class=3D"mcnImage" /> </td>
+    <td> <span style=3D"color:#878787;font-family: 'Optimist_Rg', Helvetica=
+ Neue, Helvetica, Arial, sans-serif;">Cancellation:</span> </td>
+    <td style=3D"text-align: right;font-family: 'Optimist_Rg', Helvetica Ne=
+ue, Helvetica, Arial, sans-serif;  color: #CC2427; ">Nonrefundable by airli=
+ne</td>
+  </tr>
+ 
+                         
+  <tr>
+    <td> <img src=3D"https://cdn.hoppercot.com/media/grey_cross.png" alt=3D=
+"" width=3D"24" style=3D"max-width:24px; padding-top: 2px; padding-bottom: =
+2px;" class=3D"mcnImage" /> </td>
+    <td> <span style=3D"color:#878787;font-family: 'Optimist_Rg', Helvetica=
+ Neue, Helvetica, Arial, sans-serif;">Itinerary changes:</span> </td>
+    <td style=3D"text-align: right;font-family: 'Optimist_Rg', Helvetica Ne=
+ue, Helvetica, Arial, sans-serif;  color: #CC2427; ">Not Permitted</td>
+  </tr>
+ 
+                        
+  
+
+                        
+  
+
+                      </tbody>
+                    </table>
+                  </td>
+              </tr>
+            
+          
+
+        
+          
+          
+            
+              
+            
+          
+        
+      
+    
+
+    
+    <tr>
+      <td valign=3D"bottom" class=3D"mcnTextContent" style=3D"padding: 8px =
+0px 12px;">
+        <div style=3D"text-align: left;line-height: 16px;">
+          <span class=3D"fareDisclaimer" style=3D"font-family: 'Optimist_Rg=
+', Helvetica Neue, Helvetica, Arial, sans-serif;">
+            
+              Change/cancellation fees are per passenger and set by the air=
+line. In addition to a change fee, the airline may charge a fare difference=
+ to modify your flight. Fees and policies may change at the airline=E2=80=
+=99s discretion.
+            
+          </span>
+        </div>
+      </td>
+    </tr>
+  
+  </tbody>
+</table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+              </td>
+            </tr>
+          
+          
+          
+          <tr>
+            <td class=3D"bodyContainer">
+              
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  <tbody>
+  <tr>
+    <td style=3D"padding: 24px;">
+    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%">
+      <tbody>
+      <tr>
+        <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"width: 52px=
+;">
+            
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"40" class=3D"mcnTextContentContainer">
+            <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent">
+                <img src=3D"https://travel.capitalone.com/email-assets/Trav=
+el-Price-Drop.png" alt=3D"" width=3D"40" style=3D"max-width: 40px;" class=
+=3D"mcnImage" />
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </td>
+        <td valign=3D"top" class=3D"mcnTextBlockInner">
+            
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" class=3D"mcnTextContentContainer">
+            <tbody>
+            <tr>
+              <td valign=3D"top" class=3D"mcnTextContent" style=3D"line-hei=
+ght: 160%; text-align: left;white-space:normal;">
+                <span style=3D"color: #7D7D7D; font-size: 16px; font-family=
+: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                  <strong style=3D"font-size: 18px; color: #013D5B; white-s=
+pace: nowrap;">Your flight has free price drop protection.</strong>
+                  <br />
+                    
+                      Capital One Travel will monitor your flight for up to=
+ 10 days. If the price drops, you=E2=80=99ll get up to US$100 in travel cre=
+dit to cover the difference.*
+                    
+                  <a href=3D"https://mandrillapp.com/track/click/31229592/t=
+ravel.capitalone.com?p=3DeyJzIjoiU2xxeGNhTmZDTmxHNndUWF9WMDdyZDlyXzE4Iiwidi=
+I6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL=
+3RyYXZlbC5jYXBpdGFsb25lLmNvbVxcXC90ZXJtc1xcXC9wcmljZS1kcm9wLXByb3RlY3Rpb25c=
+IixcImlkXCI6XCJlNTU5Y2Q2MTkwZTY0NzQ4ODdlMTM4MzllMzlhODBmY1wiLFwidXJsX2lkc1w=
+iOltcImJkNGMwNDMxMzY5NzdhY2EyMjEyYzMxMDlkN2Y1ZjIwNmZlN2I4YjVcIl0sXCJtc2dfdH=
+NcIjoxNzgwMDE4MjUwfSJ9" style=3D"text-decoration: underline; color: #01AAE4=
+; display: inline;">View Terms and Conditions.</a>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </tr>
+  </tbody>
+</table>
+
+            </td>
+          </tr>
+          
+          <tr>
+            <td class=3D"bodyContainer">
+              
+                
+
+
+
+
+
+
+
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #F7F3EB; margin-top: 8px;">
+  <tbody>
+  <tr>
+    <td align=3D"center">
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" style=3D"background-color: #F7F3EB">
+        <tbody>
+        <tr>
+          
+          <td width=3D"220" valign=3D"middle" style=3D"vertical-align: bott=
+om;">
+            <img src=3D"https://travel.capitalone.com/email-assets/TravelAp=
+p-Noti.png" alt=3D"Capital One Travel App" width=3D"195" style=3D"display: =
+block; width: 100%; height: auto;" />
+          </td>
+          
+          <td width=3D"230" valign=3D"middle" style=3D"padding: 24px 24px 2=
+4px 32px; box-sizing: border-box;">
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%">
+              <tbody>
+              <tr>
+                <td style=3D"font-family: &#x27;Premium Serif&#x27;; font-s=
+ize: 24px; line-height: 30px; color: #1a1a1a; font-weight: normal; padding-=
+bottom: 10px;">
+                  Stay informed and stay ahead.
+                </td>
+              </tr>
+              
+              <tr>
+                <td style=3D"font-family: 'Optimist_Rg', Helvetica Neue, He=
+lvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #333=
+333; padding-bottom: 30px;">
+                  Your travel notifications have a new home in the Capital =
+One Travel app=E2=80=94track your trip with real-time alerts.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href=3D"https://mandrillapp.com/track/click/31229592/c=
+apitalonetravel.smart.link?p=3DeyJzIjoiWFJab0VXMVhtdGRuaE54NkhLU1BGR3hTUDVv=
+IiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFw=
+vXFxcL2NhcGl0YWxvbmV0cmF2ZWwuc21hcnQubGlua1xcXC95bWpyOTJtNDdcIixcImlkXCI6XC=
+JlNTU5Y2Q2MTkwZTY0NzQ4ODdlMTM4MzllMzlhODBmY1wiLFwidXJsX2lkc1wiOltcIjEzZTU4O=
+GY4N2RlZjIwZDUzNjQ4MjdhNjNmN2M5YmYwNDM4ZjU2ZTBcIl0sXCJtc2dfdHNcIjoxNzgwMDE4=
+MjUwfSJ9" style=3D"display: inline-block; background-color: #0073bb; color:=
+ #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bol=
+d; text-decoration: none; padding: 6px 16px; border-radius: 4px;">Explore t=
+he app</a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+              
+              
+                
+
+
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"background-color: #fff; margin-top: 8px;">
+  
+  <tr>
+    <td style=3D"padding-bottom: 0px;">
+      
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%=
+" class=3D"mcnTextBlock">
+        <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+          <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding: =
+24px 24px 0px">
+            <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"100%" class=3D"mcnTextContentContainer">
+              <tbody>
+              <tr>
+                <td valign=3D"top" class=3D"mcnTextContent" style=3D"paddin=
+g-bottom: 18px; border-bottom: 1px solid #F2F2F2;">
+                  <span style=3D"font-size: 18px; color: #013D5B; font-fami=
+ly: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;"><strong>H=
+elpful Links</strong></span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      
+       
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"450" class=3D"mcnTextContentContainer">
+          <tbody>
+          <tr>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"font-size:=
+ 16px;">
+              <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" style=3D"margin: 18px 0px 6px;">
+                <tr>
+                  <td style=3D"padding: 0 24px;">
+                    <div><a href=3D"https://mandrillapp.com/track/click/312=
+29592/links.capitalone.com?p=3DeyJzIjoiTnJWeTlHWXA4OTJjUFE3UUxVX1A0TTJDRlVV=
+IiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFw=
+vXFxcL2xpbmtzLmNhcGl0YWxvbmUuY29tXFxcL3BhcnRuZXItbGlua291dD91c2VjYXNlPXRyYX=
+ZlbCZwYXRoPVxcXC90cmlwc1xcXC8_dHJpcElkPWIwNDI1MDUwLWFjNWMtNGZjMi1hNzc0LTViM=
+TU5ZTVhODc3NSZ0cmlwc0ZpbHRlcj1VcGNvbWluZyUyMFRyaXBzXCIsXCJpZFwiOlwiZTU1OWNk=
+NjE5MGU2NDc0ODg3ZTEzODM5ZTM5YTgwZmNcIixcInVybF9pZHNcIjpbXCJkZDI2YWVkNjEzNWY=
+5YThiMzVhNzM1MTdkZDNkOWNiN2ZiY2QxOGE0XCJdLFwibXNnX3RzXCI6MTc4MDAxODI1MH0ifQ=
+" style=3D"width: fit-content; display:inline-block; text-decoration-line: =
+underline; color: #0276B1; font-family: 'Optimist_Rg', Helvetica Neue, Helv=
+etica, Arial, sans-serif;">Cancel or Change Booking</a></div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+ 
+      
+        
+          
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"450" class=3D"mcnTextContentContainer">
+          <tbody>
+          <tr>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"font-size:=
+ 16px;">
+              <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" style=3D"margin: 18px 0px 6px;">
+                <tr>
+                  <td style=3D"padding: 0 24px;">
+                    <div><a href=3D"https://mandrillapp.com/track/click/312=
+29592/www.aa.com?p=3DeyJzIjoiYks1YXQweklaR3JsS1RWTlN1VnQzWG9JQi1vIiwidiI6Mi=
+wicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3d=
+y5hYS5jb21cXFwvcmVzZXJ2YXRpb25cXFwvdmlld1xcXC9maW5kLXlvdXItcmVzZXJ2YXRpb25c=
+IixcImlkXCI6XCJlNTU5Y2Q2MTkwZTY0NzQ4ODdlMTM4MzllMzlhODBmY1wiLFwidXJsX2lkc1w=
+iOltcImNlNjMxMzM2Zjk5YWQ2ZDI3YWM1ZjI2Y2Q4ODFkZDk2M2E3OWQ0OTRcIl0sXCJtc2dfdH=
+NcIjoxNzgwMDE4MjUwfSJ9" style=3D"width: fit-content; display:inline-block; =
+text-decoration-line: underline; color: #0276B1; font-family: 'Optimist_Rg'=
+, Helvetica Neue, Helvetica, Arial, sans-serif;">Check In with American Air=
+lines</a></div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+        
+      
+       
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" clas=
+s=3D"mcnTextBlock">
+  <tbody class=3D"mcnTextBlockOuter">
+  <tr>
+    <td valign=3D"top" class=3D"mcnTextBlockInner">
+      <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" width=3D"450" class=3D"mcnTextContentContainer">
+        <tbody>
+        <tr>
+          <td valign=3D"top" class=3D"mcnTextContent">
+            <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"100%" style=3D"margin: 18px 0px 6px;">
+              <tr>
+                <td style=3D"padding: 0 24px;">
+                  <div><a href=3D"https://mandrillapp.com/track/click/31229=
+592/www.aa.com?p=3DeyJzIjoiUkdOZ3NnbklrVWxUaDhFazlaOFhkSGo4TEpJIiwidiI6Miwi=
+cCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5=
+hYS5jb21cXFwvaTE4blxcXC90cmF2ZWwtaW5mb1xcXC9iYWdnYWdlXFxcL2NoZWNrZWQtYmFnZ2=
+FnZS1wb2xpY3kuanNwXCIsXCJpZFwiOlwiZTU1OWNkNjE5MGU2NDc0ODg3ZTEzODM5ZTM5YTgwZ=
+mNcIixcInVybF9pZHNcIjpbXCI3ZWQzNTFlYzE0YmNmMDdhMTliZWM1ZGEyN2U2NWQ4OWIyYTFm=
+YTkxXCJdLFwibXNnX3RzXCI6MTc4MDAxODI1MH0ifQ" style=3D"width: 100%; display: =
+inline-block; text-decoration-line: underline; color: #0276B1; font-family:=
+ 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 16=
+px;">American Airlines Baggage Fees</a></div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+ 
+      
+       
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"450" class=3D"mcnTextContentContainer">
+          <tbody>
+          <tr>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"font-size:=
+ 16px;">
+              <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" style=3D"margin: 18px 0px 6px;">
+                <tr>
+                  <td style=3D"padding: 0 24px;">
+                    <div><a href=3D"https://mandrillapp.com/track/click/312=
+29592/www.capitalone.com?p=3DeyJzIjoiS3M0YVVVbGtmNkdyWEw5YUlQR0gxODZLRWQ0Ii=
+widiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFwvX=
+FxcL3d3dy5jYXBpdGFsb25lLmNvbVxcXC9sZWFybi1ncm93XFxcL21vcmUtdGhhbi1tb25leVxc=
+XC9jYXBpdGFsLW9uZS10cmF2ZWwtZmFxc1xcXC8_ZXh0ZXJuYWxfaWQ9TEcwMDFfRU1BSUxfVFB=
+fRU1MX1RWTF9QUlRfSFBQX1paWlwiLFwiaWRcIjpcImU1NTljZDYxOTBlNjQ3NDg4N2UxMzgzOW=
+UzOWE4MGZjXCIsXCJ1cmxfaWRzXCI6W1wiMzQ5NGRmMTdmNDU3NmE4NjIxY2M5ZGVhZmIwYzMwN=
+jdjYzZhZTgwNlwiXSxcIm1zZ190c1wiOjE3ODAwMTgyNTB9In0" style=3D"width: fit-con=
+tent; display:inline-block; text-decoration-line: underline; color: #0276B1=
+; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;=
+">Frequently Asked Questions</a></div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+      
+      
+       
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"450" class=3D"mcnTextContentContainer">
+          <tbody>
+          <tr>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"font-size:=
+ 16px;">
+              <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" style=3D"margin: 18px 0px 6px;">
+                <tr>
+                  <td style=3D"padding: 0 24px;">
+                    <div><a href=3D"https://mandrillapp.com/track/click/312=
+29592/www.capitalone.com?p=3DeyJzIjoiS3M0YVVVbGtmNkdyWEw5YUlQR0gxODZLRWQ0Ii=
+widiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXFwvX=
+FxcL3d3dy5jYXBpdGFsb25lLmNvbVxcXC9sZWFybi1ncm93XFxcL21vcmUtdGhhbi1tb25leVxc=
+XC9jYXBpdGFsLW9uZS10cmF2ZWwtZmFxc1xcXC8_ZXh0ZXJuYWxfaWQ9TEcwMDFfRU1BSUxfVFB=
+fRU1MX1RWTF9QUlRfSFBQX1paWlwiLFwiaWRcIjpcImU1NTljZDYxOTBlNjQ3NDg4N2UxMzgzOW=
+UzOWE4MGZjXCIsXCJ1cmxfaWRzXCI6W1wiMzQ5NGRmMTdmNDU3NmE4NjIxY2M5ZGVhZmIwYzMwN=
+jdjYzZhZTgwNlwiXSxcIm1zZ190c1wiOjE3ODAwMTgyNTB9In0" style=3D"width: fit-con=
+tent; display:inline-block; text-decoration-line: underline; color: #0276B1=
+; font-family: 'Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;=
+">Seat Selection</a></div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+ 
+       
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" cl=
+ass=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+      <td valign=3D"top" class=3D"mcnTextBlockInner">
+        <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"450" class=3D"mcnTextContentContainer">
+          <tbody>
+          <tr>
+            <td valign=3D"top" class=3D"mcnTextContent" style=3D"font-size:=
+ 16px;">
+              <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" style=3D"margin: 18px 0px 24px;">
+                <tr>
+                  <td style=3D"padding: 0 24px;">
+                    <div><a href=3D"https://mandrillapp.com/track/click/312=
+29592/travel.capitalone.com?p=3DeyJzIjoiSEIxQXlVeWZSMENrSE9NMi1fc01ZT1dtb0Z=
+nIiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwczpcXF=
+wvXFxcL3RyYXZlbC5jYXBpdGFsb25lLmNvbVxcXC90ZXJtcy1vZi1zZXJ2aWNlXCIsXCJpZFwiO=
+lwiZTU1OWNkNjE5MGU2NDc0ODg3ZTEzODM5ZTM5YTgwZmNcIixcInVybF9pZHNcIjpbXCI0YTZl=
+ODkyOTk5MzIxZDRhZTIxNzk5ZjYyMmRjNmE1MTg1ODAwNGFlXCJdLFwibXNnX3RzXCI6MTc4MDA=
+xODI1MH0ifQ" style=3D"width: fit-content; display:inline-block; text-decora=
+tion-line: underline; color: #0276B1; font-family: 'Optimist_Rg', Helvetica=
+ Neue, Helvetica, Arial, sans-serif;">Terms and Conditions</a></div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+ 
+    </td>
+  </tr>
+</table>
+
+              
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td align=3D"center" valign=3D"top">
+        
+          
+
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" clas=
+s=3D"mcnTextBlock">
+    <tbody class=3D"mcnTextBlockOuter">
+    <tr>
+        <td valign=3D"top" class=3D"mcnTextBlockInner">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"450" class=3D"mcnTextContentContainer">
+                <tbody>
+                <tr>
+                    <td valign=3D"top" class=3D"mcnTextContent" style=3D"pa=
+dding: 18px 24px 24px;">
+                        <div style=3D"text-align: left; color: #878787; fon=
+t-size: 10px; line-height: 150%;">
+                            <strong style=3D"color: #676868; font-family: '=
+Optimist_Rg', Helvetica Neue, Helvetica, Arial, sans-serif;">Important Info=
+rmation from Capital One</strong>
+                            <br /><br />
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                <a href=3D"https://mandrillapp.com/track/cl=
+ick/31229592/www.capitalone.com?p=3DeyJzIjoiUjR1NjlDdEk3SmFHTkt6X1R5cmRhdEh=
+PSnhzIiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwcz=
+pcXFwvXFxcL3d3dy5jYXBpdGFsb25lLmNvbVxcXC9zdXBwb3J0LWNlbnRlclxcXC9jb250YWN0L=
+XVzXCIsXCJpZFwiOlwiZTU1OWNkNjE5MGU2NDc0ODg3ZTEzODM5ZTM5YTgwZmNcIixcInVybF9p=
+ZHNcIjpbXCJiYmNkZmVjYzFiMGY0M2Y5OGNlYjY1NDYxOWQ0ZDg0Nzc1ODJkMWM0XCJdLFwibXN=
+nX3RzXCI6MTc4MDAxODI1MH0ifQ" style=3D"display:inline-block; text-decoration=
+-line: underline;">
+                                    Contact Us
+                                </a> | <a href=3D"https://mandrillapp.com/t=
+rack/click/31229592/www.capitalone.com?p=3DeyJzIjoienA2ZkZ4V1FhWDQta28zMi1j=
+bVZmS1JITlhBIiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJ=
+odHRwczpcXFwvXFxcL3d3dy5jYXBpdGFsb25lLmNvbVxcXC9wcml2YWN5XCIsXCJpZFwiOlwiZT=
+U1OWNkNjE5MGU2NDc0ODg3ZTEzODM5ZTM5YTgwZmNcIixcInVybF9pZHNcIjpbXCJjZTdlMDA1M=
+WRjNGE0ZmUzZDY2MmMzOTY0YjYxOGIwNjJhMzI0OWRmXCJdLFwibXNnX3RzXCI6MTc4MDAxODI1=
+MH0ifQ" style=3D"display:inline-block; text-decoration-line: underline;">
+                                    Privacy
+                                </a> | <a href=3D"https://mandrillapp.com/t=
+rack/click/31229592/www.capitalone.com?p=3DeyJzIjoiVHBWeGJrSTRVRTNtTXBOb3RF=
+WHJqQTFDUGxJIiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJ=
+odHRwczpcXFwvXFxcL3d3dy5jYXBpdGFsb25lLmNvbVxcXC9hcHBsaWNhdGlvbnNcXFwvaWRlbn=
+RpdHktcHJvdGVjdGlvblxcXC9jb21taXRtZW50XCIsXCJpZFwiOlwiZTU1OWNkNjE5MGU2NDc0O=
+Dg3ZTEzODM5ZTM5YTgwZmNcIixcInVybF9pZHNcIjpbXCI2YjU4OGYyNjMyMDI5YmEyMTFkODE4=
+ZTRkOTNmYzhjZGRmODk1NzIwXCJdLFwibXNnX3RzXCI6MTc4MDAxODI1MH0ifQ" style=3D"di=
+splay:inline-block; text-decoration-line: underline;">
+                                    Help Prevent Fraud
+                                </a>
+                            </span>
+                            <br /><br />
+                            
+                                
+                                    <span style=3D"font-family: 'Optimist_R=
+g', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                        Please note that most airlines char=
+ge fees to modify or cancel your booking. As their agent, Capital One Trave=
+l is required to collect fees on their behalf when you change or cancel you=
+r flight.
+                                    </span>
+                                    <br /><br />
+                                    <span style=3D"font-family: 'Optimist_R=
+g', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                        Departing from the U.S.? In most ca=
+ses, after you=E2=80=99ve booked, you have until 11:59 p.m. ET the next bus=
+iness day to cancel this booking without charge.
+                                    </span>
+                                    <br /><br />
+                                    <span style=3D"font-family: 'Optimist_R=
+g', Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                        Modifications to your booking are a=
+vailable at the sole discretion of the airline. Cancellations and changes m=
+ay not be permitted per the airline=E2=80=99s fare rules and policies.
+                                    </span>
+                                    <br /><br />
+                                
+                                <span style=3D"font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                     This booking is non-refundable. Ticket=
+s cannot be transferred to a different traveler.
+                                </span>
+                                <br /><br />
+                                <span style=3D"font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                     This booking will be charged in USD. A=
+irlines may also charge additional fees for checked baggage, seat selection=
+ or other optional services.
+                                </span>
+                                <br /><br />
+                                <span style=3D"font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                     Flying internationally? International =
+trips may require special travel documentation. Your connection airport may=
+ require a transit visa for a stopover or aircraft change in that country. =
+See your government=E2=80=99s regulations regarding passport and visa requi=
+rements. Your I.D., travel documents and the passenger details on your book=
+ing must match exactly. Capital One Travel is not liable if you are unable =
+to fly due to improper, incomplete or incorrect travel I.D. or visas.
+                                </span>
+                                <br /><br />
+                                <span style=3D"font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                     Airlines may not permit name changes a=
+fter booking.
+                                </span>
+                                <br /><br />
+                                <span style=3D"font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                     By booking this trip, you agree to the=
+ airline&#x27;s fare rules, the airline&#x27;s change and cancellation poli=
+cies, and Capital One Travel&#x27;s Terms and Conditions, including our pri=
+vacy policy.
+                                </span>
+                                <br /><br />
+                            
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                 To ensure delivery, add capitalone@capital=
+onebooking.com to your address book.
+                            </span>
+                            <br /><br />
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                 This email was sent to evanpurkhiser@gmail=
+.com and contains information directly related to your account with us, oth=
+er services to which you have subscribed, and/or any application you may ha=
+ve submitted.
+                            </span>
+                            
+                            <br /><br />
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                Capital One Travel may be unavailable durin=
+g normal maintenance or due to unforeseen circumstances.
+                            </span>
+                            <br /><br />
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                Capital One does not provide, endorse or gu=
+arantee any third-party product, service, information or recommendation lis=
+ted above. The third parties listed are not affiliated with Capital One and=
+ are solely responsible for their products and services. All trademarks are=
+ the property of their respective owners.
+                            </span>
+                            <br /><br />
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                Please do not reply to this message, as thi=
+s email inbox is not monitored. <a href=3D"https://mandrillapp.com/track/cl=
+ick/31229592/www.capitalone.com?p=3DeyJzIjoiTlE1cWt6N1BVZldsMmpKUE5ZU1FjZTk=
+2WHRNIiwidiI6MiwicCI6IntcInVcIjozMTIyOTU5MixcInZcIjoyLFwidXJsXCI6XCJodHRwOl=
+xcXC9cXFwvd3d3LmNhcGl0YWxvbmUuY29tXFxcL3N1cHBvcnQtY2VudGVyXFxcL2NvbnRhY3Qtd=
+XNcIixcImlkXCI6XCJlNTU5Y2Q2MTkwZTY0NzQ4ODdlMTM4MzllMzlhODBmY1wiLFwidXJsX2lk=
+c1wiOltcIjc0ZjNhOGJmZDI3ODQyN2ZlN2U3M2ExYjdjYjYzNTNkN2RhNDg1NGVcIl0sXCJtc2d=
+fdHNcIjoxNzgwMDE4MjUwfSJ9" style=3D"display: inline; text-decoration-line: =
+underline;">
+                                    To contact us, visit http://www.capital=
+one.com/support-center/contact-us.
+                                </a>
+                            </span>
+                            <br /><br />
+                            
+                                <span style=3D"font-family: 'Optimist_Rg', =
+Helvetica Neue, Helvetica, Arial, sans-serif;">
+                                    Products and services are offered by Ca=
+pital One, N.A.
+                                </span>
+                                <br /><br />
+                            
+                            <span style=3D"font-family: 'Optimist_Rg', Helv=
+etica Neue, Helvetica, Arial, sans-serif;">
+                                =C2=A9 2026 Capital One. Capital One is a f=
+ederally registered service mark.
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+        
+      </td>
+    </tr>
+  </table>
+</center>
+<img src=3D"https://mandrillapp.com/track/open.php?u=3D31229592&id=3De559cd=
+6190e6474887e13839e39a80fc" height=3D"1" width=3D"1" alt=3D""></body>
+</html>
+

@@ -16,6 +16,7 @@ import {unitedProcessor} from 'src/processors/airline-united';
 import {amazonProcessor} from 'src/processors/amazon';
 import {appleEmailProcessor} from 'src/processors/apple';
 import {bookingProcessor} from 'src/processors/booking';
+import {capitalOneFlightsProcessor} from 'src/processors/capital-one-flights';
 import {chaseFlightsProcessor} from 'src/processors/chase-flights';
 import {cloudflareProcessor} from 'src/processors/cloudflare';
 import {lyftBikeProcessor} from 'src/processors/lyft-bike';
@@ -36,6 +37,7 @@ let EMAIL_PROCESSORS: EmailProcessor[] = [
   southwestProcessor,
   unitedProcessor,
   chaseFlightsProcessor,
+  capitalOneFlightsProcessor,
   // Other processors
   amazonProcessor,
   bookingProcessor,
