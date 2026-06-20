@@ -43,7 +43,7 @@ export function formatOldActionsMessage(oldActions: LunchMoneyActionRow[]): stri
 /**
  * Check for action entries older than 2 weeks and notify via Telegram
  */
-export async function checkOldActionEntries(env: Env): Promise<void> {
+export async function checkOldActionEntries(env: Env): Promise<number> {
   const thresholdAgo = subDays(new Date(), OLD_ACTION_THRESHOLD_DAYS);
   const thresholdAgoISO = thresholdAgo.toISOString();
 
@@ -58,7 +58,7 @@ export async function checkOldActionEntries(env: Env): Promise<void> {
   const oldActions = result.results;
 
   if (oldActions.length === 0) {
-    return;
+    return 0;
   }
 
   console.log(`Found ${oldActions.length} old action entries`);
@@ -81,4 +81,6 @@ export async function checkOldActionEntries(env: Env): Promise<void> {
       .run();
     console.log(`Marked ${actionIds.length} actions as notified`);
   }
+
+  return actionIds.length;
 }

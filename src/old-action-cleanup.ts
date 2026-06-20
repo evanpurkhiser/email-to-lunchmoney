@@ -6,7 +6,7 @@ const NOTIFIED_ACTION_CLEANUP_DAYS = 30;
  * Delete action entries that have been notified on and are older than the
  * cleanup threshold.
  */
-export async function cleanupNotifiedActions(env: Env): Promise<void> {
+export async function cleanupNotifiedActions(env: Env): Promise<number> {
   const cleanupThreshold = subDays(new Date(), NOTIFIED_ACTION_CLEANUP_DAYS);
   const cleanupThresholdISO = cleanupThreshold.toISOString();
 
@@ -19,4 +19,6 @@ export async function cleanupNotifiedActions(env: Env): Promise<void> {
   if (result.meta.changes > 0) {
     console.log(`Cleaned up ${result.meta.changes} old action entries`);
   }
+
+  return result.meta.changes;
 }

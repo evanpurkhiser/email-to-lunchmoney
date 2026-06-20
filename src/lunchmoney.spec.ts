@@ -1,11 +1,13 @@
 import {env, fetchMock} from 'cloudflare:test';
 import {afterEach, beforeAll, beforeEach, describe, expect, it} from 'vitest';
+import {vi} from 'vitest';
 
 import {
   createMockTransactionsResponse,
   createTestTransaction,
 } from './fixtures/lunchmoney-transactions';
 import {processActions} from './lunchmoney';
+import * as telegram from './telegram';
 import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
 
 beforeAll(() => {
@@ -24,6 +26,9 @@ describe('processActions', () => {
   beforeEach(async () => {
     // Clear the database before each test
     await env.DB.prepare('DELETE FROM lunchmoney_actions').run();
+    env.LUNCHMONEY_API_KEY = 'test-token';
+    env.VERBOSE_BOT = undefined;
+    vi.restoreAllMocks();
   });
 
   const transactionsListPath = /\/v1\/transactions\?.*/;
@@ -459,4 +464,151 @@ describe('processActions', () => {
     const remainingActions = await getAllTransactions();
     expect(remainingActions.results).toHaveLength(0);
   });
+  it('sends a verbose telegram message when an action is matched', async () => {
+    env.VERBOSE_BOT = 'true';
+    vi.spyOn(telegram, 'sendVerboseTelegramMessage').mockResolvedValue(undefined);
+
+    const action: LunchMoneyAction = {
+      type: 'update',
+      match: {
+        expectedPayee: 'Amazon.com',
+        expectedTotal: 2500,
+      },
+      note: 'Amazon purchase - electronics',
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    const mockTransactions = [
+      createTestTransaction({
+        id: 123,
+        payee: 'Amazon.com',
+        amount: '25.0000',
+        notes: null,
+        category_id: 456,
+      }),
+    ];
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: '/v1/me'})
+      .reply(200, {budget: {account_id: 1}})
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath})
+      .reply(200, createMockTransactionsResponse(mockTransactions))
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/123',
+        method: 'PUT',
+        body: JSON.stringify({
+          transaction: {id: 123, notes: action.note, status: 'uncleared'},
+        }),
+    })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    expect(telegram.sendVerboseTelegramMessage).toHaveBeenCalledOnce();
+    expect(telegram.sendVerboseTelegramMessage).toHaveBeenCalledWith(
+      env,
+      expect.stringContaining('Transaction Matched'),
+    );
+    expect(telegram.sendVerboseTelegramMessage).toHaveBeenCalledWith(
+      env,
+      expect.stringContaining('Date: 2023\\-07\\-18'),
+    );
+  });
+
+  it('sends split detail messages for split actions', async () => {
+    env.VERBOSE_BOT = 'true';
+    vi.spyOn(telegram, 'sendVerboseTelegramMessage').mockResolvedValue(undefined);
+
+    const action: LunchMoneyAction = {
+      type: 'split',
+      match: {
+        expectedPayee: 'Amazon',
+        expectedTotal: 3018,
+      },
+      split: [
+        {amount: 1484, note: 'Secret Clinical Strength Deodorant'},
+        {amount: 1534, note: 'Amazon Basics Toilet Paper'},
+      ],
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    const mockTransactions = [
+      createTestTransaction({
+        id: 2391587215,
+        payee: 'Amazon',
+        amount: '30.1800',
+        notes: null,
+        category_id: 908398,
+        date: '2026-05-01',
+      }),
+    ];
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: '/v1/me'})
+      .reply(200, {budget: {account_id: 41432}})
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath})
+      .reply(200, createMockTransactionsResponse(mockTransactions))
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/2391587215',
+        method: 'PUT',
+        body: JSON.stringify({
+          split: [
+            {
+              amount: '14.84',
+              notes: 'Secret Clinical Strength Deodorant',
+              category_id: 908398,
+              status: 'uncleared',
+            },
+            {
+              amount: '15.34',
+              notes: 'Amazon Basics Toilet Paper',
+              category_id: 908398,
+              status: 'uncleared',
+            },
+          ],
+        }),
+      })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    expect(telegram.sendVerboseTelegramMessage).toHaveBeenCalledTimes(2);
+    expect(telegram.sendVerboseTelegramMessage.mock.calls[0]?.[1]).toContain(
+      'Transaction Matched',
+    );
+    expect(telegram.sendVerboseTelegramMessage.mock.calls[1]?.[1]).toContain(
+      'Split details',
+    );
+    expect(telegram.sendVerboseTelegramMessage.mock.calls[1]?.[1]).toContain(
+      'Secret Clinical Strength Deodorant',
+    );
+    expect(telegram.sendVerboseTelegramMessage.mock.calls[1]?.[1]).toContain(
+      'Amazon Basics Toilet Paper',
+    );
+  });
+
 });
