@@ -20,10 +20,24 @@ function getAllTransactions() {
   return env.DB.prepare('SELECT * FROM lunchmoney_actions').all<LunchMoneyActionRow>();
 }
 
+function authHeaders(token: string) {
+  return {authorization: `Bearer ${token}`};
+}
+
+function mockLunchMoneyBudget(accountId: number | string, token = 'test-token') {
+  fetchMock
+    .get('https://dev.lunchmoney.app')
+    .intercept({path: '/v1/me', headers: authHeaders(token)})
+    .reply(200, {budget: {account_id: accountId}})
+    .times(1);
+}
+
 describe('processActions', () => {
   beforeEach(async () => {
     // Clear the database before each test
     await env.DB.prepare('DELETE FROM lunchmoney_actions').run();
+    env.LUNCHMONEY_API_KEY = 'test-token';
+    env.LUNCHMONEY_API_KEYS = undefined;
   });
 
   const transactionsListPath = /\/v1\/transactions\?.*/;
@@ -60,6 +74,8 @@ describe('processActions', () => {
         category_id: 456,
       }),
     ];
+
+    mockLunchMoneyBudget(1);
 
     fetchMock
       .get('https://dev.lunchmoney.app')
@@ -116,6 +132,8 @@ describe('processActions', () => {
       }),
     ];
 
+    mockLunchMoneyBudget(1);
+
     fetchMock
       .get('https://dev.lunchmoney.app')
       .intercept({
@@ -169,6 +187,8 @@ describe('processActions', () => {
         category_id: 888,
       }),
     ];
+
+    mockLunchMoneyBudget(1);
 
     fetchMock
       .get('https://dev.lunchmoney.app')
@@ -231,6 +251,8 @@ describe('processActions', () => {
       }),
     ];
 
+    mockLunchMoneyBudget(1);
+
     fetchMock
       .get('https://dev.lunchmoney.app')
       .intercept({path: transactionsListPath})
@@ -281,6 +303,8 @@ describe('processActions', () => {
       }),
     ];
 
+    mockLunchMoneyBudget(1);
+
     fetchMock
       .get('https://dev.lunchmoney.app')
       .intercept({path: transactionsListPath})
@@ -325,6 +349,8 @@ describe('processActions', () => {
         category_id: 888,
       }),
     ];
+
+    mockLunchMoneyBudget(1);
 
     fetchMock
       .get('https://dev.lunchmoney.app')
@@ -377,6 +403,8 @@ describe('processActions', () => {
         category_id: 456,
       }),
     ];
+
+    mockLunchMoneyBudget(1);
 
     fetchMock
       .get('https://dev.lunchmoney.app')
@@ -433,6 +461,8 @@ describe('processActions', () => {
       }),
     ];
 
+    mockLunchMoneyBudget(1);
+
     fetchMock
       .get('https://dev.lunchmoney.app')
       .intercept({path: transactionsListPath})
@@ -451,6 +481,178 @@ describe('processActions', () => {
         path: '/v1/transactions/789',
         method: 'PUT',
         body: expectedUpdateBody,
+      })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    const remainingActions = await getAllTransactions();
+    expect(remainingActions.results).toHaveLength(0);
+  });
+
+  it('falls back to later Lunch Money tokens when earlier ones do not match', async () => {
+    env.LUNCHMONEY_API_KEY = undefined;
+    env.LUNCHMONEY_API_KEYS = 'token-1,token-2';
+
+    const action: LunchMoneyAction = {
+      type: 'update',
+      match: {
+        expectedPayee: 'Amazon.com',
+        expectedTotal: 2500,
+      },
+      note: 'Amazon purchase - electronics',
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    mockLunchMoneyBudget(101, 'token-1');
+    mockLunchMoneyBudget(202, 'token-2');
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath, headers: authHeaders('token-1')})
+      .reply(200, createMockTransactionsResponse([]))
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath, headers: authHeaders('token-2')})
+      .reply(
+        200,
+        createMockTransactionsResponse([
+          createTestTransaction({
+            id: 456,
+            payee: 'Amazon.com',
+            amount: '25.0000',
+            notes: null,
+          }),
+        ]),
+      )
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/456',
+        method: 'PUT',
+        headers: authHeaders('token-2'),
+        body: JSON.stringify({
+          transaction: {id: 456, notes: action.note, status: 'uncleared'},
+        }),
+      })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    const remainingActions = await getAllTransactions();
+    expect(remainingActions.results).toHaveLength(0);
+  });
+
+  it('stops at the first matching Lunch Money token', async () => {
+    env.LUNCHMONEY_API_KEY = undefined;
+    env.LUNCHMONEY_API_KEYS = 'token-1,token-2';
+
+    const action: LunchMoneyAction = {
+      type: 'update',
+      match: {
+        expectedPayee: 'Amazon.com',
+        expectedTotal: 2500,
+      },
+      note: 'Amazon purchase - electronics',
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    mockLunchMoneyBudget(101, 'token-1');
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath, headers: authHeaders('token-1')})
+      .reply(
+        200,
+        createMockTransactionsResponse([
+          createTestTransaction({
+            id: 654,
+            payee: 'Amazon.com',
+            amount: '25.0000',
+            notes: null,
+          }),
+        ]),
+      )
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/654',
+        method: 'PUT',
+        headers: authHeaders('token-1'),
+        body: JSON.stringify({
+          transaction: {id: 654, notes: action.note, status: 'uncleared'},
+        }),
+      })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    const remainingActions = await getAllTransactions();
+    expect(remainingActions.results).toHaveLength(0);
+  });
+
+  it('continues to later tokens when an earlier Lunch Money token errors', async () => {
+    env.LUNCHMONEY_API_KEY = undefined;
+    env.LUNCHMONEY_API_KEYS = 'token-1,token-2';
+
+    const action: LunchMoneyAction = {
+      type: 'update',
+      match: {
+        expectedPayee: 'Amazon.com',
+        expectedTotal: 2500,
+      },
+      note: 'Amazon purchase - electronics',
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: '/v1/me', headers: authHeaders('token-1')})
+      .reply(500, {error: 'nope'})
+      .times(1);
+
+    mockLunchMoneyBudget(202, 'token-2');
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath, headers: authHeaders('token-2')})
+      .reply(
+        200,
+        createMockTransactionsResponse([
+          createTestTransaction({
+            id: 987,
+            payee: 'Amazon.com',
+            amount: '25.0000',
+            notes: null,
+          }),
+        ]),
+      )
+      .times(1);
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/987',
+        method: 'PUT',
+        headers: authHeaders('token-2'),
+        body: JSON.stringify({
+          transaction: {id: 987, notes: action.note, status: 'uncleared'},
+        }),
       })
       .reply(200, {success: true});
 

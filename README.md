@@ -160,5 +160,6 @@ This would enable processors like `booking` to handle international receipts by:
 ## Secrets
 
 - `INGEST_TOKEN` - Authentication token for the /ingest endpoint (generate a secure random token)
-- `LUNCHMONEY_API_KEY` - Get this in your lunchmoney settings
+- `LUNCHMONEY_API_KEY` - Get this in your lunchmoney settings. Used for single-budget setups.
+- `LUNCHMONEY_API_KEYS` - Optional comma-delimited ordered list of Lunch Money API tokens for multi-budget setups. When provided, the worker checks each budget in order until an action matches.
 - `OPENAI_API_KEY` - Needed for processors that talk to OpenAI

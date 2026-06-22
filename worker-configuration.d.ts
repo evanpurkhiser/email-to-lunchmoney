@@ -5,7 +5,8 @@ declare namespace Cloudflare {
   interface Env {
     INGEST_TOKEN: string;
     OPENAI_API_KEY: string;
-    LUNCHMONEY_API_KEY: string;
+    LUNCHMONEY_API_KEY?: string;
+    LUNCHMONEY_API_KEYS?: string;
     TELEGRAM_TOKEN?: string;
     TELEGRAM_CHAT_ID?: string;
     SENTRY_DSN?: string;

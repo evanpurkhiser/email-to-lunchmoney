@@ -4,13 +4,38 @@ import type {LunchMoneyAction, LunchMoneyActionRow} from './types';
 
 const LOOKBACK_DAYS = 180;
 
-async function lunchMoneyApi(env: Env, endpoint: string, options: RequestInit = {}) {
+interface LunchMoneyMeResponse {
+  account_id?: number | string;
+  budget?: {
+    account_id?: number | string;
+  };
+}
+
+interface LunchMoneyTransactionsResponse {
+  transactions: Array<Record<string, any>>;
+}
+
+function getLunchMoneyTokens(env: Env): string[] {
+  const multiTokenConfig = env.LUNCHMONEY_API_KEYS?.trim();
+
+  if (multiTokenConfig) {
+    return multiTokenConfig
+      .split(',')
+      .map(token => token.trim())
+      .filter(token => token.length > 0);
+  }
+
+  const singleToken = env.LUNCHMONEY_API_KEY?.trim();
+  return singleToken ? [singleToken] : [];
+}
+
+async function lunchMoneyApi(token: string, endpoint: string, options: RequestInit = {}) {
   const url = `https://dev.lunchmoney.app/v1${endpoint}`;
 
   const response = await fetch(url, {
     ...options,
     headers: {
-      Authorization: `Bearer ${env.LUNCHMONEY_API_KEY}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
       ...options.headers,
     },
@@ -25,6 +50,29 @@ async function lunchMoneyApi(env: Env, endpoint: string, options: RequestInit = 
 
 function hasNote(note: string | null) {
   return note !== null && note !== '';
+}
+
+function matchesTransaction(action: LunchMoneyAction, txn: Record<string, any>) {
+  return (
+    !hasNote(txn.notes) &&
+    txn.payee === action.match.expectedPayee &&
+    txn.amount === (action.match.expectedTotal / 100).toFixed(4)
+  );
+}
+
+function getAssignedTransactionKey(budgetAccountId: string, transactionId: number) {
+  return `${budgetAccountId}-${transactionId}`;
+}
+
+async function getBudgetAccountId(token: string): Promise<string> {
+  const me = await lunchMoneyApi(token, '/me') as LunchMoneyMeResponse;
+  const budgetAccountId = me.budget?.account_id ?? me.account_id;
+
+  if (budgetAccountId === undefined || budgetAccountId === null) {
+    throw new Error('Lunch Money /me response did not include budget.account_id');
+  }
+
+  return `${budgetAccountId}`;
 }
 
 export async function processActions(env: Env) {
@@ -42,6 +90,14 @@ export async function processActions(env: Env) {
 
   console.log(`Got ${actions.length} pending actions`);
 
+  const lunchMoneyTokens = getLunchMoneyTokens(env);
+  if (lunchMoneyTokens.length === 0) {
+    console.warn('No Lunch Money API tokens configured, skipping action processing');
+    return;
+  }
+
+  console.log(`Processing actions across ${lunchMoneyTokens.length} Lunch Money token(s)`);
+
   const now = new Date();
   const twoWeeksAgo = subDays(now, LOOKBACK_DAYS);
 
@@ -52,93 +108,104 @@ export async function processActions(env: Env) {
     pending: 'true',
   });
 
-  const txnsResp = await lunchMoneyApi(env, `/transactions?${params}`);
+  const processedActionIds = new Set<number>();
+  const assignedTransactions = new Set<string>();
 
-  console.log(`Got ${txnsResp.transactions.length} Lunch Money Transactions`);
-
-  // iterate through all actions and then use transactions.find to locate a
-  // transaction that has a matching payee name to what's expected in the
-  // action as well as matching amount
-  const processedActionIds: number[] = [];
-
-  // track which transactions we've already assigned
-  const assignedTransactions: number[] = [];
-
-  for (const actionRow of actions) {
-    const action: LunchMoneyAction = JSON.parse(actionRow.action);
-
-    // Find matching transaction by payee name. Look for newest transactions
-    // first, since we're processing actions in order of newest to oldest
-    const matchingTransaction = txnsResp.transactions
-      .reverse()
-      .find(
-        (txn: any) =>
-          !assignedTransactions.includes(txn.id) &&
-          !hasNote(txn.notes) &&
-          txn.payee === action.match.expectedPayee &&
-          txn.amount === (action.match.expectedTotal / 100).toFixed(4),
-      );
-
-    // if we can't find the transaction skip it
-    if (matchingTransaction === undefined) {
-      console.log(`No matching transaction found for action ${actionRow.id}`);
-      continue;
+  for (const token of lunchMoneyTokens) {
+    if (processedActionIds.size === actions.length) {
+      break;
     }
 
-    console.log(`Found matching transaction for action ${actionRow.id}`, {
-      matchingTransaction,
-      actionRow,
-    });
-
-    // In a try catch try to process the lunch money action with the found
-    // transaction. Either `update` which will just set the note, or `split`
-    // which spits the transaction and sets the note from each split
     try {
-      if (action.type === 'update') {
-        const transaction = {
-          id: matchingTransaction.id,
-          notes: action.note,
-          status: action.markReviewed ? 'cleared' : 'uncleared',
-        };
+      const budgetAccountId = await getBudgetAccountId(token);
+      const txnsResp = await lunchMoneyApi(
+        token,
+        `/transactions?${params}`,
+      ) as LunchMoneyTransactionsResponse;
 
-        await lunchMoneyApi(env, `/transactions/${matchingTransaction.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({transaction}),
+      console.log(`Got ${txnsResp.transactions.length} Lunch Money Transactions`, {
+        budgetAccountId,
+      });
+
+      const candidateTransactions = [...txnsResp.transactions].reverse();
+
+      for (const actionRow of actions) {
+        if (processedActionIds.has(actionRow.id)) {
+          continue;
+        }
+
+        const action: LunchMoneyAction = JSON.parse(actionRow.action);
+
+        const matchingTransaction = candidateTransactions.find(txn => {
+          const assignmentKey = getAssignedTransactionKey(budgetAccountId, txn.id);
+          return (
+            !assignedTransactions.has(assignmentKey) &&
+            matchesTransaction(action, txn)
+          );
         });
-      }
 
-      if (action.type === 'split') {
-        // Convert split data from our format to API format
-        const split = action.split.map(item => ({
-          amount: (item.amount / 100).toFixed(2),
-          notes: item.note,
-          category_id: matchingTransaction.category_id,
-          status: item.markReviewed ? 'cleared' : 'uncleared',
-        }));
+        if (matchingTransaction === undefined) {
+          continue;
+        }
 
-        await lunchMoneyApi(env, `/transactions/${matchingTransaction.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({split}),
+        console.log(`Found matching transaction for action ${actionRow.id}`, {
+          budgetAccountId,
+          matchingTransaction,
+          actionRow,
         });
+
+        try {
+          if (action.type === 'update') {
+            const transaction = {
+              id: matchingTransaction.id,
+              notes: action.note,
+              status: action.markReviewed ? 'cleared' : 'uncleared',
+            };
+
+            await lunchMoneyApi(token, `/transactions/${matchingTransaction.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({transaction}),
+            });
+          }
+
+          if (action.type === 'split') {
+            const split = action.split.map(item => ({
+              amount: (item.amount / 100).toFixed(2),
+              notes: item.note,
+              category_id: matchingTransaction.category_id,
+              status: item.markReviewed ? 'cleared' : 'uncleared',
+            }));
+
+            await lunchMoneyApi(token, `/transactions/${matchingTransaction.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({split}),
+            });
+          }
+
+          assignedTransactions.add(
+            getAssignedTransactionKey(budgetAccountId, matchingTransaction.id),
+          );
+          processedActionIds.add(actionRow.id);
+          console.log(`Successfully processed action ${actionRow.id}`, {
+            budgetAccountId,
+            transactionId: matchingTransaction.id,
+          });
+        } catch (error) {
+          console.error(`Failed to process action ${actionRow.id}:`, error);
+        }
       }
-
-      assignedTransactions.push(matchingTransaction.id);
-
-      // Record which lm action IDs have been processed so we can bulk remove them
-      // from the database at the end
-      processedActionIds.push(actionRow.id);
-      console.log(`Successfully processed action ${actionRow.id}`);
     } catch (error) {
-      console.error(`Failed to process action ${actionRow.id}:`, error);
+      console.error('Failed processing Lunch Money token, continuing to next token', error);
     }
   }
 
   // Bulk remove processed actions
-  if (processedActionIds.length > 0) {
-    const placeholders = processedActionIds.map(() => '?').join(',');
+  const processedActionIdList = [...processedActionIds];
+  if (processedActionIdList.length > 0) {
+    const placeholders = processedActionIdList.map(() => '?').join(',');
     await env.DB.prepare(`DELETE FROM lunchmoney_actions WHERE id IN (${placeholders})`)
-      .bind(...processedActionIds)
+      .bind(...processedActionIdList)
       .run();
-    console.log(`Removed ${processedActionIds.length} processed actions from database`);
+    console.log(`Removed ${processedActionIdList.length} processed actions from database`);
   }
 }
