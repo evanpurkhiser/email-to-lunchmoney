@@ -41,7 +41,7 @@ describe('Amazon order EmailProcessor', () => {
     });
   });
 
-  it('includes item quantity in split amounts for multi-item orders', async () => {
+  it('includes item quantity in split amounts and notes for multi-item orders', async () => {
     extractOrderSpy.mockResolvedValue({
       orderId: '111-2222222-3333333',
       totalCostCents: 3700,
@@ -69,11 +69,11 @@ describe('Amazon order EmailProcessor', () => {
       type: 'split',
       split: [
         {
-          note: 'Item A (111-2222222-3333333)',
+          note: 'Item A [x2] (111-2222222-3333333)',
           amount: 2114,
         },
         {
-          note: 'Item B (111-2222222-3333333)',
+          note: 'Item B [x3] (111-2222222-3333333)',
           amount: 1586,
         },
       ],

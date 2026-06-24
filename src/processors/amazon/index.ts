@@ -67,7 +67,9 @@ export function computeItemTaxes(items: AmazonOrderItem[], totalCents: number): 
 }
 
 function makeItemNote(order: AmazonOrder, item: AmazonOrderItem) {
-  return `${item.shortName} (${order.orderId})`;
+  const quantity = item.quantity > 1 ? ` [x${item.quantity}]` : '';
+
+  return `${item.shortName}${quantity} (${order.orderId})`;
 }
 
 function makeAction(order: AmazonOrder): LunchMoneyAction {
