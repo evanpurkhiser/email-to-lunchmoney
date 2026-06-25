@@ -9,8 +9,9 @@ const testCases = [
     file: 'example',
     expected: {
       type: 'update',
-      match: {expectedPayee: 'Lyft Bike', expectedTotal: 245},
+      match: {expectedPayee: 'Lyft', expectedTotal: 245},
       note: 'E 2 St & Ave C → E 5 St & Ave C [12:37, 9m]',
+      payee: 'Lyft Bike',
       markReviewed: true,
     },
   },

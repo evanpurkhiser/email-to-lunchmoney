@@ -63,7 +63,7 @@ function process(email: Email) {
   const note = `${startLocation} → ${endLocation} [${formattedStart}, ${duration}m]`;
 
   const match: LunchMoneyMatch = {
-    expectedPayee: 'Lyft Bike',
+    expectedPayee: 'Lyft',
     expectedTotal: costInCents,
   };
 
@@ -71,6 +71,7 @@ function process(email: Email) {
     type: 'update',
     match,
     note,
+    payee: 'Lyft Bike',
     markReviewed: true,
   };
 
