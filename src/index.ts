@@ -71,6 +71,13 @@ async function processEmail(email: Email, env: Env) {
   const processors = EMAIL_PROCESSORS.filter(processor => processor.matchEmail(email));
 
   if (processors.length === 0) {
+    const error = new Error('No processor matching email');
+    captureException(error, {
+      extra: {
+        from: email.from?.address,
+        subject: email.subject,
+      },
+    });
     console.error(`No processor matching email from: ${email.from?.address}`);
   }
 
