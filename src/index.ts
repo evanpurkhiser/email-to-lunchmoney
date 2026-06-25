@@ -108,9 +108,9 @@ async function processRawEmail(base64Content: string, env: Env) {
 // Create Hono app with Env types
 const app = new Hono<{Bindings: Env}>();
 
-// Apply authentication middleware to /ingest routes
+// Apply authentication middleware to manual trigger routes
 app.use(
-  '/ingest',
+  '*',
   bearerAuth({
     verifyToken: (token, c) => token === c.env.INGEST_TOKEN,
   }),
@@ -128,6 +128,15 @@ app.post('/ingest', async c => {
 
   // Process asynchronously and return 202 immediately
   c.executionCtx.waitUntil(processRawEmail(body, c.env));
+
+  return c.json({message: 'Accepted'}, 202);
+});
+
+/**
+ * POST /process - Manually triggers pending Lunch Money action processing
+ */
+app.post('/process', c => {
+  c.executionCtx.waitUntil(processActions(c.env));
 
   return c.json({message: 'Accepted'}, 202);
 });

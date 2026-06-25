@@ -96,3 +96,30 @@ describe('/ingest Endpoint', () => {
     expect(results[0].action).toEqual(JSON.stringify(exampleAction));
   });
 });
+
+describe('/process Endpoint', () => {
+  it('returns 401 when Authorization header is missing', async () => {
+    const request = new Request('http://localhost/process', {
+      method: 'POST',
+    });
+
+    const response = await SELF.fetch(request);
+
+    expect(response.status).toBe(401);
+    const body = await response.text();
+    expect(body).toBe('Unauthorized');
+  });
+
+  it('returns 202 and schedules processing with valid token', async () => {
+    const request = new Request('http://localhost/process', {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${env.INGEST_TOKEN}`},
+    });
+
+    const response = await SELF.fetch(request);
+
+    expect(response.status).toBe(202);
+    const body = await response.json();
+    expect(body).toEqual({message: 'Accepted'});
+  });
+});
