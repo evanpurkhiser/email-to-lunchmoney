@@ -64,6 +64,10 @@ export interface LunchMoneyUpdate {
    */
   note: string;
   /**
+   * Optional updated payee for the transaction
+   */
+  payee?: string;
+  /**
    * Should we mark the item as reviewed?
    */
   markReviewed?: boolean;

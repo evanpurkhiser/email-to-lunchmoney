@@ -98,6 +98,7 @@ export async function processActions(env: Env) {
         const transaction = {
           id: matchingTransaction.id,
           notes: action.note,
+          ...(action.payee === undefined ? {} : {payee: action.payee}),
           status: action.markReviewed ? 'cleared' : 'uncleared',
         };
 
