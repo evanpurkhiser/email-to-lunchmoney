@@ -13,7 +13,8 @@ const LYFT_RIDE_REGEX =
 /**
  * Matches the total cost of the ride
  */
-const LYFT_TOTAL_COST_REGEX = /Visa \*\d+\s+\$(?<totalCostUsd>\d+\.\d{2})/;
+const LYFT_TOTAL_COST_REGEX =
+  /(?:Visa \*\d+\s+\$|(?:Bike )?ride total:\s+\$)(?<totalCostUsd>\d+\.\d{2})/i;
 
 interface RideDetails {
   startLocation: string;

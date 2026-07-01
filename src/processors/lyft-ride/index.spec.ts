@@ -29,6 +29,14 @@ const testCases = [
       note: '326 E 4th St, Test City, TS 12345 → 95 Guernsey St, Test City, TS 12345 [18:48, 21m]',
     },
   },
+  {
+    file: 'venmo',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Lyft', expectedTotal: 4598},
+      note: '22 Marine Terminal Rd, Flushing, NY → 322 E 4th St, New York, NY [23:10, 19m]',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {

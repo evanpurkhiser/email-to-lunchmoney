@@ -15,6 +15,16 @@ const testCases = [
       markReviewed: true,
     },
   },
+  {
+    file: 'venmo',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Lyft', expectedTotal: 235},
+      note: 'E 5 St & Ave C → W Broadway & Spring St [11:27, 8m]',
+      payee: 'Lyft Bike',
+      markReviewed: true,
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {

@@ -13,7 +13,8 @@ const LYFT_EVENTS_REGEX =
 /**
  * Matches the total cost of the ride
  */
-const LYFT_TOTAL_COST_REGEX = /Visa \*\d+\s+\$(?<totalCostUsd>\d+\.\d{2})/;
+const LYFT_TOTAL_COST_REGEX =
+  /(?:Visa \*\d+\s+\$|Venmo account\s+\$)(?<totalCostUsd>\d+\.\d{2})/i;
 
 interface EventDetails {
   label: string;
