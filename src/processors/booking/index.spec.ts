@@ -29,6 +29,14 @@ const testCases = [
       note: 'Holiday Inn San Francisco - Golden Gateway newly renovated with No Resort Fee — Mar 8–Mar 12 (4 nights)',
     },
   },
+  {
+    file: 'confirmation-usd-knickerbocker',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Booking.com', expectedTotal: 33765},
+      note: 'Millennium Hotel Knickerbocker Chicago — Jul 15–Jul 17 (2 nights)',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {

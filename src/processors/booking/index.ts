@@ -32,8 +32,10 @@ const RECEIPT_CHECKOUT_REGEX = /Check-out\s+(?:\w+,\s+)?(\w+\s+\d{1,2},\s+\d{4})
  * Examples:
  *   "Amount paid on Feb 20, 2025\n   US$1,180.38"
  *   "Total Price\n   US$1,526.33"
+ *   "You paid $337.65"
  */
-const RECEIPT_AMOUNT_REGEX = /(?:Amount paid on .+?|Total Price)\s+US\$\s*([\d,]+\.?\d*)/;
+const RECEIPT_AMOUNT_REGEX =
+  /(?:(?:Amount paid on .+?|Total Price)\s+US\$\s*|You paid \$)([\d,]+\.?\d*)/;
 
 function process(email: Email) {
   const emailText = email.text!;
