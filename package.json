@@ -2,9 +2,13 @@
   "name": "email-to-lunchmoney",
   "version": "0.0.0",
   "private": true,
+  "bin": {
+    "email-to-lunchmoney": "./src/cli.ts"
+  },
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
+    "email-to-lunchmoney": "tsx src/cli.ts",
     "start": "wrangler dev",
     "test": "vitest",
     "lint": "oxlint src/ test/",
@@ -29,6 +33,7 @@
     "@types/node": "^25.0.10",
     "oxfmt": "^0.47.0",
     "oxlint": "^1.62.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.5.2",
     "vitest": "~3.2.0",
     "wrangler": "^4.24.0"
