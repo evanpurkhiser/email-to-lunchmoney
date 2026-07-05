@@ -11,13 +11,13 @@ const MATCHERS = [
     orderDetailsRegex:
       /ORDER ID\n(?<orderId>[A-Z0-9]+)[\s\S]*?(?=\n{2,})\n\n[^[]+\[[^\n]+\]\n(?<itemName>[^\n]+)\n(?<subItem>[^\n]+)\n/,
   },
-  // Emails from Apple Store on macOS purchases
+  // Emails from Apple Store on macOS purchases (subscription / renewal layouts vary)
   {
     testRegex: /Apple Account:\s*\n+[^\s@]+@[^ ]+\b/,
     totalCostRegex:
-      /Subtotal\s*\n\$\d+\.\d{2}\s*\nTax\s*\n\$\d+\.\d{2}[\s\S]*?-{5,}[\s\S]*?\n\$(?<totalCostUsd>\d+\.\d{2})/,
+      /Subtotal\s*\n+\$\d+\.\d{2}\s*\n+Tax\s*\n+\$\d+\.\d{2}[\s\S]*?-{5,}[\s\S]*?\n\$(?<totalCostUsd>\d+\.\d{2})/,
     orderDetailsRegex:
-      /Order ID:\s*\n+(?<orderId>[A-Z0-9]+)[\s\S]*?Apple Account:\s*\n+[^\n]+\n+(?<itemName>[^\n]+)\n\[[^\n]+\]\n\n[^\n]+\n\n(?<subItem>[^\n]+)/,
+      /Order ID:\s*\n+(?<orderId>[A-Z0-9]+)[\s\S]*?Apple Account:\s*\n+[^\n]+\n+(?:(?<itemName>[^\n]+)\n\[[^\n]+\]\n\n[^\n]+\n\n(?<subItem>[^\n]+)|(?:\[[^\n]+\]\s*\n+)+(?<itemName>[^\n]+)\s*\n+(?<subItem>[^\n]+))/,
   },
 ];
 

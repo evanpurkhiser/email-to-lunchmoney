@@ -37,6 +37,14 @@ const testCases = [
       note: 'CapCut - Video Editor, Monthly Subscription (Monthly)',
     },
   },
+  {
+    file: 'example-5',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Apple', expectedTotal: 3278},
+      note: 'AppleCare One, Monthly',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {
