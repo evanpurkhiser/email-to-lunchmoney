@@ -1,0 +1,66 @@
+Date: Thu, 16 Apr 2026 12:00:00 +0000 (GMT)
+From: Apple <no_reply@email.apple.com>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
+Subject: Your receipt from Apple.
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="boundary-applecare-one"
+
+--boundary-applecare-one
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+
+<html><body><pre>Apple [https://s.mzstatic.com/email/modern/logo/apple-134-70x84.png]
+
+
+RECEIPT &amp; RENEWAL NOTICE
+
+April 16, 2026
+
+Order ID:
+
+AB12CD34EF
+
+
+Document:
+
+123456789012
+
+
+Apple Account:
+
+testuser@example.com
+
+
+[https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/d8/ff/ec/d8ffec38-2589-8a66-7e2e-1445d4cd9b26/AppIcon-0-0-1x_U007epad-0-1-85-220.png/120x0w.jpg]
+
+AppleCare One
+
+Monthly
+
+
+Coverage for up to 3 devices
+
+
+BILLING AND PAYMENT
+
+Test User
+
+Subtotal
+
+$31.97
+
+Tax
+
+$0.81
+
+--------------------------------------------------------------------------------
+
+American Express •••• 1234
+
+
+$32.78
+</pre></body></html>
+
+--boundary-applecare-one--
