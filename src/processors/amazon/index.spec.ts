@@ -79,6 +79,22 @@ describe('Amazon order EmailProcessor', () => {
       ],
     });
   });
+
+  it('falls back to an order note when extraction returns no order items', async () => {
+    extractOrderSpy.mockResolvedValue({
+      orderId: '111-2222222-3333333',
+      totalCostCents: 1000,
+      orderItems: [],
+    });
+
+    const email = await PostalMime.parse(fixtureEmail);
+
+    await expect(amazonProcessor.process(email, env)).resolves.toEqual({
+      match: {expectedPayee: 'Amazon', expectedTotal: 1000},
+      type: 'update',
+      note: '[No products in email] (111-2222222-3333333)',
+    });
+  });
 });
 
 describe('extractOrderBlock', () => {

@@ -73,6 +73,17 @@ function makeItemNote(order: AmazonOrder, item: AmazonOrderItem) {
 }
 
 function makeAction(order: AmazonOrder): LunchMoneyAction {
+  if (order.orderItems.length === 0) {
+    return {
+      match: {
+        expectedPayee: 'Amazon',
+        expectedTotal: order.totalCostCents,
+      },
+      type: 'update',
+      note: `[No products in email] (${order.orderId})`,
+    };
+  }
+
   const itemsTax = computeItemTaxes(order.orderItems, order.totalCostCents);
 
   const match: LunchMoneyMatch = {

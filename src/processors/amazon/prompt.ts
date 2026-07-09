@@ -34,7 +34,7 @@ export const AMAZON_ORDER_PROPERTIES = {
   },
   orderItems: {
     description:
-      'A list of products ordered, each with details as they appear in the email under the item listing.',
+      'A list of products ordered, each with details as they appear in the email under the item listing. Use an empty array when the email does not include product details.',
     type: 'array',
     items: {
       type: 'object',
