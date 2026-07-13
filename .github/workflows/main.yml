@@ -1,5 +1,9 @@
 name: main
-on: [push]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   test:
@@ -8,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v4
-      - run: pnpm install
-      - run: pnpm run lint
+      - run: pnpm install --frozen-lockfile
+      - run: prek run --all-files
       - run: pnpm run test
 
   deploy:
@@ -20,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v4
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - name: Configure wrangler
         run: |
           sed -i 's/YOUR_DATABASE_ID_HERE/${{ vars.DATABASE_ID }}/' wrangler.jsonc

@@ -1,0 +1,6 @@
+[files]
+extend-exclude = ["**/*.eml", "worker-configuration.d.ts"]
+
+[default.extend-words]
+als = "als"
+TPE = "TPE"
