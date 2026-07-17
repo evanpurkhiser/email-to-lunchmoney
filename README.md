@@ -130,6 +130,7 @@ Some emails I would like to add
    Actions currently support:
    - Splitting transactions
    - Adding notes to transactions
+   - Suggesting categories for matched transactions and split items
 
 ## Future Work
 
@@ -161,4 +162,4 @@ This would enable processors like `booking` to handle international receipts by:
 
 - `INGEST_TOKEN` - Authentication token for the /ingest endpoint (generate a secure random token)
 - `LUNCHMONEY_API_KEY` - Get this in your lunchmoney settings
-- `OPENAI_API_KEY` - Needed for processors that talk to OpenAI
+- `OPENAI_API_KEY` - Needed for processors that talk to OpenAI and for AI-assisted category suggestions during matching
