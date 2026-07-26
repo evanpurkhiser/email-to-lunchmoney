@@ -45,6 +45,14 @@ const testCases = [
       note: 'AppleCare One, Monthly',
     },
   },
+  {
+    file: 'example-6',
+    expected: {
+      type: 'update',
+      match: {expectedPayee: 'Apple', expectedTotal: 4354},
+      note: 'ReciMe: Recipes & Meal Planner, ReciMe Plus (Annual)',
+    },
+  },
 ];
 
 test.for(testCases)('can process $file', async ({file, expected}) => {

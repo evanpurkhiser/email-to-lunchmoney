@@ -8,16 +8,21 @@ const MATCHERS = [
   {
     testRegex: /TOTAL \$(?<totalCostUsd>\d+\.\d{2})/,
     totalCostRegex: /TOTAL \$(?<totalCostUsd>\d+\.\d{2})/,
-    orderDetailsRegex:
+    orderDetailsRegexes: [
       /ORDER ID\n(?<orderId>[A-Z0-9]+)[\s\S]*?(?=\n{2,})\n\n[^[]+\[[^\n]+\]\n(?<itemName>[^\n]+)\n(?<subItem>[^\n]+)\n/,
+    ],
   },
   // Emails from Apple Store on macOS purchases (subscription / renewal layouts vary)
   {
     testRegex: /Apple Account:\s*\n+[^\s@]+@[^ ]+\b/,
     totalCostRegex:
       /Subtotal\s*\n+\$\d+\.\d{2}\s*\n+Tax\s*\n+\$\d+\.\d{2}[\s\S]*?-{5,}[\s\S]*?\n\$(?<totalCostUsd>\d+\.\d{2})/,
-    orderDetailsRegex:
+    orderDetailsRegexes: [
+      // Subscription receipts may include arbitrary promotional content before
+      // the item. Anchor to the item price and billing section instead.
+      /(?<itemName>[^\n[\]]+)\n+(?<subItem>[^\n[\]]+)(?=\n+(?:Renews[^\n]+\n+)?(?:[A-Z0-9]+\n+)?\$\d+\.\d{2}\n+\n+Billing and Payment)/i,
       /Order ID:\s*\n+(?<orderId>[A-Z0-9]+)[\s\S]*?Apple Account:\s*\n+[^\n]+\n+(?:(?<itemName>[^\n]+)\n\[[^\n]+\]\n\n[^\n]+\n\n(?<subItem>[^\n]+)|(?:\[[^\n]+\]\s*\n+)+(?<itemName>[^\n]+)\s*\n+(?<subItem>[^\n]+))/,
+    ],
   },
 ];
 
@@ -39,10 +44,12 @@ function process(email: Email) {
     throw new Error('Unknown apple receipt email');
   }
 
-  const orderMatch = emailText.match(matchers.orderDetailsRegex);
+  const orderMatch = matchers.orderDetailsRegexes
+    .map(regex => emailText.match(regex))
+    .find(match => match !== null);
   const costMatch = emailText.match(matchers.totalCostRegex);
 
-  if (orderMatch === null) {
+  if (orderMatch === undefined) {
     throw new Error('Failed to match Apple order details');
   }
   if (costMatch === null) {

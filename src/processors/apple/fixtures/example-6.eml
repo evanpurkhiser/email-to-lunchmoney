@@ -1,0 +1,32 @@
+From: Apple <no_reply@email.apple.com>
+To: testuser@example.com
+Subject: Your receipt from Apple.
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<html>
+  <body>
+    <h1>Receipt</h1>
+    <p>July 8, 2026</p>
+    <p>Order ID:</p>
+    <p>MKB9S9ZSMK</p>
+    <p>Apple Account:</p>
+    <p>testuser@example.com</p>
+    <p>Save 3% on all your Apple purchases with Apple Card.</p>
+    <a href="https://www.apple.com/apple-card">Apply and use in minutes.</a>
+    <img src="https://example.com/recime.png" alt="">
+    <p>ReciMe: Recipes &amp; Meal Planner</p>
+    <p>ReciMe Plus (Annual)</p>
+    <p>Renews July 9, 2027</p>
+    <p>$39.99</p>
+    <h2>Billing and Payment</h2>
+    <p>Test User</p>
+    <p>Subtotal</p>
+    <p>$39.99</p>
+    <p>Tax</p>
+    <p>$3.55</p>
+    <hr>
+    <p>Visa •••• 1234 (Apple Pay)</p>
+    <p>$43.54</p>
+  </body>
+</html>
