@@ -8,6 +8,7 @@ import {bearerAuth} from 'hono/bearer-auth';
 import type {Email} from 'postal-mime';
 import PostalMime from 'postal-mime';
 
+import {getErrorDetails} from './error-details';
 import {processActions} from './lunchmoney';
 import {cleanupNotifiedActions} from './old-action-cleanup';
 import {checkOldActionEntries} from './old-actions-checker';
@@ -56,7 +57,10 @@ async function processEmail(email: Email, env: Env) {
       }
     } catch (error) {
       captureException(error);
-      console.error('Failed to process email', error);
+      console.error('Failed to process email', {
+        processor: processor.identifier,
+        error: getErrorDetails(error),
+      });
     }
   });
 
