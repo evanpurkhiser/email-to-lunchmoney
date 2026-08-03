@@ -425,7 +425,7 @@ Paste your token when prompted.
    ```
    Paste your key when prompted.
 
-**Note:** The service uses OpenAI for parsing complex receipt data (e.g., shortening Amazon item names, parsing Cloudflare invoices). Costs are typically minimal (~$0.01-0.05 per month for normal usage).
+**Note:** The service uses OpenAI for parsing complex receipt data (e.g., shortening Amazon item names, parsing Cloudflare invoices) and for suggesting Lunch Money categories when a transaction match is found. Costs are typically minimal (~$0.01-0.05 per month for normal usage).
 
 ### 4.2 Optional: Telegram Notifications
 
