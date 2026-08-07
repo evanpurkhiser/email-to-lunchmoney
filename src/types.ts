@@ -10,9 +10,14 @@ export interface EmailProcessor {
    */
   matchEmail: (email: Email) => boolean;
   /**
-   * Process am email.
+   * Process am email. A single email can produce more than one action when it
+   * represents multiple separate charges (e.g. a ride charged separately from
+   * a tip added afterward).
    */
-  process: (email: Email, env: Env) => Promise<LunchMoneyAction | null>;
+  process: (
+    email: Email,
+    env: Env,
+  ) => Promise<LunchMoneyAction | LunchMoneyAction[] | null>;
 }
 
 export interface LunchMoneyMatch {

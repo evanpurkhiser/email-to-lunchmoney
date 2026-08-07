@@ -14,19 +14,23 @@ const UBER_EVENTS_REGEX = /^(\d{1,2}:\d{2}\s*(?:AM|PM))(.+?)$/gm;
  * Matches the total cost in USD
  * Example: "Total$36.80"
  */
-const UBER_TOTAL_COST_REGEX = /^Total\$(\d+(?:,\d{3})*\.\d{2})$/m;
+const UBER_TOTAL_COST_REGEX = /^Total\s*\$(\d+(?:,\d{3})*\.\d{2})$/m;
+
+/**
+ * Matches each individual card charge in the Payments section, in the order
+ * charged. A ride tipped after the fact is charged as two separate line
+ * items (the fare, then the tip) rather than a single combined total.
+ * Example: "American Express ••••5006$20.87"
+ */
+const UBER_PAYMENT_REGEX = /•{4}\d+\$(\d+(?:,\d{3})*\.\d{2})/g;
 
 function process(email: Email) {
   const emailText = htmlToText(email.html!);
 
   const eventMatches = [...emailText.matchAll(UBER_EVENTS_REGEX)];
-  const costMatch = emailText.match(UBER_TOTAL_COST_REGEX);
 
   if (eventMatches.length === 0) {
     throw new Error('Failed to match pickup / drop-off events');
-  }
-  if (costMatch === null) {
-    throw new Error('Failed to match uber ride total cost');
   }
 
   // Take only first 2 matches (pickup and dropoff) - the email repeats them
@@ -47,13 +51,45 @@ function process(email: Email) {
 
   const formattedStart = format(start, 'HH:mm');
   const duration = differenceInMinutes(end, start);
+  const eventPath = events.map(e => e.address).join(' → ');
+  const note = `${eventPath} [${formattedStart}, ${duration}m]`;
+
+  const paymentMatches = [...emailText.matchAll(UBER_PAYMENT_REGEX)];
+
+  if (paymentMatches.length > 0) {
+    const actions = paymentMatches.map((paymentMatch, index) => {
+      const amount = paymentMatch[1].replaceAll(',', '');
+      const costInCents = Math.round(Number(amount) * 100);
+
+      const match: LunchMoneyMatch = {
+        expectedPayee: 'Uber',
+        expectedTotal: costInCents,
+      };
+
+      // A later payment beyond the first is a tip added after the ride,
+      // charged separately from the fare
+      const updateAction: LunchMoneyUpdate = {
+        type: 'update',
+        match,
+        note: index === 0 ? note : `Tip: ${note}`,
+      };
+
+      return updateAction;
+    });
+
+    // Only wrap in an array when there's more than one charge to keep the
+    // common single-charge case identical to a plain 'update' action
+    return Promise.resolve(actions.length === 1 ? actions[0] : actions);
+  }
+
+  const costMatch = emailText.match(UBER_TOTAL_COST_REGEX);
+
+  if (costMatch === null) {
+    throw new Error('Failed to match uber ride total cost');
+  }
 
   const amount = costMatch[1].replaceAll(',', '');
   const costInCents = Math.round(Number(amount) * 100);
-
-  const eventPath = events.map(e => e.address).join(' → ');
-
-  const note = `${eventPath} [${formattedStart}, ${duration}m]`;
 
   const match: LunchMoneyMatch = {
     expectedPayee: 'Uber',

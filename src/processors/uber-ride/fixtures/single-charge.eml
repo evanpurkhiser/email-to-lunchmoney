@@ -1,0 +1,80 @@
+Date: Mon, 13 Jul 2026 06:06:47 +0000 (UTC)
+From: Uber Receipts <noreply@uber.com>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
+Subject: [Personal] Your Sunday afternoon trip with Uber
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html><head><title></title>
+</head><body style=3D"background-color:#d=
+6d6d5"><table width=3D"100%"><tr><td></td><td align=3D"center" width=3D'70=
+0'><table class=3D"receipt" align=3D"center"><tbody><tr><td><div><div clas=
+s=3D'header mj-outlook-group-fix' style=3D'background:#e8e8e8'><table clas=
+s=3D'header-table-row'><tbody><tr><td><table><tbody><tr><td><img src=3D"ht=
+tps://tb-static.uber.com/prod/receipts/cdn/receipts-v4/uber-logo.png" widt=
+h=3D"94" height=3D"44"></td></tr></tbody></table></td><td align=3D'right'=
+><div class=3D'date'>Jul 12, 2026</div><div class=3D'date'>3:06 PM</div><=
+/td></tr></tbody></table><table class=3D'header-table-row'><tbody><tr><td=
+></td></tr><tr><td><img src=3D"https://tb-static.uber.com/prod/receipts/c=
+dn/receipts-v4/UO_logo.png" width=3D"93" height=3D"32"></td></tr><tr><td>=
+<table><tbody><tr><td><div class=3D'headerMessage'>Thanks for riding, tes=
+tuser</div><br><div>We hope you enjoyed your ride this afternoon.</div></=
+td>=
+<td align=3D'right'><img src=3D"https://tb-static.uber.com/prod/receipts/=
+cdn/receipts-v4/uber_rides.png" height=3D'162'></td></tr></tbody></table>=
+</td></tr></tbody></table></div><div class=3D"body-wrapper"><table class=
+=3D"body-root"><tbody><tr><td class=3D"body-content"><div class=3D"total-=
+fare-wrapper"><table class=3D"total-fare-content received"><tbody><tr><td=
+ data-testid=3D"total_fare_title" class=3D"total-fare-title">Total</td><t=
+d data-testid=3D"total_fare_amount" class=3D"total-fare-amount">$20.87</t=
+d></tr></tbody></table></div><div class=3D"panel-wrapper"><table class=3D=
+"panel-content"><tbody><tr><td class=3D"panel-title">Payments</td></tr><t=
+r><td class=3D"panel-content"><div class=3D"payments-wrapper"><table clas=
+s=3D"payments-content"><tbody><tr><td dir=3D"ltr" class=3D"payment-item">=
+<table><tbody><tr><td width=3D"55"><img src=3D"https://tb-static.uber.com=
+/prod/wallet/icons/american_express_3x.png"></td><td><table><tbody><tr><=
+td><table><tbody><tr><td data-testid=3D"payments_0_Card.String">American=
+ Express =E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A21234</td><td data_testid=3D"=
+payments_0_AmountCharged"><font>$20.87</font></td></tr></tbody></table><=
+/td></tr><tr><td><table><tbody><tr><td data-testid=3D"payments_0_date_ti=
+me">7/13/26 2:06 AM</td><td data-testid=3D"payments_0_Info"></td></tr></=
+tbody></table></td></tr></tbody></table></td></tr></tbody></table></td>=
+</tr></tbody></table></div></td></tr></tbody></table></div><table style=
+=3D"display:table"><tr><td>Trip details</td></tr><tr><td><table><tr><td =
+width=3D"68"><img src=3D"https://d1a3f4spazzrp4.cloudfront.net/car-types=
+/haloProductImages/Regular/SedanComfort-016-0.png" width=3D"68" height=
+=3D"68"></td><td class=3D"vehicle-detail-col"><table><tr><td class=3D"ve=
+hicle-detail-label" data-testid=3D"vehicle_type">Comfort</td></tr><tr><t=
+d class=3D"vehicle-detail-desc" data-testid=3D"distance_duration">5.23 m=
+iles, 15 minutes</td></tr></table></td></tr></table></td></tr><tr><td><=
+table class=3D"desktop-content"><tr><td class=3D"desktop-content"><table=
+><tr><td style=3D"padding-top:12px"></td></tr><tr><td class=3D"hidden"><=
+img src=3D"https://tb-static.uber.com/prod/receipts/cdn/receipts-v4/Pick=
+up-1.png"></td><td class=3D"pickup-icon-2 hidden"><img class=3D"hidden" =
+src=3D"https://tb-static.uber.com/prod/receipts/cdn/receipts-v4/Pickup-2=
+.png"></td><td class=3D"hidden"><img src=3D"https://tb-static.uber.com/p=
+rod/receipts/cdn/receipts-v4/Pickup-3.png"></td><td class=3D"hidden"><ta=
+ble><tr><td class=3D"address-point-label" data-testid=3D"address_point_0=
+_time">3:08 PM</td></tr><tr><td class=3D"address-point-desc" data-testid=
+=3D"address_point_0_address">2700 Connecticut Ave NW, Washington DC, DC =
+20008, US</td></tr></table></td></tr><tr><td class=3D"hidden"><img src=
+=3D"https://tb-static.uber.com/prod/receipts/cdn/receipts-v4/Dropoff-1.p=
+ng"></td><td class=3D"dropoff-icon-2 hidden"><img class=3D"hidden" src=
+=3D"https://tb-static.uber.com/prod/receipts/cdn/receipts-v4/Dropoff-2.p=
+ng"></td><td class=3D"hidden"><img src=3D"https://tb-static.uber.com/pro=
+d/receipts/cdn/receipts-v4/Dropoff-3.png"></td><td class=3D"hidden"><tab=
+le><tr><td class=3D"address-point-label" data-testid=3D"address_point_1=
+_time">3:23 PM</td></tr><tr><td class=3D"address-point-desc" data-testid=
+=3D"address_point_1_address">123 Test Street, Test City, TS 12345, US</td=
+></tr></table></td></tr><tr><td style=3D"padding-top:0"></td></tr>=
+</table></td><td class=3D"desktop-content" style=3D"width:50%"><img wid=
+th=3D"312" src=3D"https://static-maps.uber.com/map?example"></td></tr><=
+/table></td></tr></table><div class=3D"action-panel-wrapper"><table cla=
+ss=3D"action-panel"><tbody><tr><td class=3D"action-panel-content"><tabl=
+e><tbody><tr><td data-testid=3D"driverInfo_title" class=3D"action-panel=
+-title">You rode with ELY</td><td class=3D"action-panel-rating" data-te=
+stid=3D"driverInfo_rating">4.97</td></tr></tbody></table></td></tr></tb=
+ody></table></div></td></tr></tbody></table></div></div></td></tr></tb=
+ody></table></td><td></td></tr></table></body></html>
