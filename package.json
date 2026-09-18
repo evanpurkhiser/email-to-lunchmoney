@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.12.6",
-    "@evanpurkhiser/oxc-config": "^0.8.0",
+    "@evanpurkhiser/oxc-config": "^0.16.0",
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^25.0.10",
     "oxfmt": "^0.47.0",
