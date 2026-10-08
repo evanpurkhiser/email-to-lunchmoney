@@ -78,7 +78,7 @@ export async function extractOrder(order: string, env: Env): Promise<AmazonOrder
   const client = new OpenAI({apiKey: env.OPENAI_API_KEY});
 
   const response = await client.responses.create({
-    model: 'o4-mini',
+    model: 'gpt-5.6-terra',
     text: {format: SCHEMA},
     input: [
       {
