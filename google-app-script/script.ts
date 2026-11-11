@@ -39,48 +39,52 @@ function findAndForwardEmails() {
   const threads = gmailLabel.getThreads();
 
   if (threads.length > 0) {
-    Logger.log(`Found ${threads.length} emails to process...`);
+    Logger.log(`Found ${threads.length} threads to process...`);
   }
 
   for (const thread of threads) {
+    // Gmail groups related emails (e.g. a ride receipt and a later tip
+    // receipt for the same trip) into a single thread. Every message in the
+    // thread needs to be forwarded, not just the last one, or earlier
+    // messages are silently dropped.
     const messages = thread.getMessages();
-    const lastMessage = messages[messages.length - 1];
 
-    const subject = lastMessage.getSubject();
-    const rawBody = lastMessage.getRawContent();
+    for (const message of messages) {
+      const subject = message.getSubject();
+      const rawBody = message.getRawContent();
 
-    // Base64 encode the raw email content to prevent line wrapping issues that
-    // could corrupt MIME structure and attachments during transmission
-    const encodedBody = Utilities.base64Encode(rawBody);
+      // Base64 encode the raw email content to prevent line wrapping issues that
+      // could corrupt MIME structure and attachments during transmission
+      const encodedBody = Utilities.base64Encode(rawBody);
 
-    try {
-      // POST to the Worker endpoint
-      const response = UrlFetchApp.fetch(ingestUrl, {
-        method: 'post',
-        headers: {
-          Authorization: `Bearer ${ingestToken}`,
-        },
-        payload: encodedBody,
-        muteHttpExceptions: true,
-      });
+      try {
+        // POST to the Worker endpoint
+        const response = UrlFetchApp.fetch(ingestUrl, {
+          method: 'post',
+          headers: {
+            Authorization: `Bearer ${ingestToken}`,
+          },
+          payload: encodedBody,
+          muteHttpExceptions: true,
+        });
 
-      const statusCode = response.getResponseCode();
+        const statusCode = response.getResponseCode();
 
-      if (statusCode === 202) {
-        Logger.log(`Successfully sent email: ${subject}`);
-        thread.removeLabel(gmailLabel);
-      } else {
-        const responseBody = response.getContentText();
-        Logger.log(
-          `Failed to send email "${subject}". Status: ${statusCode}, Response: ${responseBody}`,
-        );
-        // Remove label even on failure to avoid reprocessing (per design decision)
-        thread.removeLabel(gmailLabel);
+        if (statusCode === 202) {
+          Logger.log(`Successfully sent email: ${subject}`);
+        } else {
+          const responseBody = response.getContentText();
+          Logger.log(
+            `Failed to send email "${subject}". Status: ${statusCode}, Response: ${responseBody}`,
+          );
+        }
+      } catch (error) {
+        Logger.log(`Error sending email "${subject}": ${error}`);
       }
-    } catch (error) {
-      Logger.log(`Error sending email "${subject}": ${error}`);
-      // Remove label even on error to avoid reprocessing
-      thread.removeLabel(gmailLabel);
     }
+
+    // Remove the label once every message in the thread has been attempted,
+    // regardless of individual success/failure, to avoid reprocessing
+    thread.removeLabel(gmailLabel);
   }
 }
