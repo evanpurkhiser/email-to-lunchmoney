@@ -1,51 +1,78 @@
 # Email to Lunch Money - Setup Guide
 
-This guide will walk you through setting up the email-to-lunchmoney service to automatically enrich your Lunch Money transactions with details from receipt emails.
+This guide will walk you through setting up the email-to-lunchmoney service to
+automatically enrich your Lunch Money transactions with details from receipt
+emails.
 
 ## Overview
 
 The setup process involves six main steps:
 
-1. **Gmail Label Setup** - Configure Gmail to automatically label receipt emails that should be processed
-2. **Google Apps Script Deployment** - Deploy the script code to Google Apps Script
-3. **Cloudflare Workers Deployment** - Deploy the main processing service on Cloudflare
-4. **Service Configuration** - Configure API tokens, authentication, optional Telegram notifications, and other settings
-5. **Configure Apps Script** - Connect the Apps Script to your Worker with the URL and authentication token
-6. **Testing and Verification** - Test the complete flow and verify everything works
+1. **Gmail Label Setup** - Configure Gmail to automatically label receipt emails
+   that should be processed
+2. **Google Apps Script Deployment** - Deploy the script code to Google Apps
+   Script
+3. **Cloudflare Workers Deployment** - Deploy the main processing service on
+   Cloudflare
+4. **Service Configuration** - Configure API tokens, authentication,
+   optional Telegram notifications, and other settings
+5. **Configure Apps Script** - Connect the Apps Script to your Worker with the
+   URL and authentication token
+6. **Testing and Verification** - Test the complete flow
+   and verify everything works
 
-The service will parse receipt emails from supported services (Amazon, Lyft, Apple, Cloudflare), extract transaction details, and automatically update your Lunch Money transactions with notes or split them into itemized line items.
+The service will parse receipt emails from supported services
+(Amazon, Lyft, Apple, Cloudflare),
+extract transaction details,
+and automatically update your Lunch Money transactions with notes
+or split them into itemized line items.
 
 > [!TIP]
-> **Setting up with AI assistance:** You can paste this entire guide into an AI coding agent (like Claude Code or GitHub Copilot) to get step-by-step guidance and have the agent run commands for you.
+> **Setting up with AI assistance:** You can paste this entire guide into an AI
+> coding agent (like Claude Code or GitHub Copilot) to get step-by-step guidance
+> and have the agent run commands for you.
 
 <details>
 <summary><strong>For AI Agents: Setup Guidance Instructions</strong></summary>
 
-If you're an AI agent helping a user set up this service, follow these guidelines:
+If you're an AI agent helping a user set up this service,
+follow these guidelines:
 
-1. **Work through the guide step-by-step** - Don't skip ahead. Complete each section fully before moving to the next.
+1. **Work through the guide step-by-step** - Don't skip ahead.
+   Complete each section fully before moving to the next.
 
-2. **Run commands for the user** - When the guide shows a command, offer to run it unless the user says they'll do it themselves.
+2. **Run commands for the user** - When the guide shows a command,
+   offer to run it unless the user says they'll do it themselves.
 
-3. **Verify each step** - After completing a step, verify it worked (e.g., check if files were created, read configuration files, check command output).
+3. **Verify each step** - After completing a step, verify it worked
+   (e.g., check if files were created, read configuration files,
+   check command output).
 
-4. **Ask clarifying questions** - If the guide mentions configuration choices (e.g., trigger frequency, domain name), ask the user for their preference.
+4. **Ask clarifying questions** - If the guide mentions configuration choices
+   (e.g., trigger frequency, domain name), ask the user for their preference.
 
-5. **Handle errors gracefully** - If a command fails, check the Troubleshooting section and help debug the issue.
+5. **Handle errors gracefully** - If a command fails,
+   check the Troubleshooting section and help debug the issue.
 
-6. **Track progress** - Keep the user informed about which step you're on and what's coming next.
+6. **Track progress** - Keep the user informed about which step you're on
+   and what's coming next.
 
-7. **Test thoroughly** - When you reach Step 6 (Testing and Verification), guide the user through actually testing the system end-to-end.
+7. **Test thoroughly** - When you reach Step 6
+   (Testing and Verification),
+   guide the user through actually testing the system end-to-end.
 
-8. **Don't assume existing setup** - Treat this as a fresh installation unless the user explicitly tells you otherwise.
+8. **Don't assume existing setup** - Treat this as a fresh installation
+   unless the user explicitly tells you otherwise.
 
-The user should have their API keys ready (Lunch Money, OpenAI) and a Cloudflare account.
+The user should have their API keys ready
+(Lunch Money, OpenAI) and a Cloudflare account.
 
 </details>
 
 ## Prerequisites
 
-**Important:** Please ensure all prerequisites are met before beginning the setup process.
+**Important:** Please ensure all prerequisites are met
+before beginning the setup process.
 
 Before starting, ensure you have:
 
@@ -62,25 +89,36 @@ Before starting, ensure you have:
 
 ## 1. Gmail Label Setup
 
-The first step is to configure Gmail to automatically apply a label to receipt emails that should be forwarded to the service.
+The first step is to configure Gmail to automatically apply a label to receipt
+emails that should be forwarded to the service.
 
 > [!NOTE]
 > **Using gmailctl for filter management**
 >
-> If you manage many Gmail filters, consider using [gmailctl](https://github.com/mbrt/gmailctl) to define filters as code. This makes it easier to version control and maintain complex filter setups.
+> If you manage many Gmail filters,
+> consider using [gmailctl](https://github.com/mbrt/gmailctl) to define filters
+> as code.
+> This makes it easier to version control and maintain complex filter setups.
 >
-> See [evanpurkhiser/gmailctl-personal](https://github.com/evanpurkhiser/gmailctl-personal) for a complete example configuration, including the Lunch Money forwarding rules starting at [line 758](https://github.com/evanpurkhiser/gmailctl-personal/blob/main/evanpurkhiser@gmail.com.jsonnet#L758).
+> See
+> [evanpurkhiser/gmailctl-personal](https://github.com/evanpurkhiser/gmailctl-personal)
+> for a complete example configuration, including the Lunch Money forwarding
+> rules starting at
+> [line 758](https://github.com/evanpurkhiser/gmailctl-personal/blob/main/evanpurkhiser@gmail.com.jsonnet#L758).
 
 ### 1.1 Create the Gmail Label
 
 1. Open Gmail in your browser
-2. In the left sidebar, scroll down and click **"Create new label"** (or go to Settings → Labels → Create new label)
+2. In the left sidebar, scroll down and click **"Create new label"**
+   (or go to Settings → Labels → Create new label)
 3. Create a label named: `Fwd / Lunch Money`
 4. Click **Create**
 
 ### 1.2 Create Gmail Filters
 
-Now you'll create filters to automatically apply this label to specific receipt emails. The service currently supports:
+Now you'll create filters to automatically apply this label to specific receipt
+emails.
+The service currently supports:
 
 - **Airlines** - United, Delta, Alaska, American, Southwest
 - **Amazon** - Order confirmations
@@ -231,7 +269,8 @@ Now you'll create filters to automatically apply this label to specific receipt 
 
 ## 2. Google Apps Script Deployment
 
-The Apps Script monitors emails with the `Fwd / Lunch Money` label and POSTs them to the Cloudflare Worker endpoint.
+The Apps Script monitors emails with the `Fwd / Lunch Money` label
+and POSTs them to the Cloudflare Worker endpoint.
 
 ### 2.1 Install clasp (Google Apps Script CLI)
 
@@ -245,7 +284,8 @@ npm install -g @google/clasp
 clasp login
 ```
 
-This will open a browser window to authenticate with your Google account. Grant the necessary permissions.
+This will open a browser window to authenticate with your Google account.
+Grant the necessary permissions.
 
 ### 2.3 Clone and Configure the Script
 
@@ -270,7 +310,8 @@ This will open a browser window to authenticate with your Google account. Grant 
 
    This will create a `.clasp.json` file with your script ID.
 
-4. Edit `.clasp.json` to add TypeScript support by adding `".ts"` to the `scriptExtensions` array:
+4. Edit `.clasp.json` to add TypeScript support by adding `".ts"` to the
+   `scriptExtensions` array:
 
    ```json
    {
@@ -289,7 +330,8 @@ This will open a browser window to authenticate with your Google account. Grant 
 
    This uploads the script to Google Apps Script.
 
-   **Note:** We'll configure the script properties and trigger in Step 5, after deploying the Cloudflare Worker.
+   **Note:** We'll configure the script properties and trigger in Step 5,
+   after deploying the Cloudflare Worker.
 
 ## 3. Cloudflare Workers Deployment
 
@@ -320,13 +362,15 @@ The service uses Cloudflare D1 (SQLite) to store pending actions.
 wrangler d1 create email-to-lunchmoney
 ```
 
-This will output a database ID. Copy it.
+This will output a database ID.
+Copy it.
 
 ### 3.4 Update wrangler.jsonc
 
 Open `wrangler.jsonc` and update the placeholder values:
 
 1. **Replace the database ID** with the ID from the previous step:
+
    ```jsonc
    "database_id": "YOUR_DATABASE_ID_HERE"  // Replace with your database ID
    ```
@@ -368,12 +412,13 @@ This will:
 
 You should see output indicating successful deployment:
 
-```
+```text
 Published email-to-lunchmoney (X.XX sec)
   https://email-to-lunchmoney.your-subdomain.workers.dev
 ```
 
-**Important:** Copy this Worker URL - you'll need it to configure the `INGEST_URL` in your Apps Script properties (in Step 4.1).
+**Important:** Copy this Worker URL - you'll need it to configure the
+`INGEST_URL` in your Apps Script properties (in Step 4.1).
 
 ## 4. Service Configuration
 
@@ -385,13 +430,16 @@ You'll need to set the following secrets and configuration:
 
 #### INGEST_TOKEN - Authentication Token
 
-First, generate a secure random token for authenticating requests to your Worker:
+First, generate a secure random token
+for authenticating requests to your Worker:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-This will output a secure random token (e.g., `696b1b2b7fdd1dee2c425cd331740d9f...`). Copy this token.
+This will output a secure random token
+(e.g., `696b1b2b7fdd1dee2c425cd331740d9f...`).
+Copy this token.
 
 Set it as a Cloudflare secret:
 
@@ -401,7 +449,8 @@ wrangler secret put INGEST_TOKEN
 
 Paste your token when prompted.
 
-**Important:** Save this token - you'll need it to configure your Apps Script in Step 5.
+**Important:** Save this token - you'll need it to configure your Apps Script in
+Step 5.
 
 #### Lunch Money API Key
 
@@ -409,9 +458,11 @@ Paste your token when prompted.
 2. Go to **Settings** → **Developers**
 3. Create a new API token (or use an existing one)
 4. Copy the token and set it in Cloudflare:
+
    ```bash
    wrangler secret put LUNCHMONEY_API_KEY
    ```
+
    Paste your token when prompted.
 
 #### OpenAI API Key
@@ -420,16 +471,24 @@ Paste your token when prompted.
 2. Go to **API Keys** (in your account settings)
 3. Create a new secret key
 4. Copy the key and set it in Cloudflare:
+
    ```bash
    wrangler secret put OPENAI_API_KEY
    ```
+
    Paste your key when prompted.
 
-**Note:** The service uses OpenAI for parsing complex receipt data (e.g., shortening Amazon item names, parsing Cloudflare invoices). Costs are typically minimal (~$0.01-0.05 per month for normal usage).
+**Note:** The service uses OpenAI for parsing complex receipt data
+(e.g., shortening Amazon item names, parsing Cloudflare invoices).
+Costs are typically minimal (~$0.01-0.05 per month for normal usage).
 
 ### 4.2 Optional: Telegram Notifications
 
-Telegram notifications are useful for monitoring the health of your email-to-lunchmoney service. You'll receive alerts when receipt emails have been processed but couldn't be matched to transactions in Lunch Money for 15+ days. This helps you identify issues such as:
+Telegram notifications are useful
+for monitoring the health of your email-to-lunchmoney service.
+You'll receive alerts when receipt emails have been processed
+but couldn't be matched to transactions in Lunch Money for 15+ days.
+This helps you identify issues such as:
 
 - Transactions that haven't been imported into Lunch Money yet
 - Mismatched payee names between the receipt and transaction
@@ -444,6 +503,7 @@ If you want to enable Telegram notifications:
 2. Send `/newbot` and follow the prompts to create a new bot
 3. Copy the bot token provided by BotFather
 4. Set the token in Cloudflare:
+
    ```bash
    wrangler secret put TELEGRAM_TOKEN
    ```
@@ -454,14 +514,17 @@ If you want to enable Telegram notifications:
 2. Visit: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
 3. Look for the `chat` object in the response and copy the `id` value
 4. Set the chat ID in Cloudflare:
+
    ```bash
    wrangler secret put TELEGRAM_CHAT_ID
    ```
 
 **What notifications will I receive?**
 
-- Alerts when actions are older than 15 days and haven't been matched to transactions
-- This helps you identify receipt emails that couldn't be automatically processed
+- Alerts when actions are older than 15 days
+  and haven't been matched to transactions
+- This helps you identify receipt emails
+  that couldn't be automatically processed
 
 ### 4.3 Optional: Sentry Error Tracking
 
@@ -471,22 +534,28 @@ If you want centralized error tracking (recommended for production use):
 2. Create a new project (select "Cloudflare Workers" as the platform)
 3. Copy your DSN (Data Source Name)
 4. Set the DSN as a secret in Cloudflare:
+
    ```bash
    wrangler secret put SENTRY_DSN
    ```
+
    Paste your DSN when prompted (e.g., `https://...@...sentry.io/...`)
 
 ### 4.4 Configuration Variables
 
 Additional configuration is available in the source code:
 
-- **Old Action Threshold** (`src/old-actions-checker.ts`): Currently 15 days. Actions older than this trigger notifications.
-- **Cleanup Threshold** (`src/old-action-cleanup.ts`): Currently 30 days. Notified actions older than this are deleted.
-- **Scheduled Frequency** (`wrangler.jsonc`): Currently every 30 minutes (`*/30 * * * *`)
+- **Old Action Threshold** (`src/old-actions-checker.ts`): Currently 15 days.
+  Actions older than this trigger notifications.
+- **Cleanup Threshold** (`src/old-action-cleanup.ts`): Currently 30 days.
+  Notified actions older than this are deleted.
+- **Scheduled Frequency** (`wrangler.jsonc`): Currently every 30 minutes
+  (`*/30 * * * *`)
 
 ## 5. Configure Apps Script
 
-Now that the worker is deployed and configured, let's configure the Apps Script to connect to it.
+Now that the worker is deployed and configured,
+let's configure the Apps Script to connect to it.
 
 ### 5.1 Configure Script Properties
 
@@ -497,9 +566,11 @@ Now that the worker is deployed and configured, let's configure the Apps Script 
    clasp open-script
    ```
 
-   Or go directly to [script.google.com](https://script.google.com) and open your project.
+   Or go directly to [script.google.com](https://script.google.com)
+   and open your project.
 
-2. In the Apps Script editor, click **Project Settings** (gear icon in the left sidebar)
+2. In the Apps Script editor, click **Project Settings**
+   (gear icon in the left sidebar)
 
 3. Scroll down to **Script Properties** and click **Add script property**
 
@@ -511,7 +582,8 @@ Now that the worker is deployed and configured, let's configure the Apps Script 
    | `INGEST_URL`   | `https://email-to-lunchmoney.your-subdomain.workers.dev/ingest` | Your Worker endpoint URL from Step 3 |
    | `INGEST_TOKEN` | _(your token from Step 4.1)_                                    | Authentication token for the Worker  |
 
-   **Note:** For `INGEST_URL`, use the Worker URL from Step 3.6. For `INGEST_TOKEN`, use the token you generated and saved in Step 4.1.
+   **Note:** For `INGEST_URL`, use the Worker URL from Step 3.6.
+   For `INGEST_TOKEN`, use the token you generated and saved in Step 4.1.
 
 5. Click **Save script properties**
 
@@ -519,7 +591,8 @@ Now that the worker is deployed and configured, let's configure the Apps Script 
 
 The script needs to run periodically to check for new labeled emails.
 
-1. In the Apps Script editor, click the **clock icon** (Triggers) in the left sidebar
+1. In the Apps Script editor,
+   click the **clock icon** (Triggers) in the left sidebar
 
 2. Click **"+ Add Trigger"** (bottom right)
 
@@ -528,17 +601,22 @@ The script needs to run periodically to check for new labeled emails.
    - **Choose which deployment should run:** `Head`
    - **Select event source:** `Time-driven`
    - **Select type of time based trigger:** `Minutes timer` or `Hour timer`
-   - **Select minute/hour interval:** Every 30 minutes or Every 1 hour (your preference)
-     - Note: Gmail quotas limit email processing to ~100/day, so hourly is usually sufficient
+   - **Select minute/hour interval:** Every 30 minutes or Every 1 hour
+     (your preference)
+     - Note: Gmail quotas limit email processing to ~100/day,
+       so hourly is usually sufficient
 
 4. Click **Save**
 
-5. **Authorize the app** - You'll see a Google security warning screen saying "Google hasn't verified this app":
+5. **Authorize the app** - You'll see a Google security warning screen saying
+   "Google hasn't verified this app":
    - Click **"Advanced"** at the bottom
    - Click **"Go to Email to Lunch Money Forwarder (unsafe)"**
    - Review the permissions and click **"Allow"**
 
-   This is normal for personal Apps Script projects. The script needs permission to read your Gmail messages and make HTTP requests.
+   This is normal for personal Apps Script projects.
+   The script needs permission to read your Gmail messages
+   and make HTTP requests.
 
 ## 6. Testing and Verification
 
@@ -552,27 +630,31 @@ You can test the script manually before waiting for the automatic trigger.
    - Find any receipt email in your Gmail inbox
    - Click the label icon and select `Fwd / Lunch Money`
 
-2. In the Apps Script editor, select the `findAndForwardEmails` function from the dropdown at the top
+2. In the Apps Script editor,
+   select the `findAndForwardEmails` function from the dropdown at the top
 
 3. Click **Run** (play button)
 
-4. Check the **Execution log** at the bottom to verify it ran without errors. You should see output similar to:
+4. Check the **Execution log** at the bottom to verify it ran without errors.
+   You should see output similar to:
 
-   ```
+   ```text
    Notice    Execution started
    Info      Found 1 emails to process...
    Info      Successfully sent email: [Email Subject]
    Notice    Execution completed
    ```
 
-5. Check that the email you labeled had the `Fwd / Lunch Money` label removed (indicating it was successfully POSTed to the worker)
+5. Check that the email you labeled had the `Fwd / Lunch Money` label removed
+   (indicating it was successfully POSTed to the worker)
 
 **Automatic Trigger Test:**
 
 Once the manual test works, verify the automatic trigger:
 
 1. Find another receipt email and manually apply the `Fwd / Lunch Money` label
-2. Wait for the trigger to run (every 30-60 minutes depending on your configuration)
+2. Wait for the trigger to run
+   (every 30-60 minutes depending on your configuration)
 3. Check that the label was removed from the email
 
 ### 6.2 Check Worker Logs
@@ -613,7 +695,8 @@ You should see entries with:
 
 ### 6.4 Verify Lunch Money Updates
 
-After the scheduled worker runs (within 30 minutes), check your Lunch Money account:
+After the scheduled worker runs
+(within 30 minutes), check your Lunch Money account:
 
 1. Go to **Transactions**
 2. Find the transaction matching your receipt
@@ -621,13 +704,16 @@ After the scheduled worker runs (within 30 minutes), check your Lunch Money acco
 
 **Matching Logic:**
 
-- The service matches actions to transactions based on **payee name** and **amount**
+- The service matches actions to transactions based on **payee name**
+  and **amount**
 - Transactions must be in the past 180 days
 - Transactions must be uncleared (not marked as cleared/reviewed)
 
 **Clean Up Test Entries:**
 
-If you tested with an email that won't have a matching transaction in Lunch Money, you can remove the test entry from the database:
+If you tested with an email
+that won't have a matching transaction in Lunch Money,
+you can remove the test entry from the database:
 
 ```bash
 # Remove the most recent action
@@ -645,22 +731,27 @@ wrangler d1 execute email-to-lunchmoney --remote --command "DELETE FROM lunchmon
 ### Emails Not Being Forwarded
 
 - Check that the Gmail label is spelled correctly: `Fwd / Lunch Money`
-- Verify the Apps Script trigger is running (check trigger history in Apps Script editor)
+- Verify the Apps Script trigger is running
+  (check trigger history in Apps Script editor)
 - Check Apps Script execution logs for errors
 - Ensure you granted Gmail permissions to the Apps Script
 
 ### Emails Not Being Processed
 
 - Check Cloudflare Worker logs: `wrangler tail`
-- Verify the `INGEST_TOKEN` matches between Worker secrets and Apps Script properties
-- Verify the `INGEST_URL` in Apps Script points to the correct Worker endpoint (should end with `/ingest`)
+- Verify the `INGEST_TOKEN` matches between Worker secrets
+  and Apps Script properties
+- Verify the `INGEST_URL` in Apps Script points to the correct Worker endpoint
+  (should end with `/ingest`)
 - Check that your worker is deployed: `wrangler deployments list`
 - Test the endpoint directly with curl:
+
   ```bash
   curl -X POST https://your-worker-url.workers.dev/ingest \
     -H "Authorization: Bearer YOUR_TOKEN" \
     -d "$(cat test-email.eml | base64)"
   ```
+
   You should receive a 202 response if everything is configured correctly
 
 ### Actions Not Matching Transactions
@@ -678,7 +769,8 @@ wrangler d1 execute email-to-lunchmoney --remote --command "DELETE FROM lunchmon
 
 ### D1 Database Errors
 
-- Ensure migrations were applied: `wrangler d1 migrations list email-to-lunchmoney`
+- Ensure migrations were applied:
+  `wrangler d1 migrations list email-to-lunchmoney`
 - Check database binding is correct in `wrangler.jsonc`
 - View recent queries in Cloudflare dashboard (D1 → Select database → Metrics)
 
@@ -734,9 +826,15 @@ The service is designed to be extremely cost-effective:
 
 ## Security Considerations
 
-- **Token-Based Authentication:** The service uses a secure Bearer token (`INGEST_TOKEN`) to authenticate requests to the `/ingest` endpoint. Keep this token secret and rotate it if compromised.
-- **API Keys:** All secrets are stored securely in Cloudflare Workers secrets (encrypted at rest)
+- **Token-Based Authentication:** The service uses a secure Bearer token
+  (`INGEST_TOKEN`) to authenticate requests to the `/ingest` endpoint.
+  Keep this token secret and rotate it if compromised.
+- **API Keys:** All secrets are stored securely in Cloudflare Workers secrets
+  (encrypted at rest)
 - **Database Access:** D1 database is only accessible by your worker
-- **Email Content:** Raw email content is processed and then discarded (not permanently stored)
-- **Action Data:** Only extracted metadata is stored in D1 (no full email bodies or attachments)
-- **Endpoint Security:** The `/ingest` endpoint is publicly accessible but requires the authentication token.
+- **Email Content:** Raw email content is processed and then discarded
+  (not permanently stored)
+- **Action Data:** Only extracted metadata is stored in D1
+  (no full email bodies or attachments)
+- **Endpoint Security:** The `/ingest` endpoint is publicly accessible
+  but requires the authentication token.

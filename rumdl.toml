@@ -1,0 +1,13 @@
+flavor = "gfm"
+
+[MD013]
+code_blocks = false
+reflow = true
+reflow_mode = "semantic-line-breaks"
+tables = false
+
+[MD033]
+allowed_elements = ["details", "strong", "summary"]
+
+[per-file-ignores]
+"README.md" = ["MD033", "MD041"]
