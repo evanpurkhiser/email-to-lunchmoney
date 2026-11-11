@@ -1,6 +1,7 @@
 # Contributing
 
-Thank you for contributing to email-to-lunchmoney! This guide will help you add new email parsers and maintain the codebase.
+Thank you for contributing to email-to-lunchmoney!
+This guide will help you add new email parsers and maintain the codebase.
 
 ## Adding New Email Parsers
 
@@ -21,7 +22,9 @@ mkdir -p src/processors/vendor-name/fixtures
 ```
 
 > [!NOTE]
-> It's best to start with a **real, unsanitized email** from your own inbox. This makes it much easier to develop and test your parser with actual data. You'll sanitize the fixture files later before committing (see step 7).
+> It's best to start with a **real, unsanitized email** from your own inbox.
+> This makes it much easier to develop and test your parser with actual data.
+> You'll sanitize the fixture files later before committing (see step 7).
 
 ### 3. Implement the Parser
 
@@ -123,10 +126,16 @@ npm test
 
 ### 7. Sanitize Email Fixtures
 
-Before committing your code, sanitize the fixture emails to remove personal information using the provided script.
+Before committing your code,
+sanitize the fixture emails to remove personal information using the provided
+script.
 
 > [!WARNING]
-> The sanitization script is a **best-effort tool**. You **must manually review** the sanitized files to ensure **no personal information** remains (names, addresses, email addresses, phone numbers, account numbers, etc.). The script cannot catch everything!
+> The sanitization script is a **best-effort tool**.
+> You **must manually review** the sanitized files to ensure
+> **no personal information** remains (names, addresses, email addresses, phone
+> numbers, account numbers, etc.).
+> The script cannot catch everything!
 
 #### Usage
 
@@ -137,7 +146,8 @@ npx tsx scripts/sanitize-email.mts src/processors/vendor-name/fixtures/example.e
   --city "San Francisco, CA 94102"
 ```
 
-All arguments (name, address, city) are optional. The script will:
+All arguments (name, address, city) are optional.
+The script will:
 
 - Remove tracking and authentication headers (keeping only essential headers)
 - Replace your email address with `testuser@example.com`
@@ -155,13 +165,15 @@ for file in src/processors/vendor-name/fixtures/*.eml; do
 done
 ```
 
-After sanitizing your fixtures, **run your tests again** to ensure they still pass:
+After sanitizing your fixtures,
+**run your tests again** to ensure they still pass:
 
 ```bash
 npm test
 ```
 
-If tests fail after sanitization, you may need to adjust your parser to be more flexible with the sanitized data.
+If tests fail after sanitization,
+you may need to adjust your parser to be more flexible with the sanitized data.
 
 ## Code Style
 
