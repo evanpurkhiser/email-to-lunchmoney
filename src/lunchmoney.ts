@@ -75,7 +75,9 @@ export async function processActions(env: Env) {
         (txn: any) =>
           !assignedTransactions.includes(txn.id) &&
           !hasNote(txn.notes) &&
-          txn.payee === action.match.expectedPayee &&
+          [action.match.expectedPayee, ...(action.match.alternatePayees ?? [])].includes(
+            txn.payee,
+          ) &&
           txn.amount === (action.match.expectedTotal / 100).toFixed(4),
       );
 

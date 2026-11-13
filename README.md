@@ -85,6 +85,10 @@ Support for the following emails is currently implemented
   A note is added to each transaction with the start and end location,
   time of ride, and duration.
 
+- **Uber Eats receipts**.
+  Adds the restaurant name, delivery address, delivery time,
+  and duration as a note to the Uber Eats transaction.
+
 Some emails I would like to add
 
 - All square receipt emails.

@@ -1,0 +1,76 @@
+Date: Mon, 02 Mar 2026 06:10:47 +0000 (UTC)
+From: Uber Receipts <noreply@uber.com>
+To: testuser@example.com
+Message-ID: <REDACTED@example.com>
+Subject: [Personal] Your Sunday afternoon trip with Uber
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html><head><title></title>
+</head><body style=3D"background-color:#d6d6d5"><table width=3D"100%"><tr><=
+td></td><td align=3D"center" width=3D'700'><table class=3D"receipt" align=
+=3D"center"><tbody><tr><td><div><div class=3D'header mj-outlook-group-fix' =
+style=3D'background:#e8e8e8'><table class=3D'header-table-row'><tbody><tr><=
+td><table><tbody><tr><td><img src=3D"https://tb-static.uber.com/prod/receip=
+ts/cdn/receipts-v4/uber-logo.png" width=3D"94" height=3D"44"></td></tr></tb=
+ody></table></td><td align=3D'right'><div class=3D'date'>Mar 1, 2026</div><=
+div class=3D'date'>2:10 PM</div></td></tr></tbody></table><table class=3D'h=
+eader-table-row'><tbody><tr><td></td></tr><tr><td><img src=3D"https://tb-st=
+atic.uber.com/prod/receipts/cdn/receipts-v4/UO_logo.png" width=3D"93" heigh=
+t=3D"32"></td></tr><tr><td><table><tbody><tr><td><div class=3D'headerMessag=
+e'>Thanks for riding, testuser</div><br><div>We hope you enjoyed your ride =
+this afternoon.</div></td><td align=3D'right'><img src=3D"https://tb-static=
+.uber.com/prod/receipts/cdn/receipts-v4/uber_rides.png" height=3D'162'></td=
+></tr></tbody></table></td></tr></tbody></table></div><div class=3D"body-wr=
+apper"><table class=3D"body-root"><tbody><tr><td class=3D"body-content"><di=
+v class=3D"total-fare-wrapper"><table class=3D"total-fare-content received"=
+><tbody><tr><td data-testid=3D"total_fare_title" class=3D"total-fare-title"=
+>Total</td><td data-testid=3D"total_fare_amount" class=3D"total-fare-amount=
+">$18.75</td></tr></tbody></table></div><div class=3D"panel-wrapper"><table=
+ class=3D"panel-content"><tbody><tr><td class=3D"panel-title">Payments</td>=
+</tr><tr><td class=3D"panel-content"><div class=3D"payments-wrapper"><table=
+ class=3D"payments-content"><tbody><tr><td dir=3D"ltr" class=3D"payment-ite=
+m"><table><tbody><tr><td width=3D"55"><img src=3D"https://tb-static.uber.co=
+m/prod/wallet/icons/american_express_3x.png"></td><td><table><tbody><tr><td=
+><table><tbody><tr><td data-testid=3D"payments_0_Card.String">American Expr=
+ess =E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A21234</td><td data_testid=3D"payment=
+s_0_AmountCharged"><font>$18.75</font></td></tr></tbody></table></td></tr><=
+tr><td><table><tbody><tr><td data-testid=3D"payments_0_date_time">3/2/26 1:=
+10 AM</td><td data-testid=3D"payments_0_Info"></td></tr></tbody></table></t=
+d></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>=
+</div></td></tr></tbody></table></div><table style=3D"display:table"><tr><t=
+d>Trip details</td></tr><tr><td><table><tr><td width=3D"68"><img src=3D"htt=
+ps://d1a3f4spazzrp4.cloudfront.net/car-types/haloProductImages/Regular/Seda=
+nComfort-016-0.png" width=3D"68" height=3D"68"></td><td class=3D"vehicle-de=
+tail-col"><table><tr><td class=3D"vehicle-detail-label" data-testid=3D"vehi=
+cle_type">Comfort</td></tr><tr><td class=3D"vehicle-detail-desc" data-testi=
+d=3D"distance_duration">5.23 miles, 15 minutes</td></tr></table></td></tr><=
+/table></td></tr><tr><td><table class=3D"desktop-content"><tr><td class=3D"=
+desktop-content"><table><tr><td style=3D"padding-top:12px"></td></tr><tr><t=
+d class=3D"hidden"><img src=3D"https://tb-static.uber.com/prod/receipts/cdn=
+/receipts-v4/Pickup-1.png"></td><td class=3D"pickup-icon-2 hidden"><img cla=
+ss=3D"hidden" src=3D"https://tb-static.uber.com/prod/receipts/cdn/receipts-=
+v4/Pickup-2.png"></td><td class=3D"hidden"><img src=3D"https://tb-static.ub=
+er.com/prod/receipts/cdn/receipts-v4/Pickup-3.png"></td><td class=3D"hidden=
+"><table><tr><td class=3D"address-point-label" data-testid=3D"address_point=
+_0_time">2:12 PM</td></tr><tr><td class=3D"address-point-desc" data-testid=
+=3D"address_point_0_address">789 Sample Rd, Test City, TS 12345, US</td></t=
+r></table></td></tr><tr><td class=3D"hidden"><img src=3D"https://tb-static.=
+uber.com/prod/receipts/cdn/receipts-v4/Dropoff-1.png"></td><td class=3D"dro=
+poff-icon-2 hidden"><img class=3D"hidden" src=3D"https://tb-static.uber.com=
+/prod/receipts/cdn/receipts-v4/Dropoff-2.png"></td><td class=3D"hidden"><im=
+g src=3D"https://tb-static.uber.com/prod/receipts/cdn/receipts-v4/Dropoff-3=
+.png"></td><td class=3D"hidden"><table><tr><td class=3D"address-point-label=
+" data-testid=3D"address_point_1_time">2:27 PM</td></tr><tr><td class=3D"ad=
+dress-point-desc" data-testid=3D"address_point_1_address">123 Test Street, =
+Test City, TS 12345, US</td></tr></table></td></tr><tr><td style=3D"padding=
+-top:0"></td></tr></table></td><td class=3D"desktop-content" style=3D"width=
+:50%"><img width=3D"312" src=3D"https://static-maps.uber.com/map?example"><=
+/td></tr></table></td></tr></table><div class=3D"action-panel-wrapper"><tab=
+le class=3D"action-panel"><tbody><tr><td class=3D"action-panel-content"><ta=
+ble><tbody><tr><td data-testid=3D"driverInfo_title" class=3D"action-panel-t=
+itle">You rode with TESTDRIVER</td><td class=3D"action-panel-rating" data-t=
+estid=3D"driverInfo_rating">5.00</td></tr></tbody></table></td></tr></tbody=
+></table></div></td></tr></tbody></table></div></div></td></tr></tbody></ta=
+ble></td><td></td></tr></table></body></html>
