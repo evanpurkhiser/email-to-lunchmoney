@@ -461,6 +461,61 @@ describe('processActions', () => {
     expect(remainingActions.results).toHaveLength(0);
   });
 
+  it('matches an alternate payee and renames it', async () => {
+    const action: LunchMoneyAction = {
+      type: 'update',
+      match: {
+        expectedPayee: 'Uber Eats',
+        alternatePayees: ['Uber'],
+        expectedTotal: 800,
+      },
+      note: 'Tip: Restaurant → 123 Test Street [19:25, 16m]',
+      payee: 'Uber Eats',
+    };
+
+    await env.DB.prepare('INSERT INTO lunchmoney_actions (source, action) VALUES (?, ?)')
+      .bind('test', JSON.stringify(action))
+      .run();
+
+    const mockTransactions = [
+      createTestTransaction({
+        id: 321,
+        payee: 'Uber',
+        amount: '8.0000',
+        notes: null,
+        category_id: 456,
+      }),
+    ];
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({path: transactionsListPath})
+      .reply(200, createMockTransactionsResponse(mockTransactions));
+
+    const expectedUpdateBody = JSON.stringify({
+      transaction: {
+        id: 321,
+        notes: action.note,
+        payee: 'Uber Eats',
+        status: 'uncleared',
+      },
+    });
+
+    fetchMock
+      .get('https://dev.lunchmoney.app')
+      .intercept({
+        path: '/v1/transactions/321',
+        method: 'PUT',
+        body: expectedUpdateBody,
+      })
+      .reply(200, {success: true});
+
+    await processActions(env);
+
+    const remainingActions = await getAllTransactions();
+    expect(remainingActions.results).toHaveLength(0);
+  });
+
   it('marks split items as cleared/uncleared based on markReviewed flag', async () => {
     const action: LunchMoneyAction = {
       type: 'split',

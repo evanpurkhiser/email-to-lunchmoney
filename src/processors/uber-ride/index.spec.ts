@@ -37,6 +37,48 @@ test.for(testCases)('does match $file', async ({file}) => {
   expect(uberRideProcessor.matchEmail(email)).toBe(true);
 });
 
+test('can process single-charge (new template, no tip)', async () => {
+  const emailFile = await import(`./fixtures/single-charge.eml?raw`);
+  const email = await PostalMime.parse(emailFile.default);
+  const result = await uberRideProcessor.process(email, env);
+
+  expect(result).toEqual({
+    type: 'update',
+    match: {expectedPayee: 'Uber', expectedTotal: 1875},
+    note: '789 Sample Rd, Test City, TS 12345, US → 123 Test Street, Test City, TS 12345, US [14:12, 15m]',
+  });
+});
+
+test('does match single-charge', async () => {
+  const emailFile = await import(`./fixtures/single-charge.eml?raw`);
+  const email = await PostalMime.parse(emailFile.default);
+  expect(uberRideProcessor.matchEmail(email)).toBe(true);
+});
+
+test('can process tip-added-later (two separate charges)', async () => {
+  const emailFile = await import(`./fixtures/tip-added-later.eml?raw`);
+  const email = await PostalMime.parse(emailFile.default);
+  const result = await uberRideProcessor.process(email, env);
+
+  const note =
+    '789 Sample Rd, Test City, TS 12345, US → 123 Test Street, Test City, TS 12345, US [14:12, 15m]';
+
+  expect(result).toEqual([
+    {type: 'update', match: {expectedPayee: 'Uber', expectedTotal: 1875}, note},
+    {
+      type: 'update',
+      match: {expectedPayee: 'Uber', expectedTotal: 500},
+      note: `Tip: ${note}`,
+    },
+  ]);
+});
+
+test('does match tip-added-later', async () => {
+  const emailFile = await import(`./fixtures/tip-added-later.eml?raw`);
+  const email = await PostalMime.parse(emailFile.default);
+  expect(uberRideProcessor.matchEmail(email)).toBe(true);
+});
+
 const nonReceiptCases = ['not-receipt-1', 'not-receipt-2'];
 
 test.for(nonReceiptCases)('does not match non-receipt emails: %s', async file => {
