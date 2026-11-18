@@ -3,7 +3,6 @@ import {americanProcessor} from 'src/processors/airline-american';
 import {deltaProcessor} from 'src/processors/airline-delta';
 import {southwestProcessor} from 'src/processors/airline-southwest';
 import {unitedProcessor} from 'src/processors/airline-united';
-import {amazonProcessor} from 'src/processors/amazon';
 import {appleEmailProcessor} from 'src/processors/apple';
 import {bookingProcessor} from 'src/processors/booking';
 import {capitalOneFlightsProcessor} from 'src/processors/capital-one-flights';
@@ -26,7 +25,6 @@ export const DEFAULT_EMAIL_PROCESSORS: EmailProcessor[] = [
   chaseFlightsProcessor,
   capitalOneFlightsProcessor,
   // Other processors
-  amazonProcessor,
   bookingProcessor,
   lyftBikeProcessor,
   lyftRideProcessor,
