@@ -12,6 +12,13 @@
 that accepts various receipt emails via an email trigger
 and associates metadata from the receipt to transactions in Lunch Money.
 
+> [!IMPORTANT]
+> **Amazon order emails are no longer supported.**
+> Amazon's order confirmations can omit the item details this service needs to
+> annotate and split purchases.
+> See [issue #7](https://github.com/evanpurkhiser/email-to-lunchmoney/issues/7)
+> for details.
+
 > [!TIP]
 > **Want to deploy this service yourself?**
 > There is a detailed guide in [SETUP.md](SETUP.md) with step-by-step
@@ -19,13 +26,13 @@ and associates metadata from the receipt to transactions in Lunch Money.
 
 This may be useful for those who want to answer questions like:
 
-> What did I buy on Amazon for $75? Where did I go on that $12.50 Lyft ride?
+> What was that $25.20 Cloudflare charge for? Where did I go on that $8.50 Lyft
+> ride?
 
 ### Before Email to Lunch Money
 
 | Payee           | Amount  | Notes |
 | --------------- | ------- | ----- |
-| Amazon          | $43.21  |       |
 | United Airlines | $355.66 |       |
 | Cloudflare      | $25.20  |       |
 | Lyft            | $8.50   |       |
@@ -36,8 +43,6 @@ This may be useful for those who want to answer questions like:
 
 | Payee           | Amount  | Notes                                                                            |
 | --------------- | ------- | -------------------------------------------------------------------------------- |
-| Amazon          | $28.22  | Mise En Scene Hair Serum (113-7795219-8445010)                                   |
-| Amazon          | $14.99  | CERRXIAN power adapter (113-5327144-6942647)                                     |
 | United Airlines | $355.66 | EWR → SFO (ORCQG9)                                                               |
 | Cloudflare      | $25.20  | prolink.tools renewal (IN-48951432)                                              |
 | Lyft            | $8.50   | 186 States St, San Francisco, CA → 882 Sutter St, San Francisco, CA [16:40, 27m] |
@@ -53,11 +58,6 @@ Support for the following emails is currently implemented
   Extracts flight details from confirmation/receipt emails for United Airlines,
   Delta Air Lines, Alaska Airlines, American Airlines, and Southwest Airlines.
   Adds route (origin → destination) and confirmation code as transaction notes.
-
-- **Amazon order emails**.
-  Orders with multiple items have their associated Lunch Money transactions
-  split into a single transaction for each item.
-  A note is added to transactions with a shortened item name and order number.
 
 - **Booking.com receipts** (USD only).
   Adds property name, check-in/check-out dates,
@@ -93,7 +93,7 @@ Some emails I would like to add
 
 ### Workflow
 
-1. Receive receipt emails for some service such as Amazon or Lyft.
+1. Receive receipt emails for a service such as Apple or Lyft.
    These typically are sent automatically, though if disable,
    you can likely re-enable them in the settings of whatever the service is.
 
@@ -117,10 +117,6 @@ Some emails I would like to add
    if they can handle the email.
 
 5. Each processor may do their own processing:
-   - `amazon` parses out the items ordered from the plain text email
-     and passes the text to the OpenAI API to get a shortened version of the
-     item names (since amazon items typically have very long names).
-
    - `cloudflare` extracts text from PDF attachments using pdfjs-serverless
      and uses OpenAI to parse structured invoice data including line items
      and costs.

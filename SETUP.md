@@ -4,6 +4,15 @@ This guide will walk you through setting up the email-to-lunchmoney service to
 automatically enrich your Lunch Money transactions with details from receipt
 emails.
 
+> [!IMPORTANT]
+> **Amazon order emails are no longer supported.**
+> Amazon's order confirmations can omit the item details needed to annotate
+> and split purchases.
+> If you previously configured an Amazon Gmail filter for this service,
+> remove its `Fwd / Lunch Money` label action.
+> See [issue #7](https://github.com/evanpurkhiser/email-to-lunchmoney/issues/7)
+> for details.
+
 ## Overview
 
 The setup process involves six main steps:
@@ -22,7 +31,7 @@ The setup process involves six main steps:
    and verify everything works
 
 The service will parse receipt emails from supported services
-(Amazon, Lyft, Apple, Cloudflare),
+(Lyft, Apple, Cloudflare),
 extract transaction details,
 and automatically update your Lunch Money transactions with notes
 or split them into itemized line items.
@@ -121,7 +130,6 @@ emails.
 The service currently supports:
 
 - **Airlines** - United, Delta, Alaska, American, Southwest
-- **Amazon** - Order confirmations
 - **Lyft** - Ride and bike rental receipts
 - **Apple** - App Store and iTunes receipts
 - **Cloudflare** - Invoices (with PDF attachments)
@@ -190,20 +198,6 @@ The service currently supports:
 3. Configure the filter:
    - **From:** `southwest.com`
    - **Subject:** `You're going to`
-4. Click **"Create filter"**
-5. Check **"Apply the label"** and select `Fwd / Lunch Money`
-6. Click **"Create filter"**
-
-</details>
-
-<details>
-<summary><strong>Amazon Filter</strong></summary>
-
-1. In Gmail, click the search box at the top
-2. Click the filter icon (or use the dropdown to select "Show search options")
-3. Configure the filter:
-   - **From:** `amazon.com`
-   - **Subject:** `Ordered:`
 4. Click **"Create filter"**
 5. Check **"Apply the label"** and select `Fwd / Lunch Money`
 6. Click **"Create filter"**
@@ -479,7 +473,7 @@ Step 5.
    Paste your key when prompted.
 
 **Note:** The service uses OpenAI for parsing complex receipt data
-(e.g., shortening Amazon item names, parsing Cloudflare invoices).
+(e.g., parsing Cloudflare invoices).
 Costs are typically minimal (~$0.01-0.05 per month for normal usage).
 
 ### 4.2 Optional: Telegram Notifications
@@ -675,7 +669,7 @@ You should see log entries indicating:
 
 - Email received
 - Email parsed
-- Processor matched (e.g., "Amazon", "Lyft")
+- Processor matched (e.g., "lyft-ride")
 - Action stored in database
 
 ### 6.3 Check Database
@@ -690,7 +684,7 @@ You should see entries with:
 
 - `id`: Auto-incrementing ID
 - `date_created`: Timestamp
-- `source`: Email source (e.g., "Amazon")
+- `source`: Processor identifier (e.g., `lyft-ride`)
 - `action`: JSON-serialized action data
 
 ### 6.4 Verify Lunch Money Updates

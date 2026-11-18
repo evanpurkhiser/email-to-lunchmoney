@@ -102,13 +102,12 @@ test.for(testCases)('does match $file', async ({file}) => {
 
 ### 5. Register the Parser
 
-Add your parser to `src/index.ts`:
+Add your parser to `src/processors.ts`:
 
 ```typescript
 import {vendorEmailProcessor} from 'src/processors/vendor-name';
 
-let EMAIL_PROCESSORS: EmailProcessor[] = [
-  amazonProcessor,
+export const DEFAULT_EMAIL_PROCESSORS: EmailProcessor[] = [
   lyftBikeProcessor,
   lyftRideProcessor,
   appleEmailProcessor,
